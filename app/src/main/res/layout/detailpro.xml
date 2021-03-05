@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.finalproject.canteen.Checkout">
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/editHobi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Hobi"
+        android:textColorHint="@android:color/white"
+        android:textSize="34sp"
+        app:met_floatingLabel="highlight"
+        app:met_maxCharacters="13"
+        app:met_singleLineEllipsis="true" />
+
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/editProfesi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Profesi"
+        android:textColorHint="@android:color/white"
+        android:textSize="34sp"
+        app:met_floatingLabel="highlight"
+        app:met_maxCharacters="13"
+        app:met_singleLineEllipsis="true" />
+
+
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/editBD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tanggal Lahir"
+        android:textColorHint="@android:color/white"
+        android:textSize="34sp"
+        app:met_floatingLabel="highlight"
+        app:met_maxCharacters="13"
+        app:met_singleLineEllipsis="true" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Jenis kelamin" />
+    <RadioGroup
+        android:id="@+id/radioGroups"
+        android:layout_width="fill_parent"
+        android:layout_height="90dp"
+        android:orientation="vertical"
+        >
+
+        <RadioButton
+            android:id="@+id/radioButtonss"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:checked="false"
+            android:text="Male"
+            android:textSize="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioButton2ss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.13"
+            android:checked="false"
+            android:text="Female"
+            android:textSize="16dp" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="29sp"
+        android:textAlignment="center"
+        android:layout_margin="8dp"
+        android:background="@drawable/border"
+        android:text="Terapkan" />
+
+
+
+</LinearLayout>

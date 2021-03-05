@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.finalproject">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name="com.example.finalproject.page.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.example.finalproject.page.SignIn" />
+        <activity android:name="com.example.finalproject.page.SignUp" />
+        <activity
+            android:name="com.example.finalproject.Home"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme" />
+        <activity android:name="com.example.finalproject.ShoeList" />
+        <activity android:name="com.example.finalproject.page.Cart" />
+        <activity android:name="com.example.finalproject.OrderStatusDetail" />
+        <activity android:name="com.example.finalproject.Checkout" />
+        <activity android:name="com.example.finalproject.CheckoutInfo" />
+        <activity android:name="com.example.finalproject.ConfirmationSection" />
+        <activity android:name="com.example.finalproject.TopUpActivity" />
+        <activity android:name="com.example.finalproject.ScanActivity"></activity>
+        <activity android:name="com.example.finalproject.OrderStatus"></activity>
+        <activity android:name="com.example.finalproject.UserProfile"></activity>
+        <activity android:name="com.example.finalproject.detailProfile"/>
+        <activity android:name="com.example.finalproject.PrivateProfile"/>
+        <activity android:name="com.example.finalproject.SmsVerify"/>
+        <activity android:name="com.example.finalproject.page.MainMenu"/>
+        <activity android:name="com.example.finalproject.MainActivity"/>
+        <activity android:name="com.example.finalproject.page.AddProduct"/>
+        <activity android:name="com.example.finalproject.page.ProductList"/>
+        <activity android:name="com.example.finalproject.page.scanner.CodeScannerActivity"/>
+        <activity android:name="com.example.finalproject.page.CreateQR"/>
+        <activity android:name="com.example.finalproject.page.ProductDetail"/>
+    </application>
+
+</manifest>

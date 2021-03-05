@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.finalproject.page.CreateUMKM"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:orientation="vertical">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nama UMKM"
+            android:inputType="phone"
+            android:textColorHint="@android:color/white"
+            android:textSize="12sp"
+            app:met_floatingLabel="highlight"
+            app:met_maxCharacters="15"
+            app:met_singleLineEllipsis="true" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/etAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Alamat UMKM"
+            android:inputType="textPersonName"
+            android:textColorHint="@android:color/white"
+            android:textSize="12sp"
+            app:met_floatingLabel="highlight"
+            app:met_maxCharacters="24"
+            app:met_singleLineEllipsis="true" />
+
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btnCreate"
+        android:textColor="@android:color/white"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shadowColor="@android:color/black"
+
+        android:text="Buat UMKM"
+        android:layout_margin="8dp"
+        />
+</LinearLayout>
