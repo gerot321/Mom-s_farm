@@ -25,6 +25,7 @@ import com.example.finalproject.page.scanner.CodeScannerActivity;
 import com.example.finalproject.util.PreferenceUtil;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -70,7 +71,8 @@ public class Cart extends BaseActivity {
     private void initEnv(){
         database = FirebaseDatabase.getInstance();
         requests = database.getReference("Order");
-
+//        DatabaseReference cities = requests.child("cities")
+//        Query citiesQuery = requests.orderByKey().startAt(input).endAt(input+"\uf8ff");
     }
 
 
