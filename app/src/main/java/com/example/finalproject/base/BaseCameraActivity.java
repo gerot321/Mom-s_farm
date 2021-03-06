@@ -30,14 +30,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import androidx.annotation.Nullable;
 
 import com.example.finalproject.R;
 
 public abstract class BaseCameraActivity extends AppCompatActivity {
     private AlertDialog mDialog;
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

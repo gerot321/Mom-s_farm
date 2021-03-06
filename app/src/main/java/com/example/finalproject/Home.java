@@ -51,6 +51,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.Date;
+
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -191,7 +193,7 @@ public class Home extends AppCompatActivity
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 final Product prods = dataSnapshot.getValue(Product.class);
 
-                                category.child(prods.getMerchantId()).child("origin").addListenerForSingleValueEvent(new ValueEventListener() {
+                                category.child("sd").child("origin").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         String origin = dataSnapshot.getValue().toString();
@@ -240,7 +242,7 @@ public class Home extends AppCompatActivity
                                                 prods.getName(),
                                                 "1",
                                                 String.valueOf(total)
-                                                ,"",""
+                                                ,"",new Date().getTime()
                                         ));
 
                                         //category.child("status").setValue("Waiting Admin Confirmation");

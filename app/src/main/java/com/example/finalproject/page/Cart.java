@@ -23,6 +23,7 @@ import com.example.finalproject.adapter.CartAdapter;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.page.scanner.CodeScannerActivity;
 import com.example.finalproject.util.PreferenceUtil;
+import com.example.finalproject.util.StringUtil;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -115,15 +116,18 @@ public class Cart extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
+
         switch (item.getItemId()) {
-            case R.id.scanBtn:
-                intent = new Intent(this, CodeScannerActivity.class);
-                startActivity(intent);
             case R.id.menuSearch:
-                intent = new Intent(this, ProductList.class);
+                Intent intent = new Intent(this, ProductList.class);
                 intent.putExtra("page", Common.PAGE_SHOP);
                 startActivityForResult(intent, REQUEST_CODE);
+                return true;
+            case R.id.scanBtn:
+                Intent  intent1 = new Intent(this, CodeScannerActivity.class);
+                intent1.putExtra("page", Common.PAGE_SHOP);
+                startActivityForResult(intent1, REQUEST_CODE);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -139,11 +143,11 @@ public class Cart extends BaseActivity {
         int total = 0;
 
         for (Order order:cart)
-            total+=Integer.parseInt(order.getPrice());
+            total+=(Integer.parseInt(order.getPrice())*Integer.parseInt(order.getQuantity()));
         Locale locale = new Locale("en", "US");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
 
-        txtTotalPrice.setText(fmt.format(total));
+        txtTotalPrice.setText("Rp "+ StringUtil.formatToIDR(String.valueOf(total)));
 
     }
     @Override

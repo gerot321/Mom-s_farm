@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import com.example.finalproject.Common.Common;
 import com.example.finalproject.Home;
 import com.example.finalproject.Model.User;
 import com.example.finalproject.R;
+import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.util.PreferenceUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,8 +23,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
-public class SignIn extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
+public class SignIn extends BaseActivity {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     EditText etPhone, etPassword;
 
     Button btnSignIn;
@@ -32,7 +38,8 @@ public class SignIn extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
+        ButterKnife.bind(this);
+        setTitle(toolbar, "Masuk");
         etPhone = (MaterialEditText)findViewById(R.id.etPhone);
         etPassword = (MaterialEditText)findViewById(R.id.etPassword);
         btnSignIn = (Button)findViewById(R.id.btnSignIn);

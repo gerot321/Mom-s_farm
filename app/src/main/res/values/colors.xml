@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">#67b929</color>
-    <color name="colorPrimaryDark">#67b929</color>
+    <color name="colorPrimary">#373435</color>
+    <color name="colorPrimaryDark">#373435</color>
     <color name="colorAccent">#a7a0a2</color>
     <color name="colorWhite">#ffffff</color>
     <color name="secondaryColor">#fffbd6</color>
     <color name="colorBlack">#373435</color>
     <color name="overlayBackground">#3F330D</color>
+    <color name="calendar_header">@color/colorPrimary</color>
+    <color name="calendar_header_title">#FFF</color>
+    <color name="selected_date_circle_color_app">#FF5252</color>
+    <color name="range_bg_color_app">#FFCDD2</color>
 </resources>

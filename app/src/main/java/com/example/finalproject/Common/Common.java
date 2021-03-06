@@ -11,5 +11,6 @@ public class Common {
     public static int PAGE_UPDATE_PRODUCT = 1;
     public static int PAGE_CREATE_QR = 2;
     public static int PAGE_SHOP = 3;
+    public static int PAGE_RECAP = 4;
 
 }

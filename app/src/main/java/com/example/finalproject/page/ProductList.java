@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Database.Database;
@@ -19,6 +20,7 @@ import com.example.finalproject.Interface.ItemClickListener;
 import com.example.finalproject.Model.Order;
 import com.example.finalproject.Model.Product;
 import com.example.finalproject.R;
+import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.holder.ShoeViewHolder;
 import com.example.finalproject.page.scanner.CodeScannerActivity;
 import com.example.finalproject.page.scanner.ScanResultDialog;
@@ -32,13 +34,14 @@ import com.squareup.picasso.Picasso;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ProductList extends AppCompatActivity {
+public class ProductList extends BaseActivity {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
 
     FirebaseDatabase database;
     DatabaseReference productList;
+    public static final int REQUEST_CODE = 1;
 
     int page = 0;
     FirebaseRecyclerAdapter<Product, ShoeViewHolder> adapter;
@@ -61,9 +64,7 @@ public class ProductList extends AppCompatActivity {
     }
 
     private void initView(){
-        toolbar.setTitle("Daftar Produk");
-        setSupportActionBar(toolbar);
-
+        setTitle(toolbar, "Daftar Produk");
 
         recyclerView = (RecyclerView)findViewById(R.id.recycler_shoe);
         recyclerView.setHasFixedSize(true);
@@ -118,7 +119,7 @@ public class ProductList extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ScanResultDialog dialog = new ScanResultDialog(ProductList.this, model, adapter.getRef(position).getKey());
+                                    ScanResultDialog dialog = new ScanResultDialog(ProductList.this, model);
                                     dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                         @Override
                                         public void onDismiss(DialogInterface dialogInterface) {
@@ -133,6 +134,19 @@ public class ProductList extends AppCompatActivity {
 
                         }
                     });
+                }else if(page == Common.PAGE_RECAP){
+                    viewHolder.setItemClickListener(new ItemClickListener() {
+                        @Override
+                        public void onClick(View view, final int position, boolean isLongCLick) {
+
+                            Intent intent = getIntent();
+                            intent.putExtra("product", (Parcelable) model);
+                            setResult(RESULT_OK, intent);
+                            finish();
+
+                        }
+                    });
+
                 }
 
 
@@ -179,12 +193,33 @@ public class ProductList extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.scanBtn:
-                Intent intent = new Intent(this, SignIn.class);
-                PreferenceUtil.clearAll();
-                startActivity(intent);
-                finish();
+                Intent  intent = new Intent(this, CodeScannerActivity.class);
+                intent.putExtra("page", page);
+                if(page == Common.PAGE_RECAP){
+                    startActivityForResult(intent, REQUEST_CODE);
+                }else{
+                    startActivity(intent);
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == REQUEST_CODE  && resultCode  == RESULT_OK) {
+                Product product = (Product) data.getParcelableExtra("product");
+                Intent intent = getIntent();
+                intent.putExtra("product", (Parcelable) product);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        } catch (Exception ex) {
+            Toast.makeText(ProductList.this, ex.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

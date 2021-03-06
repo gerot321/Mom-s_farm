@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.finalproject.Model.User;
 import com.example.finalproject.R;
+import com.example.finalproject.base.BaseActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +26,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class SignUp extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class SignUp extends BaseActivity {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     private static final String TAG = "PhoneAuth";
     MaterialEditText etPhone, etName, etPassword,etDate,etAddress,etEmail;
     RadioButton radio;
@@ -40,7 +47,8 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
+        ButterKnife.bind(this);
+        setTitle(toolbar, "Buat Akun");
         etPhone = (MaterialEditText)findViewById(R.id.etPhone);
         etName = (MaterialEditText)findViewById(R.id.etName);
         etPassword = (MaterialEditText)findViewById(R.id.etPassword);
@@ -90,7 +98,7 @@ public class SignUp extends AppCompatActivity {
                                     etDate.getText().toString()," "," "," ",etEmail.getText().toString(),"unVerified");
                             table_user.child(etPhone.getText().toString()).setValue(user);
                             Toast.makeText(SignUp.this, "Account successfully created!", Toast.LENGTH_SHORT).show();
-
+                            finish();
                         }
                     }
 

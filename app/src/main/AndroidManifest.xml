@@ -44,6 +44,9 @@
         <activity android:name="com.example.finalproject.page.scanner.CodeScannerActivity"/>
         <activity android:name="com.example.finalproject.page.CreateQR"/>
         <activity android:name="com.example.finalproject.page.ProductDetail"/>
+        <activity android:name="com.example.finalproject.page.RekapDetail"/>
+        <activity android:name="com.example.finalproject.page.RekapOption"/>
+
     </application>
 
 </manifest>

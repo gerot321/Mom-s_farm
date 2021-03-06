@@ -29,13 +29,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
@@ -50,6 +49,8 @@ import com.example.finalproject.R;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.example.finalproject.base.BaseCameraActivity;
 import com.example.finalproject.page.MainMenu;
+import com.example.finalproject.page.ProductDetail;
+import com.example.finalproject.page.ProductList;
 import com.example.finalproject.page.SignIn;
 import com.example.finalproject.util.PreferenceUtil;
 import com.google.firebase.database.DataSnapshot;
@@ -73,12 +74,20 @@ public class CodeScannerActivity extends BaseCameraActivity {
     FirebaseDatabase database;
     DatabaseReference productReference;
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_code_scanner);
         ButterKnife.bind(this);
+        sourcePage = getIntent().getIntExtra("page",0);
         iniEnv();
         initView();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = getIntent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void initView(){
@@ -86,18 +95,28 @@ public class CodeScannerActivity extends BaseCameraActivity {
 
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
-            public void onDecoded(@NonNull final Result result) {
-                if(sourcePage == Common.PAGE_SHOP){
-                    showProgress();
-                    productReference.child(result.getText()).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final DataSnapshot dataSnapshot) {
-                            final Product product =dataSnapshot.getValue(Product.class);
-
+            public void onDecoded(final Result result) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showProgress();
+                    }
+                });
+                productReference.child(result.getText()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                disProgress();
+                            }
+                        });
+                        final Product product =dataSnapshot.getValue(Product.class);
+                        if(sourcePage == Common.PAGE_SHOP){
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ScanResultDialog dialog = new ScanResultDialog(CodeScannerActivity.this, product, dataSnapshot.getKey());
+                                    ScanResultDialog dialog = new ScanResultDialog(CodeScannerActivity.this, product);
                                     dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                         @Override
                                         public void onDismiss(DialogInterface dialogInterface) {
@@ -107,25 +126,33 @@ public class CodeScannerActivity extends BaseCameraActivity {
                                     dialog.show();
                                 }
                             });
+                        }else if(sourcePage == Common.PAGE_UPDATE_PRODUCT){
+                            Intent intent = new Intent(CodeScannerActivity.this, ProductDetail.class);
+                            intent.putExtra("productId", product.getProductId());
+                            intent.putExtra("product", (Parcelable) product);
+                            startActivity(intent);
+                            finish();
+                        }else if(sourcePage == Common.PAGE_RECAP){
+                            Intent intent = getIntent();
+                            intent.putExtra("product", (Parcelable) product);
+                            setResult(RESULT_OK, intent);
+                            finish();
                         }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
+                    }
 
-                }else{
-                    Intent intent = getIntent();
-                    intent.putExtra("code", result.getText());
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
         });
         mCodeScanner.setErrorCallback(new ErrorCallback() {
             @Override
-            public void onError(@NonNull Exception error) {
+            public void onError(Exception error) {
                 Toast.makeText(CodeScannerActivity.this, getString(R.string.scanner_error, error), Toast.LENGTH_LONG).show();
             }
         });
@@ -149,8 +176,8 @@ public class CodeScannerActivity extends BaseCameraActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,String[] permissions,
+            int[] grantResults) {
         if (requestCode == RC_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mPermissionGranted = true;

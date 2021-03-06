@@ -8,9 +8,12 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -25,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -40,8 +44,17 @@ import butterknife.ButterKnife;
 public class AddProduct extends BaseActivity {
     @BindView(R.id.image_card)
     CardView imageHolder;
+    @BindView(R.id.minus_stock)
+    RelativeLayout minusStock;
+    @BindView(R.id.plus_stock)
+    RelativeLayout plusStock;
+    @BindView(R.id.product_stock_edt)
+    EditText stockEdt;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     private static final int PICK_IMAGE_REQUEST = 1;
-    MaterialEditText Id, Name, Price,Description;
+    MaterialEditText  Name, Price;
     private RelativeLayout mButtonChooseImage;
     Button btnSignUp;
     private Uri mImageUri;
@@ -56,27 +69,54 @@ public class AddProduct extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         ButterKnife.bind(this);
+        setTitle(toolbar, "Tambah Produk");
         mButtonChooseImage = findViewById(R.id.button_choose_image);
-        Id = findViewById(R.id.Id);
         Name = findViewById(R.id.nameProduct);
         Price =  findViewById(R.id.Price);
-        Description =  findViewById(R.id.decription);
         btnSignUp = findViewById(R.id.btnSignUp);
         mImageView =  findViewById(R.id.image_view);
-//        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
+        plusStock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int stockValue = Integer.parseInt(stockEdt.getText().toString())+1;
+                stockEdt.setText(String.valueOf(stockValue));
+            }
+        });
+
+        minusStock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Integer.parseInt(stockEdt.getText().toString())>0){
+                    int stockValue = Integer.parseInt(stockEdt.getText().toString())-1;
+                    stockEdt.setText(String.valueOf(stockValue));
+                }
+            }
+        });
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference table_user = database.getReference("Product");
+//        Query applesQuery = table_user;
+//
+//        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+//                    appleSnapshot.getRef().removeValue();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.e("123", "onCancelled", databaseError.toException());
+//            }
+//        });
+
         mercId =  getIntent().getStringExtra("merch");
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //  final ProgressDialog mDialog = new ProgressDialog(addProduct.this);
-                // mDialog.setMessage("loading...");
-                //  mDialog.show();
                 showProgress();
                 if (mImageUri != null) {
                     StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
@@ -87,33 +127,12 @@ public class AddProduct extends BaseActivity {
                                 @Override
                                 public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
 //
-                                    table_user.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            // Check if already user phone
-                                            if (dataSnapshot.child(Id.getText().toString()).exists()) {
-                                                // mDialog.dismiss();
+                                    Product products = new Product( "PROD-"+String.valueOf(System.currentTimeMillis()), Name.getText().toString(), taskSnapshot.getDownloadUrl().toString(), Price.getText().toString(), stockEdt.getText().toString());
+                                    table_user.child(products.getProductId()).setValue(products);
+                                    disProgress();
+                                    Toast.makeText(AddProduct.this, "Berhasil Menambahkan Produk", Toast.LENGTH_SHORT).show();
 
-                                                //Toast.makeText(addProduct.this, "Account already exist!", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                //mDialog.dismiss();
-
-                                                Product products = new Product(Id.getText().toString(), Name.getText().toString(), taskSnapshot.getDownloadUrl().toString(), Description.getText().toString(), Price.getText().toString(), "0", mercId);
-                                                table_user.child(Id.getText().toString()).setValue(products);
-                                                disProgress();
-                                                Toast.makeText(AddProduct.this, "Berhasil Menambahkan Produk", Toast.LENGTH_SHORT).show();
-
-                                                AddProduct.this.finish();
-
-
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-
-                                        }
-                                    });
+                                    AddProduct.this.finish();
 
                                 }
                             })

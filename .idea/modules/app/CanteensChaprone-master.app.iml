@@ -102,6 +102,7 @@
     <orderEntry type="library" name="Gradle: com.jakewharton:butterknife:8.8.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.budiyev.android:code-scanner:2.1.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidmads.library.qrgenearator:QRGenearator:1.0.3@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.PhilJay:MPAndroidChart:v3.1.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-crash:11.0.2@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tagmanager:11.0.2@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tagmanager-api:11.0.2@aar" level="project" />

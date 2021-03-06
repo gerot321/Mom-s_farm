@@ -36,7 +36,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Database.Database;
@@ -54,11 +53,22 @@ import java.util.List;
 import java.util.Locale;
 
 public class ScanResultDialog extends AppCompatDialog {
-    public ScanResultDialog(@NonNull final Context context, @NonNull final Product result, final String productId) {
+    int orderQuantityCart = 0;
+    public ScanResultDialog(final Context context, final Product result) {
         super(context, resolveDialogTheme(context));
         PreferenceUtil.setContext(context);
         setTitle("Tambah Produk");
         setContentView(R.layout.dialog_scan_result);
+
+
+        List<Order> orders = PreferenceUtil.getOrders();
+
+        for(Order order : orders){
+            if(order.getProductId().equals(result.getProductId())){
+                orderQuantityCart = Integer.parseInt(order.getQuantity());
+            }
+        }
+
         Button cancelBtn = findViewById(R.id.cancel_button);
         Button addBtn = findViewById(R.id.add_btn);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -74,10 +84,11 @@ public class ScanResultDialog extends AppCompatDialog {
         RelativeLayout minusStock = findViewById(R.id.minus_stock);
         RelativeLayout plusStock = findViewById(R.id.plus_stock);
 
+
         plusStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Integer.parseInt(stockEdt.getText().toString())<Integer.parseInt(result.getStock())){
+                if((Integer.parseInt(stockEdt.getText().toString())+ orderQuantityCart)<Integer.parseInt(result.getStock())){
                     int stockValue = Integer.parseInt(stockEdt.getText().toString())+1;
                     stockEdt.setText(String.valueOf(stockValue));
                 }
@@ -97,23 +108,16 @@ public class ScanResultDialog extends AppCompatDialog {
 
         name.setText(result.getName());
         price.setText(result.getPrice());
-        stock.setText(result.getStock());
+        stock.setText(String.valueOf(Integer.parseInt(result.getStock())-orderQuantityCart));
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                new Database(context).addToCart(new Order(
-//                        productId,
-//                        result.getName(),
-//                        stockEdt.getText().toString(),
-//                        result.getPrice(),
-//                        PreferenceUtil.getUser().getPhone()
-//                ));
 
                 List<Order> orders = PreferenceUtil.getOrders();
                 boolean found = false;
                 for(int i=0;i<orders.size();i++){
-                    if(orders.get(i).getProductId().equals(productId)){
+                    if(orders.get(i).getProductId().equals(result.getProductId())){
                         found = true;
 
                         orders.get(i).setQuantity(String.valueOf(
@@ -122,26 +126,26 @@ public class ScanResultDialog extends AppCompatDialog {
                         ));
                     }
                 }
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
                 Date date = new Date();
                 if(!found){
                     orders.add(new Order(
-                            productId,
+                            result.getProductId(),
                             result.getName(),
                             stockEdt.getText().toString(),
                             result.getPrice(),
                             PreferenceUtil.getUser().getPhone(),
-                            dateFormatter.format(date)
+                            date.getTime()
                     ));
                 }
                 PreferenceUtil.setOrders(orders);
+                dismiss();
             }
         });
     }
 
 
 
-    private static int resolveDialogTheme(@NonNull Context context) {
+    private static int resolveDialogTheme(Context context) {
         TypedValue outValue = new TypedValue();
         return outValue.resourceId;
     }

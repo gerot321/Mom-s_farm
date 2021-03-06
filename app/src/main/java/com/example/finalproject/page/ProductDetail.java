@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -46,12 +47,18 @@ public class ProductDetail extends BaseActivity {
     MaterialEditText productPrice;
     @BindView(R.id.productName)
     MaterialEditText productName;
-    @BindView(R.id.product_stock)
-    EditText productStock;
     @BindView(R.id.submit_btn)
     Button submitBtn;
     @BindView(R.id.button_choose_image)
     RelativeLayout mButtonChooseImage;
+    @BindView(R.id.minus_stock)
+    RelativeLayout minusStock;
+    @BindView(R.id.plus_stock)
+    RelativeLayout plusStock;
+    @BindView(R.id.product_stock_edt)
+    EditText stockEdt;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     FirebaseDatabase database;
     DatabaseReference productTable;
@@ -89,11 +96,30 @@ public class ProductDetail extends BaseActivity {
     }
 
     public void initView(){
+        setTitle(toolbar, "Ubah Produk");
+
+        plusStock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int stockValue = Integer.parseInt(stockEdt.getText().toString())+1;
+                stockEdt.setText(String.valueOf(stockValue));
+            }
+        });
+
+        minusStock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Integer.parseInt(stockEdt.getText().toString())>0){
+                    int stockValue = Integer.parseInt(stockEdt.getText().toString())-1;
+                    stockEdt.setText(String.valueOf(stockValue));
+                }
+            }
+        });
         if(product.getImage()!=null){
             imageCard.setVisibility(View.VISIBLE);
             Picasso.with(getBaseContext()).load(product.getImage()).into(imageProduct);
         }
-        productStock.setText(product.getStock());
+        stockEdt.setText(product.getStock());
         productName.setText(product.getName());
         productPrice.setText(product.getPrice());
 
@@ -101,7 +127,7 @@ public class ProductDetail extends BaseActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                productTable.child(productId).child("Stock").setValue(productStock.getText().toString());
+                productTable.child(productId).child("Stock").setValue(stockEdt.getText().toString());
                 productTable.child(productId).child("Name").setValue(productName.getText().toString());
                 productTable.child(productId).child("Price").setValue(productPrice.getText().toString());
 
@@ -134,6 +160,8 @@ public class ProductDetail extends BaseActivity {
                             });
                 }
                 disProgress();
+                Toast.makeText(ProductDetail.this, "Berhasil Merubah Produk", Toast.LENGTH_SHORT).show();
+                finish();
 
             }
         });

@@ -12,6 +12,6 @@
         android:id="@+id/scanBtn"
         android:icon="@drawable/qr_scanner"
         android:orderInCategory="100"
-        android:title="Search"
+        android:title="Scan"
         app:showAsAction="always" />
 </menu>

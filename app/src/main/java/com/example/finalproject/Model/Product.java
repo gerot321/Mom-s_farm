@@ -6,29 +6,25 @@ import android.os.Parcelable;
 import com.google.firebase.database.PropertyName;
 
 public class Product implements Parcelable {
-    private String name, image, description, price, stock, merchantId,productId;
+    private String name, image, price, stock,productId;
 
     public Product(){
 
     }
 
-    public Product(String Id,String Name, String Image, String Description, String Price, String Stock, String MerchantId) {
+    public Product(String Id,String Name, String Image, String Price, String Stock) {
         productId=Id;
         name = Name;
         image = Image;
-        description = Description;
         price = Price;
-        stock = Stock;
-        merchantId = MerchantId;
+        stock = Stock;;
     }
 
     protected Product(Parcel in) {
         name = in.readString();
         image = in.readString();
-        description = in.readString();
         price = in.readString();
         stock = in.readString();
-        merchantId = in.readString();
         productId = in.readString();
     }
 
@@ -36,10 +32,8 @@ public class Product implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(image);
-        dest.writeString(description);
         dest.writeString(price);
         dest.writeString(stock);
-        dest.writeString(merchantId);
         dest.writeString(productId);
     }
 
@@ -76,14 +70,6 @@ public class Product implements Parcelable {
     public void setImage(String Image) {
         image = Image;
     }
-    @PropertyName("Description")
-    public String getDescription() {
-        return description;
-    }
-    @PropertyName("Description")
-    public void setDescription(String Description) {
-        description = Description;
-    }
     @PropertyName("Price")
     public String getPrice() {
         return price;
@@ -100,13 +86,13 @@ public class Product implements Parcelable {
     public void setStock(String Stock) {
         stock = Stock;
     }
-    @PropertyName("MerchantId")
-    public String getMerchantId() {
-        return merchantId;
+    @PropertyName("ProductId")
+    public String getProductId() {
+        return productId;
     }
-    @PropertyName("MerchantId")
-    public void setMerchantId(String MerchantId) {
-        merchantId = MerchantId;
+    @PropertyName("ProductId")
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 }
 

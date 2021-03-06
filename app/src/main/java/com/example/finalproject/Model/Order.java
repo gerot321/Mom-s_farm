@@ -7,12 +7,12 @@ public class Order {
     private String quantity;
     private String price;
     private String seller;
-    private String date;
+    private Long date;
 
     public Order() {
     }
 
-    public Order(String productId, String productName, String quantity, String price, String seller, String date) {
+    public Order(String productId, String productName, String quantity, String price, String seller, Long date) {
         this.productId = productId;
         this.productName = productName;
         this.quantity = quantity;
@@ -22,11 +22,11 @@ public class Order {
     }
 
 
-    public String getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 

@@ -61,7 +61,7 @@ public class MainMenu extends AppCompatActivity {
         recap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainMenu.this, AddProduct.class);
+                Intent intent = new Intent(MainMenu.this, RekapOption.class);
                 startActivity(intent);
             }
         });
