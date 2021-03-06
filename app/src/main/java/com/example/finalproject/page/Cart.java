@@ -78,7 +78,7 @@ public class Cart extends BaseActivity {
 
 
     private void initView(){
-        toolbar.setTitle("Main Menu");
+        toolbar.setTitle("Keranjang");
         setSupportActionBar(toolbar);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);

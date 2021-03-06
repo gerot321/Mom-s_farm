@@ -64,17 +64,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
 
     @Override
     public void onBindViewHolder(CartViewHolder holder, int position) {
-        TextDrawable drawable = TextDrawable.builder()
-                .buildRound(""+listData.get(position).getQuantity(), Color.RED);
+//        TextDrawable drawable = TextDrawable.builder()
+//                .buildRound(""+listData.get(position).getQuantity(), Color.RED);
 
-        holder.img_cart_count.setImageDrawable(drawable);
+//        holder.img_cart_count.setImageDrawable(drawable);
 
 
 
 //        int shippingPrice = (Integer.parseInt(listData.get(position).getShippingPrice()));
         holder.txt_price.setText("Total Price : "+listData.get(position).getPrice());
 
-        holder.txt_shipping_price.setText("Shipping Price : 5000");
+        holder.txt_shipping_price.setText("Stock : "+listData.get(position).getQuantity());
 
         holder.txt_cart_name.setText(listData.get(position).getProductName());
     }

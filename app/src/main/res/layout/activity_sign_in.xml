@@ -33,7 +33,6 @@
             android:layout_height="wrap_content"
             android:hint="Phone Number"
             android:inputType="phone"
-            android:text="085945170120"
             android:textColorHint="@android:color/white"
             android:textSize="34sp"
 
@@ -49,7 +48,6 @@
             android:layout_height="wrap_content"
             android:hint="Password"
             android:inputType="textPassword"
-            android:text="111111"
             android:textColorHint="@android:color/white"
             android:textSize="34sp"
             app:met_floatingLabel="highlight"
