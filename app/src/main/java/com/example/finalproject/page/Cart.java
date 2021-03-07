@@ -2,7 +2,6 @@ package com.example.finalproject.page;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -10,23 +9,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.finalproject.Checkout;
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Database.Database;
 import com.example.finalproject.Model.Order;
+import com.example.finalproject.Model.Product;
 import com.example.finalproject.R;
 import com.example.finalproject.adapter.CartAdapter;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.page.scanner.CodeScannerActivity;
 import com.example.finalproject.util.PreferenceUtil;
 import com.example.finalproject.util.StringUtil;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -53,6 +53,7 @@ public class Cart extends BaseActivity {
 
     FirebaseDatabase database;
     DatabaseReference requests;
+    DatabaseReference productRef;
 
     List<Order> cart = new ArrayList<>();
     CartAdapter adapter;
@@ -72,6 +73,7 @@ public class Cart extends BaseActivity {
     private void initEnv(){
         database = FirebaseDatabase.getInstance();
         requests = database.getReference("Order");
+        productRef = database.getReference("Product");
 //        DatabaseReference cities = requests.child("cities")
 //        Query citiesQuery = requests.orderByKey().startAt(input).endAt(input+"\uf8ff");
     }
@@ -86,12 +88,26 @@ public class Cart extends BaseActivity {
         btnPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Order> orders =  PreferenceUtil.getOrders();
-                for(Order order : orders){
+                final List<Order> orders =  PreferenceUtil.getOrders();
+                for(final Order order : orders){
                     String id = "ORD-"+String.valueOf(System.currentTimeMillis());
                     requests.child(id).setValue(order);
+                    productRef.child(order.getProductId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            final Product product = dataSnapshot.getValue(Product.class);
+                            productRef.child(order.getProductId()).child("Stock").setValue(String.valueOf(Integer.parseInt(product.getStock())-Integer.parseInt(order.getQuantity())));
+                            productRef.removeEventListener(this);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
                 Toast.makeText(Cart.this,"Order Terbuat",Toast.LENGTH_LONG).show();
+                PreferenceUtil.clearOrder();
                 finish();
             }
         });

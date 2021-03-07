@@ -61,8 +61,7 @@ public class AddProduct extends BaseActivity {
 
     private StorageTask mUploadTask;
     private ImageView mImageView;
-//    private ProgressBar mProgressBar;
-    String mercId = " ";
+
     private StorageReference mStorageRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,23 +96,8 @@ public class AddProduct extends BaseActivity {
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference table_user = database.getReference("Product");
-//        Query applesQuery = table_user;
-//
-//        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
-//                    appleSnapshot.getRef().removeValue();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.e("123", "onCancelled", databaseError.toException());
-//            }
-//        });
 
-        mercId =  getIntent().getStringExtra("merch");
+
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

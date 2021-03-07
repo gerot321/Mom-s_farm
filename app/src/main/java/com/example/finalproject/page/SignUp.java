@@ -2,25 +2,43 @@ package com.example.finalproject.page;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.finalproject.Model.Product;
 import com.example.finalproject.Model.User;
 import com.example.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
+import com.example.finalproject.util.PreferenceUtil;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,22 +50,44 @@ import butterknife.ButterKnife;
 public class SignUp extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.image_card)
+    CardView imageHolder;
+    @BindView(R.id.button_choose_image)
+    RelativeLayout mButtonChooseImage;
+    @BindView(R.id.image_view)
+    ImageView mImageView;
+
     private static final String TAG = "PhoneAuth";
     MaterialEditText etPhone, etName, etPassword,etDate,etAddress,etEmail;
     RadioButton radio;
     RadioGroup groups;
     Button btnSignUp;
-//    private String phoneVerificationId;
-//    private PhoneAuthProvider.ForceResendingToken resendToken;
-//    private PhoneAuthProvider.OnVerificationStateChangedCallbacks
-//            verificationCallbacks;
+    private Uri mImageUri;
+
+    private static final int PICK_IMAGE_REQUEST = 1;
+
+    private StorageTask mUploadTask;
+    private StorageReference mStorageRef;
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
+    DatabaseReference table_user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+
+        mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+            }
+        });
+
         setTitle(toolbar, "Buat Akun");
         etPhone = (MaterialEditText)findViewById(R.id.etPhone);
         etName = (MaterialEditText)findViewById(R.id.etName);
@@ -57,11 +97,10 @@ public class SignUp extends BaseActivity {
         radio= (RadioButton)findViewById(R.id.radioButton);
         groups =(RadioGroup)findViewById(R.id.radioGroup);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
-        etEmail=(MaterialEditText)findViewById(R.id.etEmail);
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference table_user = database.getReference("User");
+        table_user = database.getReference("User");
         etDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -78,38 +117,73 @@ public class SignUp extends BaseActivity {
             @Override
             public void onClick(final View v) {
 
-                final ProgressDialog mDialog = new ProgressDialog(SignUp.this);
-                mDialog.setMessage("loading...");
-                mDialog.show();
+                showProgress();
 
-                table_user.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.child(etPhone.getText().toString()).exists()){
-                            mDialog.dismiss();
 
-                            Toast.makeText(SignUp.this, "Account already exist!", Toast.LENGTH_SHORT).show();
-                        }else {
-                            mDialog.dismiss();
-                            int select = groups.getCheckedRadioButtonId();
-                            radio= (RadioButton)findViewById(select);
-//                            sendCode(v);
-                            User user = new User(etName.getText().toString(), etPassword.getText().toString(), "Costumer","0",etAddress.getText().toString(),radio.getText().toString(),
-                                    etDate.getText().toString()," "," "," ",etEmail.getText().toString(),"unVerified");
-                            table_user.child(etPhone.getText().toString()).setValue(user);
-                            Toast.makeText(SignUp.this, "Account successfully created!", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }
+                if (mImageUri != null) {
+                    StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+                            + "." + getFileExtension(mImageUri));
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    mUploadTask = fileReference.putFile(mImageUri)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+//
+                                    table_user.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            if(dataSnapshot.child(etPhone.getText().toString()).exists()){
+                                                disProgress();
 
-                    }
-                });
+                                                Toast.makeText(SignUp.this, "Account already exist!", Toast.LENGTH_SHORT).show();
+                                            }else {
+                                                disProgress();
+                                                createUser(taskSnapshot.getDownloadUrl().toString());
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(SignUp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+//                                    mProgressBar.setProgress((int) progress);
+
+                                }
+                            });
+                } else {
+                    createUser(" ");
+                }
+
 
             }
         });
+    }
+
+    private void createUser (String image){
+        int select = groups.getCheckedRadioButtonId();
+        radio= (RadioButton)findViewById(select);
+        User user = new User(etName.getText().toString(), etPassword.getText().toString(), "Costumer","0",etAddress.getText().toString(),radio.getText().toString(),
+                etDate.getText().toString()," "," ", image," ","unVerified");
+        table_user.child(PreferenceUtil.getUser().getPhone()).removeValue();
+        table_user.child(user.getPhone()).setValue(user);
+        PreferenceUtil.setUser(user);
+        Toast.makeText(SignUp.this, "Berhasil Membuat Akun", Toast.LENGTH_SHORT).show();
+
+        finish();
     }
 
     private void showDateDialog(){
@@ -130,60 +204,21 @@ public class SignUp extends BaseActivity {
 
         datePickerDialog.show();
     }
-//    public void sendCode(View view) {
-//
-//        String phoneNumber = etPhone.getText().toString();
-//
-//        setUpVerificatonCallbacks();
-//
-//        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-//                phoneNumber,        // Phone number to verify
-//                60,                 // Timeout duration
-//                TimeUnit.SECONDS,   // Unit of timeout
-//                this,               // Activity (for callback binding)
-//                verificationCallbacks);
-//    }
-//    private void setUpVerificatonCallbacks() {
-//
-//        verificationCallbacks =
-//                new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-//
-//                    @Override
-//                    public void onVerificationCompleted(
-//                            PhoneAuthCredential credential) {
-//
-//
-//                    }
-//
-//                    @Override
-//                    public void onVerificationFailed(FirebaseException e) {
-//
-//                        if (e instanceof FirebaseAuthInvalidCredentialsException) {
-//                            // Invalid request
-//
-//                            Toast.makeText(SignUp.this, "Invalid credential: "
-//                                    + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-//
-//                        } else if (e instanceof FirebaseTooManyRequestsException) {
-//                            // SMS quota exceeded
-//                            Toast.makeText(SignUp.this, "SMS Quota exceeded.", Toast.LENGTH_SHORT).show();
-//                            Log.d(TAG, "SMS Quota exceeded.");
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onCodeSent(String verificationId,
-//                                           PhoneAuthProvider.ForceResendingToken token) {
-//
-//                        phoneVerificationId = verificationId;
-//                        resendToken = token;
-//                        Intent I = new Intent(SignUp.this, SmsVerify.class);
-//                        I.putExtra("Phone",etPhone.getText().toString());
-//                        I.putExtra("creden",verificationId);
-//                        I.putExtra("token",token.toString());
-//                        startActivity(I);
-//
-//                    }
-//                };
-//    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            mImageUri = data.getData();
+            imageHolder.setVisibility(View.VISIBLE);
+            Picasso.with(this).load(mImageUri).into(mImageView);
+        }
+    }
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
 }

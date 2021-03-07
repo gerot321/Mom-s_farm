@@ -138,6 +138,7 @@ public class CodeScannerActivity extends BaseCameraActivity {
                             setResult(RESULT_OK, intent);
                             finish();
                         }
+                        productReference.removeEventListener(this);
 
 
                     }
