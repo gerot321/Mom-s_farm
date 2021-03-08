@@ -27,25 +27,30 @@ import butterknife.ButterKnife;
 public class SignIn extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    EditText etPhone, etPassword;
-
+    @BindView(R.id.etPhone)
+    EditText etPhone;
+    @BindView(R.id.etPassword)
+    EditText etPassword;
+    @BindView(R.id.btnSignIn)
     Button btnSignIn;
 
+    DatabaseReference table_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
-        setTitle(toolbar, "Masuk");
-        etPhone = (MaterialEditText)findViewById(R.id.etPhone);
-        etPassword = (MaterialEditText)findViewById(R.id.etPassword);
-        btnSignIn = (Button)findViewById(R.id.btnSignIn);
         PreferenceUtil.setContext(this);
-        // Initialize firebase
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference table_user = database.getReference("User");
 
+        initEnv();
+        initView();
+
+
+    }
+
+    private void initView(){
+        setTitle(toolbar, "Masuk");
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +99,11 @@ public class SignIn extends BaseActivity {
                 });
             }
         });
+    }
 
+    private void initEnv(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        table_user = database.getReference("User");
     }
 
 }

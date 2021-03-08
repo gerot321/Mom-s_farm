@@ -136,11 +136,7 @@ public class RekapDetail extends BaseActivity {
     }
 
     private void initEnv(){
-        long diffStart = endDate.getTime() - startDate.getTime();
-        long dayStart = TimeUnit.DAYS.convert(diffStart, TimeUnit.MILLISECONDS);
-        calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-        calendar.add(Calendar.DAY_OF_MONTH,-(int) (dayStart+1));
+
 
         typeRecap = getIntent().getStringExtra("type");
         database = FirebaseDatabase.getInstance();
@@ -152,7 +148,11 @@ public class RekapDetail extends BaseActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
+        long diffStart = endDate.getTime() - startDate.getTime();
+        long dayStart = TimeUnit.DAYS.convert(diffStart, TimeUnit.MILLISECONDS);
+        calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.DAY_OF_MONTH,-(int) (dayStart+1));
         long diff = endDate.getTime() - startDate.getTime();
         long day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
         Calendar calendar = Calendar.getInstance();
@@ -216,7 +216,7 @@ public class RekapDetail extends BaseActivity {
 
                 YAxis leftAxis = lineChart.getAxisLeft();
                 leftAxis.removeAllLimitLines();
-                leftAxis.setAxisMaximum(max);
+                leftAxis.setAxisMaximum(max+(max/10));
                 leftAxis.setAxisMinimum(0f);
                 leftAxis.enableGridDashedLine(10f, 10f, 0f);
                 leftAxis.setDrawZeroLine(false);
@@ -250,22 +250,27 @@ public class RekapDetail extends BaseActivity {
 
     private void addData(Order sale){
         Date date = new Date(sale.getDate());
-        if(max<Integer.parseInt(sale.getPrice())){
-            max = Integer.parseInt(sale.getPrice());
-        }
+
         if(date.equals(startDate)||date.after(startDate)){
             long diff = date.getTime() - startDate.getTime();
             long day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
             chartList.get((int) day).setY((chartList.get((int) day).getY()+Float.parseFloat(sale.getPrice())));
             orderList.add(sale);
             total += Integer.parseInt(sale.getPrice());
+            if (max<(chartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()))){
+                max = (int) (chartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()));
+            }
         }else{
             prevOrderList.add(sale);
             prevTotal += Integer.parseInt(sale.getPrice());
-
             long diff = date.getTime() - calendar.getTime().getTime();
             long day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
             prevChartList.get((int) day).setY((prevChartList.get((int) day).getY()+Integer.parseInt(sale.getPrice())));
+            if (max<(prevChartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()))){
+                max = (int) (prevChartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()));
+            }
+
         }
     }
 

@@ -6,9 +6,9 @@ android {
         applicationId "com.example.finalproject"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
+        versionCode 210308001
         multiDexEnabled true
-        versionName "1.0"
+        versionName "1.210308001"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

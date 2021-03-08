@@ -56,11 +56,21 @@ public class SignUp extends BaseActivity {
     RelativeLayout mButtonChooseImage;
     @BindView(R.id.image_view)
     ImageView mImageView;
-
-    private static final String TAG = "PhoneAuth";
-    MaterialEditText etPhone, etName, etPassword,etDate,etAddress,etEmail;
+    @BindView(R.id.etPhone)
+    MaterialEditText etPhone;
+    @BindView(R.id.etName)
+    MaterialEditText etName;
+    @BindView(R.id.etPassword)
+    MaterialEditText etPassword;
+    @BindView(R.id.etTanngal)
+    MaterialEditText etDate;
+    @BindView(R.id.etAddress)
+    MaterialEditText etAddress;
+    @BindView(R.id.radioButton)
     RadioButton radio;
+    @BindView(R.id.radioGroup)
     RadioGroup groups;
+    @BindView(R.id.btnSignUp)
     Button btnSignUp;
     private Uri mImageUri;
 
@@ -76,8 +86,19 @@ public class SignUp extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
-        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+        initEnv();
+        initView();
+    }
 
+    private void initEnv(){
+        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        table_user = database.getReference("User");
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+    }
+
+    private void initView(){
+        setTitle(toolbar, "Buat Akun");
         mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,20 +108,6 @@ public class SignUp extends BaseActivity {
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
-
-        setTitle(toolbar, "Buat Akun");
-        etPhone = (MaterialEditText)findViewById(R.id.etPhone);
-        etName = (MaterialEditText)findViewById(R.id.etName);
-        etPassword = (MaterialEditText)findViewById(R.id.etPassword);
-        etDate= (MaterialEditText)findViewById(R.id.etTanngal);
-        etAddress =(MaterialEditText)findViewById(R.id.etAddress);
-        radio= (RadioButton)findViewById(R.id.radioButton);
-        groups =(RadioGroup)findViewById(R.id.radioGroup);
-        btnSignUp = (Button) findViewById(R.id.btnSignUp);
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        table_user = database.getReference("User");
         etDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -140,6 +147,7 @@ public class SignUp extends BaseActivity {
                                                 disProgress();
                                                 createUser(taskSnapshot.getDownloadUrl().toString());
                                             }
+                                            table_user.removeEventListener(this);
                                         }
 
                                         @Override
@@ -176,9 +184,8 @@ public class SignUp extends BaseActivity {
     private void createUser (String image){
         int select = groups.getCheckedRadioButtonId();
         radio= (RadioButton)findViewById(select);
-        User user = new User(etName.getText().toString(), etPassword.getText().toString(), "Costumer","0",etAddress.getText().toString(),radio.getText().toString(),
+        User user = new User(etName.getText().toString(), etPassword.getText().toString(), "Costumer",etPhone.getText().toString(),etAddress.getText().toString(),radio.getText().toString(),
                 etDate.getText().toString()," "," ", image," ","unVerified");
-        table_user.child(PreferenceUtil.getUser().getPhone()).removeValue();
         table_user.child(user.getPhone()).setValue(user);
         PreferenceUtil.setUser(user);
         Toast.makeText(SignUp.this, "Berhasil Membuat Akun", Toast.LENGTH_SHORT).show();

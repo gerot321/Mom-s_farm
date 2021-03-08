@@ -15,11 +15,11 @@ public class User {
 
     }
 
-    public User(String name, String password,String status,String saldo,String address,String gender,String tanggalLahir,String hobi, String profesi,String image,String email,String verified) {
+    public User(String name, String password,String status,String phone,String address,String gender,String tanggalLahir,String hobi, String profesi,String image,String email,String verified) {
         this.name = name;
         this.password = password;
         this.status = status;
-        this.saldo=saldo;
+        this.phone=phone;
         this.address=address;
         this.gender=gender;
         this.tanggalLahir=tanggalLahir;

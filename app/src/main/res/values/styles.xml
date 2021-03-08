@@ -23,5 +23,13 @@
         <!--<item name="android:textColor">@android:color/white</item>-->
         <!--<item name="android:textStyle">normal</item>-->
     <!--</style>-->
+    <style name="TextAppearance.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 
+    <style name="TextAppearance.App.TextInputLayoutLogin" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">34sp</item>
+    </style>
 </resources>

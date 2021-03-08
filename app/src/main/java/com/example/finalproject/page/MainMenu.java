@@ -60,11 +60,6 @@ public class MainMenu extends AppCompatActivity  implements NavigationView.OnNav
         initView();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
 
     private void initView(){
         toolbar.setTitle("Main Menu");
@@ -92,7 +87,9 @@ public class MainMenu extends AppCompatActivity  implements NavigationView.OnNav
             }
         });
         myImage = headerView.findViewById(R.id.my_image);
-        Picasso.with(this).load(PreferenceUtil.getUser().getImage()).into(myImage);
+        if(!PreferenceUtil.getUser().getImage().equals(" ")&&!PreferenceUtil.getUser().getImage().isEmpty()){
+            Picasso.with(this).load(PreferenceUtil.getUser().getImage()).into(myImage);
+        }
 
 
         addProduct.setOnClickListener(new View.OnClickListener() {

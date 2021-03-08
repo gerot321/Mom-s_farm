@@ -52,28 +52,38 @@ public class AddProduct extends BaseActivity {
     EditText stockEdt;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.button_choose_image)
+    RelativeLayout mButtonChooseImage;
+    @BindView(R.id.image_view)
+    ImageView mImageView;
+    @BindView(R.id.nameProduct)
+    MaterialEditText  Name;
+    @BindView(R.id.Price)
+    MaterialEditText Price;
+    @BindView(R.id.btnSignUp)
+    Button btnSignUp;
 
     private static final int PICK_IMAGE_REQUEST = 1;
-    MaterialEditText  Name, Price;
-    private RelativeLayout mButtonChooseImage;
-    Button btnSignUp;
+
     private Uri mImageUri;
 
     private StorageTask mUploadTask;
-    private ImageView mImageView;
 
+    DatabaseReference table_user;
     private StorageReference mStorageRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         ButterKnife.bind(this);
+
+        initEnv();
+        initView();
+
+    }
+
+    private void initView(){
         setTitle(toolbar, "Tambah Produk");
-        mButtonChooseImage = findViewById(R.id.button_choose_image);
-        Name = findViewById(R.id.nameProduct);
-        Price =  findViewById(R.id.Price);
-        btnSignUp = findViewById(R.id.btnSignUp);
-        mImageView =  findViewById(R.id.image_view);
 
         plusStock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,9 +103,6 @@ public class AddProduct extends BaseActivity {
             }
         });
 
-        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference table_user = database.getReference("Product");
 
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
@@ -110,8 +117,8 @@ public class AddProduct extends BaseActivity {
                             .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-//
-                                    Product products = new Product( "PROD-"+String.valueOf(System.currentTimeMillis()), Name.getText().toString(), taskSnapshot.getDownloadUrl().toString(), Price.getText().toString(), stockEdt.getText().toString());
+
+                                    Product products = new Product( "PROD-"+String.valueOf(System.currentTimeMillis()), Name.getText().toString(), taskSnapshot.getDownloadUrl().toString(), Price.getText().toString(), stockEdt.getText().toString(), "ACTIVE");
                                     table_user.child(products.getProductId()).setValue(products);
                                     disProgress();
                                     Toast.makeText(AddProduct.this, "Berhasil Menambahkan Produk", Toast.LENGTH_SHORT).show();
@@ -152,9 +159,15 @@ public class AddProduct extends BaseActivity {
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
-
     }
 
+
+    private void initEnv(){
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        table_user = database.getReference("Product");
+
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

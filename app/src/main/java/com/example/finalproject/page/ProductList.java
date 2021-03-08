@@ -84,7 +84,7 @@ public class ProductList extends BaseActivity {
         adapter = new FirebaseRecyclerAdapter<Product, ShoeViewHolder>(Product.class,
                 R.layout.shoe_item,
                 ShoeViewHolder.class,
-                query) {
+                query.orderByChild("isActive").equalTo("ACTIVE")) {
             @Override
             protected void populateViewHolder(ShoeViewHolder viewHolder, final Product model, int position) {
                 viewHolder.shoe_name.setText(model.getName());

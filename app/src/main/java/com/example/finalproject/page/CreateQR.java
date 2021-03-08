@@ -118,6 +118,8 @@ public class CreateQR extends AppCompatActivity {
         dir.mkdirs();
         String fileName = String.format("%d.jpg", System.currentTimeMillis());
         File outFile = new File(dir, fileName);
+
+
         try {
             outStream = new FileOutputStream(outFile);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
@@ -127,6 +129,9 @@ public class CreateQR extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        intent.setData(Uri.fromFile(outFile));
+        sendBroadcast(intent);
     }
 
     private void checkPermission() {

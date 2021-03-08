@@ -49,6 +49,8 @@ public class ProductDetail extends BaseActivity {
     MaterialEditText productName;
     @BindView(R.id.submit_btn)
     Button submitBtn;
+    @BindView(R.id.delete_btn)
+    Button deleteBtn;
     @BindView(R.id.button_choose_image)
     RelativeLayout mButtonChooseImage;
     @BindView(R.id.minus_stock)
@@ -97,7 +99,14 @@ public class ProductDetail extends BaseActivity {
 
     public void initView(){
         setTitle(toolbar, "Ubah Produk");
-
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                productTable.child(productId).child("isActive").setValue("NONACTIVE");
+                Toast.makeText(ProductDetail.this, "Berhasil menghapus produk", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
         plusStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,7 +124,7 @@ public class ProductDetail extends BaseActivity {
                 }
             }
         });
-        if(product.getImage()!=null){
+        if(product.getImage()!=null&&!product.getImage().equals(" ")&&!product.getImage().isEmpty()){
             imageCard.setVisibility(View.VISIBLE);
             Picasso.with(getBaseContext()).load(product.getImage()).into(imageProduct);
         }

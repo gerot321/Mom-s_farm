@@ -6,19 +6,21 @@ import android.os.Parcelable;
 import com.google.firebase.database.PropertyName;
 
 public class Product implements Parcelable {
-    private String name, image, price, stock,productId;
+    private String name, image, price, stock,productId,isActive;
 
     public Product(){
 
     }
 
-    public Product(String Id,String Name, String Image, String Price, String Stock) {
-        productId=Id;
-        name = Name;
-        image = Image;
-        price = Price;
-        stock = Stock;;
+    public Product(String id,String name, String image, String price, String stock, String isActive) {
+        productId=id;
+        this.name = name;
+        this.image = image;
+        this.price = price;
+        this.stock = stock;
+        this.isActive = isActive;
     }
+
 
     protected Product(Parcel in) {
         name = in.readString();
@@ -26,20 +28,7 @@ public class Product implements Parcelable {
         price = in.readString();
         stock = in.readString();
         productId = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(image);
-        dest.writeString(price);
-        dest.writeString(stock);
-        dest.writeString(productId);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        isActive = in.readString();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -93,6 +82,30 @@ public class Product implements Parcelable {
     @PropertyName("ProductId")
     public void setProductId(String productId) {
         this.productId = productId;
+    }
+
+    @PropertyName("isActive")
+    public String getIsActive() {
+        return isActive;
+    }
+    @PropertyName("isActive")
+    public void setIsActive(String isActive) {
+        this.isActive = isActive;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeString(image);
+        parcel.writeString(price);
+        parcel.writeString(stock);
+        parcel.writeString(productId);
+        parcel.writeString(isActive);
     }
 }
 

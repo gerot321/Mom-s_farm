@@ -4,20 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.finalproject.page.SignIn"
-  >
+    tools:context="com.example.finalproject.page.SignIn">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
-
     </android.support.design.widget.AppBarLayout>
     <LinearLayout
         android:orientation="vertical"
@@ -35,24 +32,30 @@
             android:inputType="phone"
             android:textColorHint="@android:color/white"
             android:textSize="34sp"
-
+            app:met_textColorHint="@color/colorBlack"
             app:met_floatingLabel="highlight"
             app:met_maxCharacters="15"
-
-            app:met_singleLineEllipsis="true" />
-
-
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/etPassword"
+            app:met_singleLineEllipsis="true"/>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:textColorHint="@android:color/white"
-            android:textSize="34sp"
-            app:met_floatingLabel="highlight"
-            app:met_maxCharacters="10"
-            app:met_singleLineEllipsis="true" />
+            android:textColorHint="@color/colorBlack"
+            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayoutLogin"
+            app:passwordToggleEnabled="true">
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColorHint="@android:color/white"
+                android:textSize="34sp"
+                app:met_floatingLabel="highlight"
+                app:met_maxCharacters="10"
+                app:met_singleLineEllipsis="true" />
+        </android.support.design.widget.TextInputLayout>
+
     </LinearLayout>
 
 

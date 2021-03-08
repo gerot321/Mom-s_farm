@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Phone Number"
                 android:inputType="phone"
-                android:textColorHint="@android:color/white"
+                android:textColorHint="@color/colorBlack"
                 android:textSize="12sp"
                 app:met_floatingLabel="highlight"
                 app:met_maxCharacters="15"
@@ -87,30 +87,37 @@
                 android:layout_height="wrap_content"
                 android:hint="Name"
                 android:inputType="textPersonName"
-                android:textColorHint="@android:color/white"
+                android:textColorHint="@color/colorBlack"
                 android:textSize="12sp"
                 app:met_floatingLabel="highlight"
                 app:met_singleLineEllipsis="true" />
 
-
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/etPassword"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
-                android:textColorHint="@android:color/white"
-                android:textSize="12sp"
-                android:inputType="textPassword"
-                app:met_floatingLabel="highlight"
-                app:met_maxCharacters="16"
-                app:met_singleLineEllipsis="true" />
+                android:textColorHint="@color/colorBlack"
+                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
+                app:passwordToggleEnabled="true">
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    android:textColorHint="@color/colorBlack"
+                    android:textSize="12sp"
+                    android:inputType="textPassword"
+                    app:met_floatingLabel="none"
+                    app:met_maxCharacters="16"
+                    app:met_singleLineEllipsis="true" />
+            </android.support.design.widget.TextInputLayout>
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/etAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Alamat Lengkap"
-                android:textColorHint="@android:color/white"
+                android:textColorHint="@color/colorBlack"
                 android:textSize="12sp"
                 app:met_floatingLabel="highlight"
                 app:met_singleLineEllipsis="true" />
@@ -120,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Tanggal Lahir"
                 android:inputType="date"
-                android:textColorHint="@android:color/white"
+                android:textColorHint="@color/colorBlack"
                 android:textSize="12sp"
                 app:met_floatingLabel="highlight"
                 app:met_singleLineEllipsis="true" />

@@ -57,16 +57,30 @@ public class EditProfile extends BaseActivity {
     RadioButton male;
     @BindView(R.id.radioButton2)
     RadioButton female;
+    @BindView(R.id.etPhone)
+    MaterialEditText etPhone;
+    @BindView(R.id.etName)
+    MaterialEditText etName;
+    @BindView(R.id.etPassword)
+    MaterialEditText etPassword;
+    @BindView(R.id.etTanngal)
+    MaterialEditText etDate;
+    @BindView(R.id.etAddress)
+    MaterialEditText etAddress;
+    @BindView(R.id.radioButton)
+    RadioButton radio;
+    @BindView(R.id.radioGroup)
+    RadioGroup groups;
+    @BindView(R.id.btnSignUp)
+    Button btnSignUp;
+
 
     private static final String TAG = "PhoneAuth";
-    MaterialEditText etPhone, etName, etPassword,etDate,etAddress,etEmail;
-    RadioButton radio;
-    RadioGroup groups;
-    Button btnSignUp;
+
     private Uri mImageUri;
 
     private static final int PICK_IMAGE_REQUEST = 1;
-
+    FirebaseDatabase database;
     private StorageTask mUploadTask;
     private StorageReference mStorageRef;
     private DatePickerDialog datePickerDialog;
@@ -77,8 +91,13 @@ public class EditProfile extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
-        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+        initEnv();
+        initView();
 
+
+    }
+
+    private void initView(){
         mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,20 +109,16 @@ public class EditProfile extends BaseActivity {
         });
 
         setTitle(toolbar, "Buat Akun");
-        etPhone = (MaterialEditText)findViewById(R.id.etPhone);
         etPhone.setText(PreferenceUtil.getUser().getPhone());
-        etName = (MaterialEditText)findViewById(R.id.etName);
         etName.setText(PreferenceUtil.getUser().getName());
-        etPassword = (MaterialEditText)findViewById(R.id.etPassword);
-        etDate= (MaterialEditText)findViewById(R.id.etTanngal);
         etDate.setText(PreferenceUtil.getUser().getTanggalLahir());
-        etAddress =(MaterialEditText)findViewById(R.id.etAddress);
         etAddress.setText(PreferenceUtil.getUser().getAddress());
-        radio= (RadioButton)findViewById(R.id.radioButton);
-        groups =(RadioGroup)findViewById(R.id.radioGroup);
-        btnSignUp = (Button) findViewById(R.id.btnSignUp);
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-
+        etPhone.setEnabled(false);
+        if(PreferenceUtil.getUser().getImage()!=null&&!PreferenceUtil.getUser().getImage().equals(" ")&&!PreferenceUtil.getUser().getImage().isEmpty()){
+            imageHolder.setVisibility(View.VISIBLE);
+            Picasso.with(getBaseContext()).load(PreferenceUtil.getUser().getImage()).into(mImageView);
+        }
+        btnSignUp.setText("Daftar Akun");
         if(PreferenceUtil.getUser().getGender().equals("Female")){
             male.setChecked(false);
             female.setChecked(true);
@@ -112,8 +127,7 @@ public class EditProfile extends BaseActivity {
             female.setChecked(false);
         }
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        table_user = database.getReference("User");
+
         etDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -145,14 +159,8 @@ public class EditProfile extends BaseActivity {
                                     table_user.addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            if(dataSnapshot.child(etPhone.getText().toString()).exists()){
-                                                disProgress();
-
-                                                Toast.makeText(EditProfile.this, "Account already exist!", Toast.LENGTH_SHORT).show();
-                                            }else {
-                                                disProgress();
-                                                createUser(taskSnapshot.getDownloadUrl().toString());
-                                            }
+                                            disProgress();
+                                            createUser(taskSnapshot.getDownloadUrl().toString());
                                         }
 
                                         @Override
@@ -184,12 +192,20 @@ public class EditProfile extends BaseActivity {
 
             }
         });
+
+    }
+
+    private void initEnv(){
+        database = FirebaseDatabase.getInstance();
+        table_user = database.getReference("User");
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
     }
 
     private void createUser (String image){
         int select = groups.getCheckedRadioButtonId();
         radio= (RadioButton)findViewById(select);
-        User user = new User(etName.getText().toString(), etPassword.getText().toString(), "Costumer","0",etAddress.getText().toString(),radio.getText().toString(),
+        User user = new User(etName.getText().toString(), etPassword.getText().toString(), "Costumer",etPhone.getText().toString(),etAddress.getText().toString(),radio.getText().toString(),
                 etDate.getText().toString()," "," ", image," ","unVerified");
         table_user.child(PreferenceUtil.getUser().getPhone()).removeValue();
         table_user.child(user.getPhone()).setValue(user);
