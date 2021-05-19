@@ -12,16 +12,18 @@ import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.finalproject.Interface.ItemClickListener;
 import com.example.finalproject.Model.Order;
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
 class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public TextView txt_name, txt_price,txt_quantity, txt_product_id;
+    public TextView txt_name, txt_price,txt_quantity, txt_product_id, txt_product_price, txt_order_date, txt_type, txt_seller_name;
 
     private ItemClickListener itemClickListener;
 
@@ -33,8 +35,10 @@ class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
         txt_price = (TextView)itemView.findViewById(R.id.order_total);
         txt_product_id = (TextView)itemView.findViewById(R.id.order_id);
         txt_quantity = (TextView)itemView.findViewById(R.id.order_quantity);
-
-
+        txt_product_price = (TextView)itemView.findViewById(R.id.product_price);
+        txt_order_date = (TextView)itemView.findViewById(R.id.order_date);
+        txt_type = (TextView)itemView.findViewById(R.id.order_type);
+        txt_seller_name = (TextView)itemView.findViewById(R.id.seller_name);
     }
 
     @Override
@@ -62,11 +66,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderViewHolder>{
 
     @Override
     public void onBindViewHolder(OrderViewHolder holder, int position) {
-
+        SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yy");
+        Date date = new Date(listData.get(position).getDate());
         holder.txt_price.setText("Total Harga : "+listData.get(position).getPrice());
         holder.txt_quantity.setText("Jumlah Produk : "+listData.get(position).getQuantity());
         holder.txt_product_id.setText("Kode Produk : "+listData.get(position).getProductId());
         holder.txt_name.setText("Nama Barang : "+listData.get(position).getProductName());
+        holder.txt_product_price.setText("Harga Product : "+Integer.parseInt(listData.get(position).getPrice())/Integer.parseInt(listData.get(position).getQuantity()));
+        holder.txt_order_date.setText("Tanggal Order : "+formater.format(date));
+        holder.txt_type.setText("Tipe Order : "+listData.get(position).getType());
+        holder.txt_seller_name.setText("Penjual : "+listData.get(position).getSeller());
 
     }
 

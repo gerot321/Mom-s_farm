@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:padding="10dp"
         android:orientation="vertical"
-        android:layout_height="80dp">
+        android:layout_height="wrap_content">
         <TextView
             android:textColor="@color/colorWhite"
             android:text="Total Pendapatan"
@@ -50,12 +50,6 @@
             android:id="@+id/total_txt"
             android:textColor="@color/colorWhite"
             android:text="Periode Sekarang:"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/prev_total_txt"
-            android:textColor="@color/colorWhite"
-            android:text="Periode Seebelumnya:"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>

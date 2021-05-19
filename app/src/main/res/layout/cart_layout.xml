@@ -43,7 +43,17 @@
                 android:textAllCaps="true"
                 android:textStyle="italic" />
             <TextView
-                android:id="@+id/cart_shipping_price"
+                android:id="@+id/cart_stock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical|start"
+                android:text="10,000"
+                android:textAllCaps="true"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/cart_total_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -54,12 +64,12 @@
 
         </LinearLayout>
 
-<!--        <ImageView-->
-<!--            android:id="@+id/cart_item_count"-->
-<!--            android:layout_width="40dp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_gravity="center_horizontal|end"-->
-<!--            android:layout_marginTop="16dp" />-->
+        <ImageView
+            android:src="@drawable/ic_clear"
+            android:id="@+id/cart_item_delete"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|end" />
 
 
     </LinearLayout>

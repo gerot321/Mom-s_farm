@@ -5,7 +5,9 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/butterknife-8.8.0.aar/b1b4695f3ac5a51c67198cec7e7dca9f/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/butterknife-8.8.0.aar/b1b4695f3ac5a51c67198cec7e7dca9f/AndroidManifest.xml" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/8.8.0/6fff5cc94f958dad479526d7bece178dce3bbf80/butterknife-8.8.0-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/8.8.0/1b542592bf8a8f20e96584da92ef3f2fd56ad61e/butterknife-8.8.0-sources.jar!/" />
     </SOURCES>

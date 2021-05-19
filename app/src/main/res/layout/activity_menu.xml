@@ -97,7 +97,7 @@
                     android:layout_centerInParent="true"
                     android:textSize="20sp"
                     android:textColor="@color/colorBlack"
-                    android:text="Rekap Bulanan"
+                    android:text="Rekap Penjualan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
@@ -117,7 +117,7 @@
                     android:layout_centerInParent="true"
                     android:textSize="20sp"
                     android:textColor="@color/colorBlack"
-                    android:text="CetaK QR"
+                    android:text="Cetak QR"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>

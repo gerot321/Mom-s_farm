@@ -1,378 +1,72 @@
 {
   "project_info": {
-    "project_number": "389252841267",
-    "firebase_url": "https://onlincec.firebaseio.com",
-    "project_id": "onlincec",
-    "storage_bucket": "onlincec.appspot.com"
+    "project_number": "879456400904",
+    "firebase_url": "https://projectmomfarm-980ea-default-rtdb.firebaseio.com",
+    "project_id": "projectmomfarm-980ea",
+    "storage_bucket": "projectmomfarm-980ea.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:389252841267:android:6dbf872fed5e17d7ee8846",
+        "mobilesdk_app_id": "1:879456400904:android:fd4f50375e53acb34ac3bd",
         "android_client_info": {
           "package_name": "com.example.finalproject"
         }
       },
       "oauth_client": [
         {
-          "client_id": "389252841267-fmr89sl4r77bg5o5bj7p73mi6nena495.apps.googleusercontent.com",
+          "client_id": "879456400904-ujrrrnk6dus916ta68v8rkksrbn3ggpr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDj7qBKxuv4qR61GS4NKwz_PFcxy1a0JdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "879456400904-ujrrrnk6dus916ta68v8rkksrbn3ggpr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:879456400904:android:c8feed27551b0f104ac3bd",
+        "android_client_info": {
+          "package_name": "com.momsfarm.finalproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "879456400904-88663o5rnb0djsrfqsbfi08npvpgm62b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.finalproject",
+            "package_name": "com.momsfarm.finalproject",
             "certificate_hash": "0822edd30b78a96ac8a51a60d2f45c8201b2d008"
           }
         },
         {
-          "client_id": "389252841267-8hvphakjpisjkrnuu9qan6povn87oa84.apps.googleusercontent.com",
+          "client_id": "879456400904-ujrrrnk6dus916ta68v8rkksrbn3ggpr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDdt6Oe5A_5nq1Md_hpGyTdSs91ldPeT_s"
+          "current_key": "AIzaSyDj7qBKxuv4qR61GS4NKwz_PFcxy1a0JdU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "389252841267-5mgnbuti7jlirubibfl7s8lk8crkvkqh.apps.googleusercontent.com",
+              "client_id": "879456400904-ujrrrnk6dus916ta68v8rkksrbn3ggpr.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "389252841267-fd1flfckijnos892slv9g6u3qonko3p6.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.gerrys.canteen"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:389252841267:android:ac0632f08a5859b7",
-        "android_client_info": {
-          "package_name": "com.example.gerrys.canteen"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "389252841267-ehned3siem25jnvvhrj42ogam8c66adm.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.gerrys.canteen",
-            "certificate_hash": "ec43e40d67c8fbaafa798bb2f33ce10d61f34cff"
-          }
-        },
-        {
-          "client_id": "389252841267-tlet4pu5qco6c55flgv7ms1e1vh463aj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.gerrys.canteen",
-            "certificate_hash": "28c8a7b6fdec50f45d88a736dfde2547fec62fb8"
-          }
-        },
-        {
-          "client_id": "389252841267-8hvphakjpisjkrnuu9qan6povn87oa84.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDdt6Oe5A_5nq1Md_hpGyTdSs91ldPeT_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "389252841267-5mgnbuti7jlirubibfl7s8lk8crkvkqh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "389252841267-fd1flfckijnos892slv9g6u3qonko3p6.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.gerrys.canteen"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:389252841267:android:d565f5949ad9788f",
-        "android_client_info": {
-          "package_name": "com.example.gerrys.cashierapps"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "389252841267-8hvphakjpisjkrnuu9qan6povn87oa84.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDdt6Oe5A_5nq1Md_hpGyTdSs91ldPeT_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "389252841267-5mgnbuti7jlirubibfl7s8lk8crkvkqh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "389252841267-fd1flfckijnos892slv9g6u3qonko3p6.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.gerrys.canteen"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:389252841267:android:7d8fbec5dd5168f5",
-        "android_client_info": {
-          "package_name": "com.example.gerrys.charperone"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "389252841267-d0toi25n5ihf210omsse8oaj9ijb4lpg.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.gerrys.charperone",
-            "certificate_hash": "28c8a7b6fdec50f45d88a736dfde2547fec62fb8"
-          }
-        },
-        {
-          "client_id": "389252841267-8hvphakjpisjkrnuu9qan6povn87oa84.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDdt6Oe5A_5nq1Md_hpGyTdSs91ldPeT_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "389252841267-5mgnbuti7jlirubibfl7s8lk8crkvkqh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "389252841267-fd1flfckijnos892slv9g6u3qonko3p6.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.gerrys.canteen"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:389252841267:android:92017ddae2989380",
-        "android_client_info": {
-          "package_name": "com.example.gerrys.couriercharperone"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "389252841267-8hvphakjpisjkrnuu9qan6povn87oa84.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDdt6Oe5A_5nq1Md_hpGyTdSs91ldPeT_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "389252841267-5mgnbuti7jlirubibfl7s8lk8crkvkqh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "389252841267-fd1flfckijnos892slv9g6u3qonko3p6.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.gerrys.canteen"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:389252841267:android:938fe4c9c7e8d76d",
-        "android_client_info": {
-          "package_name": "com.example.gerrys.merchantapps"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "389252841267-8hvphakjpisjkrnuu9qan6povn87oa84.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDdt6Oe5A_5nq1Md_hpGyTdSs91ldPeT_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "389252841267-5mgnbuti7jlirubibfl7s8lk8crkvkqh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "389252841267-fd1flfckijnos892slv9g6u3qonko3p6.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.gerrys.canteen"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:389252841267:android:4557daa071990672",
-        "android_client_info": {
-          "package_name": "com.example.gerrys.onlinecanteen"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "389252841267-8hvphakjpisjkrnuu9qan6povn87oa84.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDdt6Oe5A_5nq1Md_hpGyTdSs91ldPeT_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "389252841267-5mgnbuti7jlirubibfl7s8lk8crkvkqh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "389252841267-fd1flfckijnos892slv9g6u3qonko3p6.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.gerrys.canteen"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:389252841267:android:da0ae41ee7c843d1",
-        "android_client_info": {
-          "package_name": "dev.edmt.qrcodecamera"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "389252841267-umgi7vg5cbqapi5chqec4r54mbnq28jb.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "dev.edmt.qrcodecamera",
-            "certificate_hash": "259a746dd5df24f2fbba84c1749625b7119a2a89"
-          }
-        },
-        {
-          "client_id": "389252841267-8hvphakjpisjkrnuu9qan6povn87oa84.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDdt6Oe5A_5nq1Md_hpGyTdSs91ldPeT_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "389252841267-5mgnbuti7jlirubibfl7s8lk8crkvkqh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "389252841267-fd1flfckijnos892slv9g6u3qonko3p6.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.gerrys.canteen"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:389252841267:android:2e07e4796cedfe18ee8846",
-        "android_client_info": {
-          "package_name": "in.spyapp.patanjali.android"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "389252841267-gl0fu71i5rhq4cgb8j78oav2kslujbsn.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "in.spyapp.patanjali.android",
-            "certificate_hash": "6922ef3a92711b0e8d8148357f8c0c841df227a2"
-          }
-        },
-        {
-          "client_id": "389252841267-8hvphakjpisjkrnuu9qan6povn87oa84.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDdt6Oe5A_5nq1Md_hpGyTdSs91ldPeT_s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "389252841267-5mgnbuti7jlirubibfl7s8lk8crkvkqh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "389252841267-fd1flfckijnos892slv9g6u3qonko3p6.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.gerrys.canteen"
-              }
             }
           ]
         }

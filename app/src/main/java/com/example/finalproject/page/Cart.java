@@ -8,7 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,7 +18,7 @@ import com.example.finalproject.Common.Common;
 import com.example.finalproject.Database.Database;
 import com.example.finalproject.Model.Order;
 import com.example.finalproject.Model.Product;
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 import com.example.finalproject.adapter.CartAdapter;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.page.scanner.CodeScannerActivity;
@@ -49,6 +51,8 @@ public class Cart extends BaseActivity {
     Button btnPlace;
     @BindView(R.id.btnClearCart)
     Button btnClear;
+    @BindView(R.id.order_option)
+    Spinner orderOption;
     RecyclerView.LayoutManager layoutManager;
 
     FirebaseDatabase database;
@@ -74,12 +78,22 @@ public class Cart extends BaseActivity {
         database = FirebaseDatabase.getInstance();
         requests = database.getReference("Order");
         productRef = database.getReference("Product");
-//        DatabaseReference cities = requests.child("cities")
-//        Query citiesQuery = requests.orderByKey().startAt(input).endAt(input+"\uf8ff");
+        loadListProduct();
     }
 
 
     private void initView(){
+        List<String> categories = new ArrayList<String>();
+        categories.add("Dibeli");
+        categories.add("Pribadi");
+        categories.add("Dll");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        orderOption.setAdapter(dataAdapter);
+
         toolbar.setTitle("Keranjang");
         setSupportActionBar(toolbar);
         recyclerView.setHasFixedSize(true);
@@ -91,12 +105,15 @@ public class Cart extends BaseActivity {
                 final List<Order> orders =  PreferenceUtil.getOrders();
                 for(final Order order : orders){
                     String id = "ORD-"+String.valueOf(System.currentTimeMillis());
+                    order.setType(orderOption.getSelectedItem().toString());
+                    order.setSeller(PreferenceUtil.getUser().getName());
+                    order.setSellerId(PreferenceUtil.getUser().getPhone());
                     requests.child(id).setValue(order);
                     productRef.child(order.getProductId()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             final Product product = dataSnapshot.getValue(Product.class);
-                            productRef.child(order.getProductId()).child("Stock").setValue(String.valueOf(Integer.parseInt(product.getStock())-Integer.parseInt(order.getQuantity())));
+                            productRef.child(order.getProductId()).child("stock").setValue(String.valueOf(Integer.parseInt(product.getStock())-Integer.parseInt(order.getQuantity())));
                             productRef.removeEventListener(this);
                         }
 
@@ -120,8 +137,9 @@ public class Cart extends BaseActivity {
                 finish();
             }
         });
+        adapter = new CartAdapter(cart, this);
+        recyclerView.setAdapter(adapter);
 
-        loadListProduct();
     }
 
     @Override
@@ -150,28 +168,28 @@ public class Cart extends BaseActivity {
     }
 
 
-    private void loadListProduct() {
+    public void loadListProduct() {
         cart = PreferenceUtil.getOrders();
-        adapter = new CartAdapter(cart, this);
-        recyclerView.setAdapter(adapter);
+        calculateTotal();
+    }
 
-        //Calculate total price
+    public void calculateTotal(){
         int total = 0;
 
         for (Order order:cart)
             total+=(Integer.parseInt(order.getPrice())*Integer.parseInt(order.getQuantity()));
-        Locale locale = new Locale("en", "US");
-        NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
 
         txtTotalPrice.setText("Rp "+ StringUtil.formatToIDR(String.valueOf(total)));
-
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == REQUEST_CODE  && resultCode  == RESULT_OK) {
-                loadListProduct();
+                cart = PreferenceUtil.getOrders();
+                calculateTotal();
+                adapter.addData(cart);
             }
         } catch (Exception ex) {
             Toast.makeText(Cart.this, ex.toString(),

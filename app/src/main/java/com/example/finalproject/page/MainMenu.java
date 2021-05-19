@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.MainActivity;
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 import com.example.finalproject.util.PreferenceUtil;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -91,7 +91,11 @@ public class MainMenu extends AppCompatActivity  implements NavigationView.OnNav
             Picasso.with(this).load(PreferenceUtil.getUser().getImage()).into(myImage);
         }
 
-
+        if(PreferenceUtil.getUser().getStatus().equals("ADMIN")){
+            addProduct.setVisibility(View.VISIBLE);
+        }else{
+            addProduct.setVisibility(View.GONE);
+        }
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,7 +103,6 @@ public class MainMenu extends AppCompatActivity  implements NavigationView.OnNav
                 startActivity(intent);
             }
         });
-
         recap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

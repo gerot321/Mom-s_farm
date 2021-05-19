@@ -41,7 +41,7 @@ import com.example.finalproject.Common.Common;
 import com.example.finalproject.Database.Database;
 import com.example.finalproject.Model.Order;
 import com.example.finalproject.Model.Product;
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 
 import com.example.finalproject.page.ProductList;
 import com.example.finalproject.util.PreferenceUtil;
@@ -113,32 +113,36 @@ public class ScanResultDialog extends AppCompatDialog {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(Integer.parseInt(stockEdt.getText().toString())!=0){
+                    List<Order> orders = PreferenceUtil.getOrders();
+                    boolean found = false;
+                    for(int i=0;i<orders.size();i++){
+                        if(orders.get(i).getProductId().equals(result.getProductId())){
+                            found = true;
 
-                List<Order> orders = PreferenceUtil.getOrders();
-                boolean found = false;
-                for(int i=0;i<orders.size();i++){
-                    if(orders.get(i).getProductId().equals(result.getProductId())){
-                        found = true;
-
-                        orders.get(i).setQuantity(String.valueOf(
-                                Integer.parseInt(orders.get(i).getQuantity())
-                                + Integer.parseInt(stockEdt.getText().toString())
+                            orders.get(i).setQuantity(String.valueOf(
+                                    Integer.parseInt(orders.get(i).getQuantity())
+                                            + Integer.parseInt(stockEdt.getText().toString())
+                            ));
+                        }
+                    }
+                    Date date = new Date();
+                    if(!found){
+                        orders.add(new Order(
+                                result.getProductId(),
+                                result.getName(),
+                                stockEdt.getText().toString(),
+                                result.getPrice(),
+                                PreferenceUtil.getUser().getPhone(),
+                                date.getTime()
                         ));
                     }
+                    PreferenceUtil.setOrders(orders);
+                    dismiss();
+                }else{
+                    Toast.makeText(getContext(),"Mohon memasukan stock diatas 0",Toast.LENGTH_LONG).show();
                 }
-                Date date = new Date();
-                if(!found){
-                    orders.add(new Order(
-                            result.getProductId(),
-                            result.getName(),
-                            stockEdt.getText().toString(),
-                            result.getPrice(),
-                            PreferenceUtil.getUser().getPhone(),
-                            date.getTime()
-                    ));
-                }
-                PreferenceUtil.setOrders(orders);
-                dismiss();
+
             }
         });
     }

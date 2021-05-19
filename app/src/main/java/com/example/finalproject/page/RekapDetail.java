@@ -26,7 +26,7 @@ import com.example.finalproject.Interface.ItemClickListener;
 import com.example.finalproject.MainActivity;
 import com.example.finalproject.Model.Order;
 import com.example.finalproject.Model.Product;
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 import com.example.finalproject.adapter.CartAdapter;
 import com.example.finalproject.adapter.OrderAdapter;
 import com.example.finalproject.base.BaseActivity;
@@ -69,8 +69,6 @@ public class RekapDetail extends BaseActivity {
     LineChart lineChart;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.prev_total_txt)
-    TextView prevTotalTxt;
     @BindView(R.id.total_txt)
     TextView totalTxt;
     RecyclerView.LayoutManager layoutManager;
@@ -83,6 +81,7 @@ public class RekapDetail extends BaseActivity {
     List<Order> prevOrderList = new ArrayList<>();
     List<Entry> chartList = new ArrayList<>();
     List<Entry> prevChartList = new ArrayList<>();
+    List<String> daylist = new ArrayList<>();
     Date startDate = new Date();
     Date endDate = new Date();
     SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
@@ -158,9 +157,20 @@ public class RekapDetail extends BaseActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
         calendar.add(Calendar.DAY_OF_MONTH,-(int) (day+1));
-        for(int i = 1;i<=(int) (day+1);i++){
+//        for(int i = 1;i<=(int) (day+1);i++){
+//            chartList.add(new Entry(i, 0));
+//            prevChartList.add(new Entry(i, 0));
+//        }
+
+        for(int i = 0;i<(int) (day+1);i++){
+            Calendar tempCalendar = Calendar.getInstance();
+            tempCalendar.setTime(startDate);
+            if(i>0){
+                tempCalendar.add(Calendar.DAY_OF_MONTH,+i);
+            }
+            daylist.add(String.valueOf(tempCalendar.getTime().getTime()));
             chartList.add(new Entry(i, 0));
-            prevChartList.add(new Entry(i, 0));
+//            prevChartList.add(new Entry(i, 0));
         }
         loadOrder(requests.orderByChild("date").startAt(calendar.getTime().getTime()).endAt(endDate.getTime()));
     }
@@ -175,7 +185,7 @@ public class RekapDetail extends BaseActivity {
                     if(!productId.isEmpty()){
                         if(sale.getProductId().equals(productId)){
                            if(typeRecap.equals("Individual")){
-                               if(sale.getSeller().equals(PreferenceUtil.getUser().getPhone())){
+                               if(sale.getSellerId().equals(PreferenceUtil.getUser().getPhone())){
                                    addData(sale);
                                }
                            }else{
@@ -183,7 +193,13 @@ public class RekapDetail extends BaseActivity {
                            }
                         }
                     }else{
-                        addData(sale);
+                        if(typeRecap.equals("Individual")){
+                            if(sale.getSellerId().equals(PreferenceUtil.getUser().getPhone())){
+                                addData(sale);
+                            }
+                        }else{
+                            addData(sale);
+                        }
                     }
 
 
@@ -191,20 +207,24 @@ public class RekapDetail extends BaseActivity {
                 Calendar endPrevDate = Calendar.getInstance();
                 endPrevDate.setTime(startDate);
                 endPrevDate.add(Calendar.DAY_OF_MONTH,-1);
-                prevTotalTxt.setText(dateFormatter.format(calendar.getTime())+" - "+dateFormatter.format(endPrevDate.getTime())+": "+StringUtil.formatToIDR(String.valueOf(prevTotal)));
                 totalTxt.setText(dateFormatter.format(startDate)+" - "+dateFormatter.format(endDate)+": "+StringUtil.formatToIDR(String.valueOf(total)));
 
                 LineDataSet kasusLineDataSet = new LineDataSet(chartList, dateFormatter.format(startDate)+" - "+dateFormatter.format(endDate));
-                kasusLineDataSet.setMode( LineDataSet.Mode.CUBIC_BEZIER);
                 kasusLineDataSet.setColor(Color.BLUE);
                 kasusLineDataSet.setCircleRadius(5f);
+                kasusLineDataSet.setDrawIcons(false);
+                kasusLineDataSet.setDrawCircles(false);
+                kasusLineDataSet.setDrawValues(false);
                 kasusLineDataSet.setCircleColor(Color.BLUE);
 
-                LineDataSet sembuhLineDataSet = new LineDataSet(prevChartList, dateFormatter.format(calendar.getTime())+" - "+dateFormatter.format(endPrevDate.getTime()));
-                sembuhLineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                sembuhLineDataSet.setColor(Color.GREEN);
-                sembuhLineDataSet.setCircleRadius(5f);
-                sembuhLineDataSet.setCircleColor(Color.GREEN);
+//                LineDataSet sembuhLineDataSet = new LineDataSet(prevChartList, dateFormatter.format(calendar.getTime())+" - "+dateFormatter.format(endPrevDate.getTime()));
+//                sembuhLineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+//                sembuhLineDataSet.setColor(Color.GREEN);
+//                sembuhLineDataSet.setCircleRadius(5f);
+//                sembuhLineDataSet.setDrawIcons(false);
+//                sembuhLineDataSet.setDrawCircles(false);
+//                sembuhLineDataSet.setDrawValues(false);
+//                sembuhLineDataSet.setCircleColor(Color.GREEN);
 
 
                 Legend legend = lineChart.getLegend();
@@ -225,14 +245,14 @@ public class RekapDetail extends BaseActivity {
 
                 lineChart.getDescription().setEnabled(false);
                 lineChart.getXAxis().setPosition( XAxis.XAxisPosition.BOTTOM);
-                lineChart.setData(new LineData(kasusLineDataSet, sembuhLineDataSet));
+                lineChart.setData(new LineData(kasusLineDataSet));
                 lineChart.animateXY(100, 500);
                 adapter = new OrderAdapter(orderList, RekapDetail.this);
                 recyclerView.setAdapter(adapter);
-                List<String> date =new  ArrayList<String>();
-                String[] stockArr = new String[date.size()];
-                stockArr = date.toArray(stockArr);
-                ValueFormatter tanggal = new AxisDateFormatter(stockArr);
+//                List<String> date =new  ArrayList<String>();
+//                String[] stockArr = new String[date.size()];
+//                stockArr = date.toArray(stockArr);
+                ValueFormatter tanggal = new AxisDateFormatter(daylist);
                 lineChart.getXAxis().setValueFormatter(tanggal);
 
                 adapter = new OrderAdapter(orderList, RekapDetail.this);
@@ -250,28 +270,53 @@ public class RekapDetail extends BaseActivity {
 
     private void addData(Order sale){
         Date date = new Date(sale.getDate());
+        orderList.add(sale);
+        total += Integer.parseInt(sale.getPrice());
 
-        if(date.equals(startDate)||date.after(startDate)){
-            long diff = date.getTime() - startDate.getTime();
-            long day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-            chartList.get((int) day).setY((chartList.get((int) day).getY()+Float.parseFloat(sale.getPrice())));
-            orderList.add(sale);
-            total += Integer.parseInt(sale.getPrice());
-            if (max<(chartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()))){
-                max = (int) (chartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()));
+        for(int i=0;i<daylist.size();i++){
+            Date dateListItem = new Date(Long.parseLong(daylist.get(i)));
+            SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yy");
+
+            if(formater.format(dateListItem).equals(formater.format(date))){
+                chartList.get(i).setY((chartList.get(i).getY()+Float.parseFloat(sale.getPrice())));
+                if (max<(chartList.get(i).getY()+Integer.parseInt(sale.getPrice()))){
+                    max = (int) (chartList.get(i).getY()+Integer.parseInt(sale.getPrice()));
+                }
             }
-        }else{
-            prevOrderList.add(sale);
-            prevTotal += Integer.parseInt(sale.getPrice());
-            long diff = date.getTime() - calendar.getTime().getTime();
-            long day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-
-            prevChartList.get((int) day).setY((prevChartList.get((int) day).getY()+Integer.parseInt(sale.getPrice())));
-            if (max<(prevChartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()))){
-                max = (int) (prevChartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()));
-            }
-
         }
+//        if(date.equals(startDate)||date.after(startDate)){
+//            long diff = date.getTime() - startDate.getTime();
+//            long day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+//
+//            orderList.add(sale);
+//            total += Integer.parseInt(sale.getPrice());
+//            if (max<(chartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()))){
+//                max = (int) (chartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()));
+//            }
+//        }
+
+//        if(date.equals(startDate)||date.after(startDate)){
+//            long diff = date.getTime() - startDate.getTime();
+//            long day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+//            chartList.get((int) day).setY((chartList.get((int) day).getY()+Float.parseFloat(sale.getPrice())));
+//            orderList.add(sale);
+//            total += Integer.parseInt(sale.getPrice());
+//            if (max<(chartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()))){
+//                max = (int) (chartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()));
+//            }
+//        }
+//        else{
+//            prevOrderList.add(sale);
+//            prevTotal += Integer.parseInt(sale.getPrice());
+//            long diff = date.getTime() - calendar.getTime().getTime();
+//            long day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+//
+//            prevChartList.get((int) day).setY((prevChartList.get((int) day).getY()+Integer.parseInt(sale.getPrice())));
+//            if (max<(prevChartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()))){
+//                max = (int) (prevChartList.get((int) day).getY()+Integer.parseInt(sale.getPrice()));
+//            }
+//
+//        }
     }
 
     @Override

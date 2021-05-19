@@ -19,7 +19,7 @@ import android.view.View;
 
 import com.example.finalproject.Interface.ItemClickListener;
 import com.example.finalproject.Model.Product;
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 import com.example.finalproject.holder.ShoeViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +36,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.WriterException;
@@ -59,6 +61,10 @@ public class CreateQR extends AppCompatActivity {
     ImageView qrCodeIV;
     @BindView(R.id.save_qr)
     Button save_qr_code;
+    @BindView(R.id.parent_img)
+    FrameLayout parentImage;
+    @BindView(R.id.prod_name)
+    TextView prodName;
 
     final private int PERMISSION = 1;
 
@@ -67,6 +73,7 @@ public class CreateQR extends AppCompatActivity {
     Bitmap bitmap;
     QRGEncoder qrgEncoder;
     String productId;
+    String productName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,9 +86,14 @@ public class CreateQR extends AppCompatActivity {
 
     private void initData(){
         productId = getIntent().getStringExtra("productId");
+        productName = getIntent().getStringExtra("productName");
     }
 
     private void initView(){
+//        String output = str.substring(0, 1).toUpperCase() + str.substring(1);
+
+        prodName.setText(productName.substring(0, 1).toUpperCase() + productName.substring(1));
+
         if(productId!=null){
             WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
             Display display = manager.getDefaultDisplay();
@@ -109,9 +121,13 @@ public class CreateQR extends AppCompatActivity {
 
 
     private void saveImageToGallery(ImageView iv){
-        BitmapDrawable draw = (BitmapDrawable) iv.getDrawable();
-        Bitmap bitmap = draw.getBitmap();
+//        BitmapDrawable draw = (BitmapDrawable) iv.getDrawable();
+//        Bitmap bitmap = draw.getBitmap();
+        parentImage.setDrawingCacheEnabled(true);
 
+        parentImage.buildDrawingCache();
+
+        Bitmap bitmap = parentImage.getDrawingCache();
         FileOutputStream outStream = null;
         File sdCard = Environment.getExternalStorageDirectory();
         File dir = new File(sdCard.getAbsolutePath() + "/Mom's Farm");

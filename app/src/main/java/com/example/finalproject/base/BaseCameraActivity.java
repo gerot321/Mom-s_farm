@@ -31,7 +31,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 
 public abstract class BaseCameraActivity extends AppCompatActivity {
     private AlertDialog mDialog;

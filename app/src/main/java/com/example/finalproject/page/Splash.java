@@ -11,7 +11,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.example.finalproject.MainActivity;
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.util.PreferenceUtil;
 

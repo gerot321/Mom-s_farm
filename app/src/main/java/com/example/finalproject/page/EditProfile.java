@@ -19,7 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.finalproject.Model.User;
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.util.PreferenceUtil;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -67,7 +67,6 @@ public class EditProfile extends BaseActivity {
     MaterialEditText etDate;
     @BindView(R.id.etAddress)
     MaterialEditText etAddress;
-    @BindView(R.id.radioButton)
     RadioButton radio;
     @BindView(R.id.radioGroup)
     RadioGroup groups;

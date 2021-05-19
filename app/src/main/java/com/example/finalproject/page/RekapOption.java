@@ -23,7 +23,7 @@ import java.util.Calendar;
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Model.Order;
 import com.example.finalproject.Model.Product;
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -95,7 +95,14 @@ public class RekapOption extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(RekapOption.this, RekapDetail.class);
                 intent.putExtra("startDate",dateFormatter.format(startDate));
-                intent.putExtra("endDate",dateFormatter.format(endDate));
+                if(dateFormatter.format(startDate).equals(dateFormatter.format(endDate))){
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(endDate);
+                    calendar.add(Calendar.DAY_OF_MONTH,1);
+                    intent.putExtra("endDate",dateFormatter.format(calendar.getTime()));
+                }else{
+                    intent.putExtra("endDate",dateFormatter.format(endDate));
+                }
                 if(product==null){
                     intent.putExtra("productId","");
                 }else{
@@ -103,7 +110,6 @@ public class RekapOption extends BaseActivity {
                 }
                 intent.putExtra("type",recapOption.getSelectedItem().toString());
                 startActivity(intent);
-
             }
         });
 

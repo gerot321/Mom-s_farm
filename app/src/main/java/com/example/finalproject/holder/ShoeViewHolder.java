@@ -1,17 +1,19 @@
 package com.example.finalproject.holder;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.finalproject.Interface.ItemClickListener;
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 
 
 public class ShoeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public TextView shoe_name;
     public ImageView shoe_image;
+    public CardView parent;
 
     private ItemClickListener itemClickListener;
 
@@ -24,6 +26,7 @@ public class ShoeViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
         shoe_name = itemView.findViewById(R.id.shoe_name);
         shoe_image = itemView.findViewById(R.id.shoe_image);
+        parent = itemView.findViewById(R.id.parentView);
 
         itemView.setOnClickListener(this);
 

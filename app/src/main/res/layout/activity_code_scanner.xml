@@ -8,4 +8,19 @@
         android:id="@+id/scanner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/buttonGallery"
+        android:layout_gravity="bottom|center"
+        android:background="@color/colorBlack"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:textColor="@color/colorWhite"
+            android:layout_centerInParent="true"
+            android:text="Ambil dari Gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
 </FrameLayout>

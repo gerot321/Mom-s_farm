@@ -7,8 +7,9 @@ public class Order {
     private String quantity;
     private String price;
     private String seller;
+    private String sellerId;
     private Long date;
-
+    private String type;
     public Order() {
     }
 
@@ -21,6 +22,21 @@ public class Order {
         this.date = date;
     }
 
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
 
     public Long getDate() {
         return date;

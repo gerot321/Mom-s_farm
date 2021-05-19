@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.example.finalproject.Model.Product;
 import com.example.finalproject.Model.User;
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.util.PreferenceUtil;
 import com.google.android.gms.tasks.OnFailureListener;

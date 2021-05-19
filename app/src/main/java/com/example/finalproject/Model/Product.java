@@ -6,18 +6,19 @@ import android.os.Parcelable;
 import com.google.firebase.database.PropertyName;
 
 public class Product implements Parcelable {
-    private String name, image, price, stock,productId,isActive;
+    private String name, image, price, stock,productId,isActive, seller;
 
     public Product(){
 
     }
 
-    public Product(String id,String name, String image, String price, String stock, String isActive) {
+    public Product(String id,String name, String image, String price, String stock, String isActive,String seller) {
         productId=id;
         this.name = name;
         this.image = image;
         this.price = price;
         this.stock = stock;
+        this.seller = seller;
         this.isActive = isActive;
     }
 
@@ -29,6 +30,7 @@ public class Product implements Parcelable {
         stock = in.readString();
         productId = in.readString();
         isActive = in.readString();
+        seller = in.readString();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -43,56 +45,6 @@ public class Product implements Parcelable {
         }
     };
 
-    @PropertyName("Name")
-    public String getName() {
-        return name;
-    }
-    @PropertyName("Name")
-    public void setName(String Name) {
-        name = Name;
-    }
-    @PropertyName("Image")
-    public String getImage() {
-        return image;
-    }
-    @PropertyName("Image")
-    public void setImage(String Image) {
-        image = Image;
-    }
-    @PropertyName("Price")
-    public String getPrice() {
-        return price;
-    }
-    @PropertyName("Price")
-    public void setPrice(String Price) {
-        price = Price;
-    }
-    @PropertyName("Stock")
-    public String getStock() {
-        return stock;
-    }
-    @PropertyName("Stock")
-    public void setStock(String Stock) {
-        stock = Stock;
-    }
-    @PropertyName("ProductId")
-    public String getProductId() {
-        return productId;
-    }
-    @PropertyName("ProductId")
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    @PropertyName("isActive")
-    public String getIsActive() {
-        return isActive;
-    }
-    @PropertyName("isActive")
-    public void setIsActive(String isActive) {
-        this.isActive = isActive;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -106,6 +58,37 @@ public class Product implements Parcelable {
         parcel.writeString(stock);
         parcel.writeString(productId);
         parcel.writeString(isActive);
+        parcel.writeString(seller);
     }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public String getSeller() {
+        return seller;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getIsActive() {
+        return isActive;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getStock() {
+        return stock;
+    }
+
 }
+
 

@@ -18,7 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.finalproject.Model.Product;
-import com.example.finalproject.R;
+import com.momsfarm.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -104,6 +104,7 @@ public class ProductDetail extends BaseActivity {
             public void onClick(View view) {
                 productTable.child(productId).child("isActive").setValue("NONACTIVE");
                 Toast.makeText(ProductDetail.this, "Berhasil menghapus produk", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
                 finish();
             }
         });
@@ -132,13 +133,14 @@ public class ProductDetail extends BaseActivity {
         productName.setText(product.getName());
         productPrice.setText(product.getPrice());
 
-
+        submitBtn.setText("UBAH PRODUK");
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                productTable.child(productId).child("Stock").setValue(stockEdt.getText().toString());
-                productTable.child(productId).child("Name").setValue(productName.getText().toString());
-                productTable.child(productId).child("Price").setValue(productPrice.getText().toString());
+                showProgress();
+                productTable.child(productId).child("stock").setValue(stockEdt.getText().toString());
+                productTable.child(productId).child("name").setValue(productName.getText().toString());
+                productTable.child(productId).child("price").setValue(productPrice.getText().toString());
 
                 if (mImageUri != null) {
                     StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
@@ -149,8 +151,11 @@ public class ProductDetail extends BaseActivity {
                                 @Override
                                 public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
 //
-                                    productTable.child(productId).child("Image").setValue(taskSnapshot.getDownloadUrl().toString());
-
+                                    productTable.child(productId).child("image").setValue(taskSnapshot.getDownloadUrl().toString());
+                                    disProgress();
+                                    Toast.makeText(ProductDetail.this, "Berhasil Merubah Produk", Toast.LENGTH_SHORT).show();
+                                    setResult(RESULT_OK);
+                                    finish();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -167,10 +172,12 @@ public class ProductDetail extends BaseActivity {
 
                                 }
                             });
+                }else{
+                    disProgress();
+                    Toast.makeText(ProductDetail.this, "Berhasil Merubah Produk", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    finish();
                 }
-                disProgress();
-                Toast.makeText(ProductDetail.this, "Berhasil Merubah Produk", Toast.LENGTH_SHORT).show();
-                finish();
 
             }
         });
@@ -192,6 +199,7 @@ public class ProductDetail extends BaseActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             mImageUri = data.getData();
+            imageCard.setVisibility(View.VISIBLE);
             Picasso.with(this).load(mImageUri).into(imageProduct);
         }
     }

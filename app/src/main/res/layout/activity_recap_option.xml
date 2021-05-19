@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:textColor="@color/colorBlack"
-                    android:text="Dari Tanngal:"
+                    android:text="Dari Tanggal:"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
