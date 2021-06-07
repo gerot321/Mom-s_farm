@@ -73,7 +73,7 @@
                 android:id="@+id/etPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Phone Number"
+                android:hint="Nomor telepon"
                 android:inputType="phone"
                 android:textColorHint="@color/colorBlack"
                 android:textSize="12sp"
@@ -85,7 +85,7 @@
                 android:id="@+id/etName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name"
+                android:hint="Nama"
                 android:inputType="textPersonName"
                 android:textColorHint="@color/colorBlack"
                 android:textSize="12sp"
@@ -150,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="55dp"
                     android:checked="false"
-                    android:text="Male"
+                    android:text="Laki-laki"
                     android:textSize="16dp" />
 
                 <RadioButton
@@ -159,7 +159,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.13"
                     android:checked="false"
-                    android:text="Female"
+                    android:text="Perempuan"
                     android:textSize="16dp" />
             </RadioGroup>
 

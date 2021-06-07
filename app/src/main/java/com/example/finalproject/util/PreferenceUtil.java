@@ -20,14 +20,16 @@ public class PreferenceUtil {
     private static String PREF_TOKEN_KEY = "token";
     private static SharedPreferences sharedPreferencesStatic;
     private static SharedPreferences sharedPreferencesLive;
+    private static SharedPreferences sharedPreferencesPersist;
 
 
     public static void setContext(Context context) {
         sharedPreferencesToken = context.getSharedPreferences("TOKEN", Context.MODE_PRIVATE);
+        sharedPreferencesPersist = context.getSharedPreferences("PERSIST", Context.MODE_PRIVATE);
+
     }
 
     public static void setUser(User user) {
-
         Gson gson = new Gson();
         String json = gson.toJson(user);
         SharedPreferences.Editor editor = sharedPreferencesToken.edit();
@@ -40,6 +42,26 @@ public class PreferenceUtil {
         String json = sharedPreferencesToken.getString("UserData", "");
         User user = gson.fromJson(json, User.class);
         return user;
+    }
+
+
+    public static void setPersistUser(User user) {
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        SharedPreferences.Editor editor = sharedPreferencesPersist.edit();
+        editor.putString("UserData", json);
+        editor.commit();
+    }
+
+    public static User getPersistUser() {
+        Gson gson = new Gson();
+        String json = sharedPreferencesPersist.getString("UserData", "");
+        if(json.isEmpty()){
+            return null;
+        }else{
+            User user = gson.fromJson(json, User.class);
+            return user;
+        }
     }
 
     public static void setOrders(List<Order> orderList) {
@@ -80,6 +102,9 @@ public class PreferenceUtil {
         sharedPreferencesToken.edit().clear().commit();
     }
 
+    public static void clearPersist(){
+        sharedPreferencesPersist.edit().clear().commit();
+    }
 
 
 

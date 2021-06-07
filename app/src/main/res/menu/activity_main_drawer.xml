@@ -7,6 +7,11 @@
             android:id="@+id/nav_log_out"
             android:icon="@drawable/exit_app"
             android:title="Keluar" />
+
+        <item
+            android:id="@+id/nav_change_password"
+            android:icon="@drawable/change_icon"
+            android:title="Ubah Password" />
     </group>
 
 

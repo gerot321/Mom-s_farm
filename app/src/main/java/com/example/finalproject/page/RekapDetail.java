@@ -201,8 +201,6 @@ public class RekapDetail extends BaseActivity {
                             addData(sale);
                         }
                     }
-
-
                 }
                 Calendar endPrevDate = Calendar.getInstance();
                 endPrevDate.setTime(startDate);

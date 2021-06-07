@@ -89,20 +89,25 @@ public class RekapOption extends BaseActivity {
             }
         });
 
-        setTitle(toolbar, "Option Rekap");
+        setTitle(toolbar, "Pengaturan Rekap");
         viewRecap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(RekapOption.this, RekapDetail.class);
                 intent.putExtra("startDate",dateFormatter.format(startDate));
-                if(dateFormatter.format(startDate).equals(dateFormatter.format(endDate))){
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(endDate);
-                    calendar.add(Calendar.DAY_OF_MONTH,1);
-                    intent.putExtra("endDate",dateFormatter.format(calendar.getTime()));
-                }else{
-                    intent.putExtra("endDate",dateFormatter.format(endDate));
-                }
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(endDate);
+                calendar.add(Calendar.MINUTE,59);
+                calendar.add(Calendar.HOUR_OF_DAY, 23);
+                intent.putExtra("endDate",dateFormatter.format(calendar.getTime()));
+//                if(dateFormatter.format(startDate).equals(dateFormatter.format(endDate))){
+//                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTime(endDate);
+//                    calendar.add(Calendar.DAY_OF_MONTH,1);
+//                    intent.putExtra("endDate",dateFormatter.format(calendar.getTime()));
+//                }else{
+//                    intent.putExtra("endDate",dateFormatter.format(endDate));
+//                }
                 if(product==null){
                     intent.putExtra("productId","");
                 }else{
@@ -158,7 +163,7 @@ public class RekapOption extends BaseActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         Calendar calendar = Calendar.getInstance();
-                        calendar.set(year, monthOfYear, dayOfMonth);
+                        calendar.set(year, monthOfYear, dayOfMonth, 0, 0);
                         endDate = calendar.getTime();
                         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
                         dateEndText.setText(dateFormatter.format(endDate));

@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -62,7 +63,7 @@ public class MainMenu extends AppCompatActivity  implements NavigationView.OnNav
 
 
     private void initView(){
-        toolbar.setTitle("Main Menu");
+        toolbar.setTitle("Menu Utama");
         setSupportActionBar(toolbar);
 
 
@@ -95,6 +96,8 @@ public class MainMenu extends AppCompatActivity  implements NavigationView.OnNav
             addProduct.setVisibility(View.VISIBLE);
         }else{
             addProduct.setVisibility(View.GONE);
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.nav_change_password).setVisible(false);
         }
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,6 +175,10 @@ public class MainMenu extends AppCompatActivity  implements NavigationView.OnNav
             PreferenceUtil.clearAll();
             startActivity(intent);
             finish();
+        }
+        if (id == R.id.nav_change_password) {
+            Intent intent = new Intent(this, ChangePassword.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

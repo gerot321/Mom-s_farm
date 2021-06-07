@@ -71,8 +71,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderViewHolder>{
         holder.txt_price.setText("Total Harga : "+listData.get(position).getPrice());
         holder.txt_quantity.setText("Jumlah Produk : "+listData.get(position).getQuantity());
         holder.txt_product_id.setText("Kode Produk : "+listData.get(position).getProductId());
-        holder.txt_name.setText("Nama Barang : "+listData.get(position).getProductName());
-        holder.txt_product_price.setText("Harga Product : "+Integer.parseInt(listData.get(position).getPrice())/Integer.parseInt(listData.get(position).getQuantity()));
+        holder.txt_name.setText("Nama Produk : "+listData.get(position).getProductName());
+        holder.txt_product_price.setText("Harga Produk : "+Integer.parseInt(listData.get(position).getPrice())/Integer.parseInt(listData.get(position).getQuantity()));
         holder.txt_order_date.setText("Tanggal Order : "+formater.format(date));
         holder.txt_type.setText("Tipe Order : "+listData.get(position).getType());
         holder.txt_seller_name.setText("Penjual : "+listData.get(position).getSeller());

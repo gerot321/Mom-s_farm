@@ -31,6 +31,7 @@
         <activity android:name="com.example.finalproject.page.RekapDetail"/>
         <activity android:name="com.example.finalproject.page.RekapOption"/>
         <activity android:name="com.example.finalproject.page.EditProfile"/>
+        <activity android:name="com.example.finalproject.page.ChangePassword"/>
 
     </application>
 

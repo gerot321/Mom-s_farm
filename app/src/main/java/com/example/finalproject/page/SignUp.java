@@ -123,7 +123,10 @@ public class SignUp extends BaseActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-
+                if(etName.getText().toString().isEmpty()||etAddress.getText().toString().isEmpty()||etDate.getText().toString().isEmpty()||etPassword.getText().toString().isEmpty()||etPhone.getText().toString().isEmpty()){
+                    Toast.makeText(SignUp.this, "Mohon isi semua data untuk melakukan registrasi akun", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 showProgress();
 
 
@@ -142,7 +145,7 @@ public class SignUp extends BaseActivity {
                                             if(dataSnapshot.child(etPhone.getText().toString()).exists()){
                                                 disProgress();
 
-                                                Toast.makeText(SignUp.this, "Account already exist!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(SignUp.this, "Nomor telepon sudah terdaftar", Toast.LENGTH_SHORT).show();
                                             }else {
                                                 disProgress();
                                                 createUser(taskSnapshot.getDownloadUrl().toString());
@@ -184,7 +187,7 @@ public class SignUp extends BaseActivity {
     private void createUser (String image){
         int select = groups.getCheckedRadioButtonId();
         radio= (RadioButton)findViewById(select);
-        User user = new User(etName.getText().toString(), etPassword.getText().toString(), "Costumer",etPhone.getText().toString(),etAddress.getText().toString(),radio.getText().toString(),
+        User user = new User(etName.getText().toString(), etPassword.getText().toString(), "Costumer",etPhone.getText().toString(),etAddress.getText().toString(), radio.getText().toString().equals("Perempuan")?"Female":"Male",
                 etDate.getText().toString()," "," ", image," ","unVerified");
         table_user.child(user.getPhone()).setValue(user);
         PreferenceUtil.setUser(user);

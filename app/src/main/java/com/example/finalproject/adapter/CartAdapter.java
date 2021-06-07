@@ -80,7 +80,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
 //        int shippingPrice = (Integer.parseInt(listData.get(position).getShippingPrice()));
         holder.txt_price.setText("Harga : "+listData.get(position).getPrice());
 
-        holder.txt_shipping_price.setText("Stok Barang : "+listData.get(position).getQuantity());
+        holder.txt_shipping_price.setText("Stok Produk : "+listData.get(position).getQuantity());
 
         holder.txt_cart_name.setText(listData.get(position).getProductName());
         holder.txt_total.setText("Total Harga: "+String.valueOf(Integer.parseInt(order.getQuantity())*Integer.parseInt(order.getPrice())));

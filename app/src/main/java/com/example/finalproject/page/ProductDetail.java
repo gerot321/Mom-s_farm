@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.finalproject.Model.Product;
+import com.example.finalproject.util.PreferenceUtil;
 import com.momsfarm.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -98,6 +100,13 @@ public class ProductDetail extends BaseActivity {
     }
 
     public void initView(){
+        if(PreferenceUtil.getUser().getStatus().equals("ADMIN")){
+            productName.setEnabled(true);
+            productPrice.setEnabled(true);
+        }else{
+            productName.setEnabled(false);
+            productPrice.setEnabled(false);
+        }
         setTitle(toolbar, "Ubah Produk");
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
