@@ -5,10 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -18,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.example.finalproject.Model.Product;
 import com.momsfarm.finalproject.R;
@@ -108,6 +107,11 @@ public class AddProduct extends BaseActivity {
             @Override
             public void onClick(View v) {
                 showProgress();
+                if(Name.getText().toString().isEmpty()||Price.getText().toString().isEmpty()||stockEdt.getText().toString().isEmpty()){
+                    Toast.makeText(AddProduct.this, "Mohon isi semua data untuk menambahkan produk", Toast.LENGTH_SHORT).show();
+
+                    return;
+                }
                 table_product.orderByChild("name").equalTo(Name.getText().toString()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -167,7 +171,7 @@ public class AddProduct extends BaseActivity {
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onFailure(@NonNull Exception e) {
+                        public void onFailure(Exception e) {
                             Toast.makeText(AddProduct.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })

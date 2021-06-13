@@ -6,10 +6,6 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -19,6 +15,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.example.finalproject.Model.Product;
 import com.example.finalproject.Model.User;
@@ -163,7 +162,7 @@ public class SignUp extends BaseActivity {
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
-                                public void onFailure(@NonNull Exception e) {
+                                public void onFailure(Exception e) {
                                     Toast.makeText(SignUp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             })
@@ -176,7 +175,25 @@ public class SignUp extends BaseActivity {
                                 }
                             });
                 } else {
-                    createUser(" ");
+                    table_user.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.child(etPhone.getText().toString()).exists()){
+                                disProgress();
+
+                                Toast.makeText(SignUp.this, "Nomor telepon sudah terdaftar", Toast.LENGTH_SHORT).show();
+                            }else {
+                                disProgress();
+                                createUser(" ");
+                            }
+                            table_user.removeEventListener(this);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
 

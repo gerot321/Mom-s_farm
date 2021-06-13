@@ -3,9 +3,6 @@ package com.example.finalproject.page;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +14,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.Calendar;
 
@@ -199,7 +198,7 @@ public class RekapOption extends BaseActivity {
         Query query = requests.orderByChild("date").startAt(startDate.getTime()).endAt(endDate.getTime());
         query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ssn : dataSnapshot.getChildren()) {
 
                     Order sale = ssn.getValue(Order.class);
@@ -210,7 +209,7 @@ public class RekapOption extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         }) ;

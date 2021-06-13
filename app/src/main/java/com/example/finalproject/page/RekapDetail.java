@@ -5,12 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +14,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Interface.ItemClickListener;
@@ -161,7 +159,10 @@ public class RekapDetail extends BaseActivity {
 //            chartList.add(new Entry(i, 0));
 //            prevChartList.add(new Entry(i, 0));
 //        }
-
+        Calendar calendarEnd = Calendar.getInstance();
+        calendarEnd.setTime(endDate);
+        calendarEnd.add(Calendar.MINUTE,59);
+        calendarEnd.add(Calendar.HOUR_OF_DAY, 23);
         for(int i = 0;i<(int) (day+1);i++){
             Calendar tempCalendar = Calendar.getInstance();
             tempCalendar.setTime(startDate);
@@ -172,14 +173,14 @@ public class RekapDetail extends BaseActivity {
             chartList.add(new Entry(i, 0));
 //            prevChartList.add(new Entry(i, 0));
         }
-        loadOrder(requests.orderByChild("date").startAt(calendar.getTime().getTime()).endAt(endDate.getTime()));
+        loadOrder(requests.orderByChild("date").startAt(calendar.getTime().getTime()).endAt(calendarEnd.getTime().getTime()));
     }
 
     private void loadOrder(Query query){
         recyclerView.setAdapter(adapter);
         query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange( DataSnapshot dataSnapshot) {
                 for (DataSnapshot ssn : dataSnapshot.getChildren()) {
                     Order sale = ssn.getValue(Order.class);
                     if(!productId.isEmpty()){
@@ -247,6 +248,9 @@ public class RekapDetail extends BaseActivity {
                 lineChart.animateXY(100, 500);
                 adapter = new OrderAdapter(orderList, RekapDetail.this);
                 recyclerView.setAdapter(adapter);
+                lineChart.getXAxis().setGranularity(1);
+
+                lineChart.getAxisRight().setEnabled(false);
 //                List<String> date =new  ArrayList<String>();
 //                String[] stockArr = new String[date.size()];
 //                stockArr = date.toArray(stockArr);
@@ -258,7 +262,7 @@ public class RekapDetail extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled( DatabaseError databaseError) {
 
             }
         }) ;

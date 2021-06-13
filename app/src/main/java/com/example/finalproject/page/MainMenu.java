@@ -2,13 +2,14 @@ package com.example.finalproject.page;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.MainActivity;
+import com.google.android.material.navigation.NavigationView;
 import com.momsfarm.finalproject.R;
 import com.example.finalproject.util.PreferenceUtil;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MainMenu extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
+public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     @BindView(R.id.add_product)
     CardView addProduct;
     @BindView(R.id.shop)

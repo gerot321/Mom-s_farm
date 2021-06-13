@@ -1,13 +1,12 @@
 package com.example.finalproject.adapter;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.finalproject.Interface.ItemClickListener;
@@ -80,7 +79,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
 //        int shippingPrice = (Integer.parseInt(listData.get(position).getShippingPrice()));
         holder.txt_price.setText("Harga : "+listData.get(position).getPrice());
 
-        holder.txt_shipping_price.setText("Stok Produk : "+listData.get(position).getQuantity());
+        holder.txt_shipping_price.setText("Jumlah Produk : "+listData.get(position).getQuantity());
 
         holder.txt_cart_name.setText(listData.get(position).getProductName());
         holder.txt_total.setText("Total Harga: "+String.valueOf(Integer.parseInt(order.getQuantity())*Integer.parseInt(order.getPrice())));

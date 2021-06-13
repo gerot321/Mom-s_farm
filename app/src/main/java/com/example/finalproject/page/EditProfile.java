@@ -5,9 +5,6 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -17,6 +14,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.example.finalproject.Model.User;
 import com.momsfarm.finalproject.R;
@@ -125,7 +125,7 @@ public class EditProfile extends BaseActivity {
             male.setChecked(true);
             female.setChecked(false);
         }
-
+        etPassword.setVisibility(View.GONE);
 
         etDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -172,7 +172,7 @@ public class EditProfile extends BaseActivity {
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
-                                public void onFailure(@NonNull Exception e) {
+                                public void onFailure(Exception e) {
                                     Toast.makeText(EditProfile.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             })
