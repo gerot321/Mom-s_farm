@@ -54,12 +54,28 @@
                 app:met_maxCharacters="10"
                 app:met_singleLineEllipsis="true" />
         </com.google.android.material.textfield.TextInputLayout>
-        <CheckBox
-            android:id="@+id/remember_me"
-            android:textSize="20sp"
-            android:text="Ingat saya"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <CheckBox
+                android:id="@+id/remember_me"
+                android:textSize="20sp"
+                android:text="Ingat saya"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <View
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"/>
+            <TextView
+                android:id="@+id/forgot_password"
+                android:textSize="20sp"
+                android:text="Lupa Password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
 
 

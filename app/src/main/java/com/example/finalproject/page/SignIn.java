@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
@@ -37,6 +38,8 @@ public class SignIn extends BaseActivity {
     Button btnSignIn;
     @BindView(R.id.remember_me)
     CheckBox checkBox;
+    @BindView(R.id.forgot_password)
+    TextView forgotPassword;
     DatabaseReference table_user;
     User persistUser;
     @Override
@@ -117,6 +120,14 @@ public class SignIn extends BaseActivity {
                 });
             }
         });
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignIn.this, ChangePassword.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void initEnv(){

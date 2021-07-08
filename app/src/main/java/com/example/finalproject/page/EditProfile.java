@@ -19,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
 import com.example.finalproject.Model.User;
+import com.google.android.material.textfield.TextInputLayout;
 import com.momsfarm.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.util.PreferenceUtil;
@@ -72,7 +73,8 @@ public class EditProfile extends BaseActivity {
     RadioGroup groups;
     @BindView(R.id.btnSignUp)
     Button btnSignUp;
-
+    @BindView(R.id.inputLayout)
+    TextInputLayout textInputLayout;
 
     private static final String TAG = "PhoneAuth";
 
@@ -107,7 +109,7 @@ public class EditProfile extends BaseActivity {
             }
         });
 
-        setTitle(toolbar, "Buat Akun");
+        setTitle(toolbar, "Ubah Akun");
         etPhone.setText(PreferenceUtil.getUser().getPhone());
         etName.setText(PreferenceUtil.getUser().getName());
         etDate.setText(PreferenceUtil.getUser().getTanggalLahir());
@@ -126,7 +128,7 @@ public class EditProfile extends BaseActivity {
             female.setChecked(false);
         }
         etPassword.setVisibility(View.GONE);
-
+        textInputLayout.setVisibility(View.GONE);
         etDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -139,6 +141,7 @@ public class EditProfile extends BaseActivity {
                 showDateDialog();
             }
         });
+        btnSignUp.setText("Ubah");
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -160,6 +163,8 @@ public class EditProfile extends BaseActivity {
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             disProgress();
                                             createUser(taskSnapshot.getDownloadUrl().toString());
+                                            table_user.removeEventListener(this);
+
                                         }
 
                                         @Override
@@ -204,7 +209,7 @@ public class EditProfile extends BaseActivity {
     private void createUser (String image){
         int select = groups.getCheckedRadioButtonId();
         radio= (RadioButton)findViewById(select);
-        User user = new User(etName.getText().toString(), etPassword.getText().toString(), "Costumer",etPhone.getText().toString(),etAddress.getText().toString(),radio.getText().toString(),
+        User user = new User(etName.getText().toString(), PreferenceUtil.getUser().getPassword(), PreferenceUtil.getUser().getStatus(),etPhone.getText().toString(),etAddress.getText().toString(),radio.getText().toString().equals("Perempuan")?"Female":"Male",
                 etDate.getText().toString()," "," ", image," ","unVerified");
         table_user.child(PreferenceUtil.getUser().getPhone()).removeValue();
         table_user.child(user.getPhone()).setValue(user);

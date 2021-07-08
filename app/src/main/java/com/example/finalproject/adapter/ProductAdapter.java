@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Interface.ItemClickListener;
 import com.example.finalproject.Model.Order;
@@ -82,7 +83,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder>{
         final Product model = listData.get(position);
         viewHolder.shoe_name.setText(model.getName());
         if(!model.getImage().isEmpty()&&!model.getImage().equals(" ")){
-            Picasso.with(context).load(model.getImage()).into(viewHolder.shoe_image);
+            Glide.with(context).load(model.getImage()).into(viewHolder.shoe_image);
+        }else{
+            Glide.with(context).load("https://firebasestorage.googleapis.com/v0/b/projectmomfarm-980ea.appspot.com/o/uploads%2Fno_image.png?alt=media&token=50ca0b8e-5122-43ed-bef0-f96e2989cafe").into(viewHolder.shoe_image);
         }
 
         final Product local = model;

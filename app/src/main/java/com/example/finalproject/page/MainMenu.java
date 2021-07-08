@@ -90,16 +90,16 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             }
         });
         myImage = headerView.findViewById(R.id.my_image);
-        if(!PreferenceUtil.getUser().getImage().equals(" ")&&!PreferenceUtil.getUser().getImage().isEmpty()){
-            Picasso.with(this).load(PreferenceUtil.getUser().getImage()).into(myImage);
-        }
 
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_change_password).setVisible(false);
+        addProduct.setVisibility(View.VISIBLE);
         if(PreferenceUtil.getUser().getStatus().equals("ADMIN")){
-            addProduct.setVisibility(View.VISIBLE);
+//            addProduct.setVisibility(View.VISIBLE);
         }else{
-            addProduct.setVisibility(View.GONE);
-            Menu nav_Menu = navigationView.getMenu();
-            nav_Menu.findItem(R.id.nav_change_password).setVisible(false);
+//            addProduct.setVisibility(View.GONE);
+//            Menu nav_Menu = navigationView.getMenu();
+//            nav_Menu.findItem(R.id.nav_change_password).setVisible(false);
         }
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +161,14 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 //        }
 //    }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!PreferenceUtil.getUser().getImage().equals(" ")&&!PreferenceUtil.getUser().getImage().isEmpty()){
+            Picasso.with(this).load(PreferenceUtil.getUser().getImage()).into(myImage);
+        }
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

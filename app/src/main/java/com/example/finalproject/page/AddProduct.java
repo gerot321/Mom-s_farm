@@ -106,18 +106,32 @@ public class AddProduct extends BaseActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgress();
                 if(Name.getText().toString().isEmpty()||Price.getText().toString().isEmpty()||stockEdt.getText().toString().isEmpty()){
                     Toast.makeText(AddProduct.this, "Mohon isi semua data untuk menambahkan produk", Toast.LENGTH_SHORT).show();
 
                     return;
                 }
-                table_product.orderByChild("name").equalTo(Name.getText().toString()).addValueEventListener(new ValueEventListener() {
+                showProgress();
+
+                table_product.orderByChild("name").startAt(Name.getText().toString().toUpperCase()).endAt(Name.getText().toString().toLowerCase()+ "\uf8ff").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
                         if(dataSnapshot.exists()){
-                            Toast.makeText(AddProduct.this, "Produk sudah terdaftar", Toast.LENGTH_SHORT).show();
-                            disProgress();
+                            boolean isExist = false;
+                            for (DataSnapshot ssn : dataSnapshot.getChildren()) {
+                                Product product = ssn.getValue(Product.class);
+                                if(product.getIsActive().equals("ACTIVE")){
+                                    isExist = true;
+                                }
+                            }
+                            if(isExist){
+                                Toast.makeText(AddProduct.this, "Produk sudah terdaftar", Toast.LENGTH_SHORT).show();
+                                disProgress();
+                            }else{
+                                addProduct();
+                            }
+
                         }else{
                             addProduct();
                         }

@@ -100,11 +100,12 @@ public class ProductDetail extends BaseActivity {
 
     public void initView(){
         if(PreferenceUtil.getUser().getStatus().equals("ADMIN")){
-            productName.setEnabled(true);
-            productPrice.setEnabled(true);
+//            productName.setEnabled(true);
+//            productPrice.setEnabled(true);
         }else{
-            productName.setEnabled(false);
-            productPrice.setEnabled(false);
+//            deleteBtn.setVisibility(View.GONE);
+//            productName.setEnabled(false);
+//            productPrice.setEnabled(false);
         }
         setTitle(toolbar, "Ubah Produk");
         deleteBtn.setOnClickListener(new View.OnClickListener() {

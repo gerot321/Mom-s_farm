@@ -58,6 +58,9 @@ public class RekapOption extends BaseActivity {
     TextView dateStartText;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.sell_type_option)
+    Spinner sellTypeOption;
     public static final int REQUEST_CODE = 1;
 
     FirebaseDatabase database;
@@ -113,6 +116,7 @@ public class RekapOption extends BaseActivity {
                     intent.putExtra("productId",product.getProductId());
                 }
                 intent.putExtra("type",recapOption.getSelectedItem().toString());
+                intent.putExtra("sell_type",sellTypeOption.getSelectedItem().toString());
                 startActivity(intent);
             }
         });
@@ -133,12 +137,21 @@ public class RekapOption extends BaseActivity {
         categories.add("Individual");
         categories.add("Keseluruhan");
 
+        List<String> sellType = new ArrayList<String>();
+        sellType.add("Dijual");
+        sellType.add("Konsumsi Pribadi");
+
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
 
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         recapOption.setAdapter(dataAdapter);
 
+        ArrayAdapter<String> sellAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, sellType);
+
+        sellAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        sellTypeOption.setAdapter(sellAdapter);
 
         final Calendar cldr = Calendar.getInstance();
         int day = cldr.get(Calendar.DAY_OF_MONTH);

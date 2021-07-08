@@ -85,9 +85,8 @@ public class Cart extends BaseActivity {
 
     private void initView(){
         List<String> categories = new ArrayList<String>();
-        categories.add("Dibeli");
-        categories.add("Pribadi");
-        categories.add("Dll");
+        categories.add("Dijual");
+        categories.add("Konsumsi Pribadi");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
 
