@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="bottom"
+    android:paddingHorizontal="15dp"
+    android:background="#f2f2f2"
+    android:orientation="vertical">
+    <ImageView
+        android:id="@+id/closeSheet"
+        android:scaleType="centerCrop"
+        android:layout_margin="15dp"
+        android:layout_gravity="right"
+        android:src="@drawable/close_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginTop="15dp"
+            android:textSize="15sp"
+            android:textColor="@color/colorBlack"
+            android:text="Status:"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioGroup android:id="@+id/radioGroup1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/all"
+                android:checked="true"
+                android:textSize="12sp"
+                android:text="Semua">
+            </RadioButton>
+            <RadioButton android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/success"
+                android:textSize="12sp"
+                android:text="Berhasil">
+            </RadioButton>
+            <RadioButton android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/failed"
+                android:textSize="12sp"
+                android:text="Gagal">
+            </RadioButton>
+            <RadioButton android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pending"
+                android:textSize="12sp"
+                android:text="Menunggu Pembayaran"/>
+            <RadioButton android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/approved"
+                android:textSize="12sp"
+                android:text="Pembayaran diterima."/>
+            <RadioButton android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/shipping"
+                android:textSize="12sp"
+                android:text="Dalam pengiriman."/>
+            <RadioButton android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/reject"
+                android:textSize="12sp"
+                android:text="Pembayaran ditolak."/>
+            <RadioButton android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/waiting"
+                android:textSize="12sp"
+                android:text="Menunggu konfirmasi.">
+            </RadioButton>
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:weightSum="8"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_weight="6"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textColor="@color/colorBlack"
+                    android:text="Dari Tanngal:"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:text="   -"
+                    android:id="@+id/date_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <android.support.v7.widget.CardView
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_height="30dp"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="6dp">
+
+                <TextView
+                    android:textAlignment="center"
+                    android:background="@color/colorBlack"
+                    android:id="@+id/pick_start_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:shadowColor="@android:color/black"
+                    android:text="Pilih Tanggal"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    />
+
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:weightSum="8"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_weight="6"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textColor="@color/colorBlack"
+                    android:text="Sampai Tanggal:"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:text="   -"
+                    android:id="@+id/date_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <android.support.v7.widget.CardView
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_height="30dp"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="6dp">
+
+                <TextView
+                    android:textAlignment="center"
+                    android:background="@color/colorBlack"
+                    android:id="@+id/pick_end_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:shadowColor="@android:color/black"
+                    android:text="Pilih Tanggal"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    />
+
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+        <android.support.v7.widget.CardView
+            android:layout_marginBottom="40dp"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="50dp"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="6dp">
+
+            <TextView
+                android:textAlignment="center"
+                android:background="@color/colorBlack"
+                android:id="@+id/okBtn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:shadowColor="@android:color/black"
+                android:text="Terapkan"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                />
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+</LinearLayout>

@@ -5,7 +5,10 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -14,12 +17,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-
 import com.example.finalproject.Model.Product;
-import com.example.finalproject.util.PreferenceUtil;
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,8 +49,6 @@ public class ProductDetail extends BaseActivity {
     MaterialEditText productName;
     @BindView(R.id.submit_btn)
     Button submitBtn;
-    @BindView(R.id.delete_btn)
-    Button deleteBtn;
     @BindView(R.id.button_choose_image)
     RelativeLayout mButtonChooseImage;
     @BindView(R.id.minus_stock)
@@ -99,24 +96,8 @@ public class ProductDetail extends BaseActivity {
     }
 
     public void initView(){
-        if(PreferenceUtil.getUser().getStatus().equals("ADMIN")){
-//            productName.setEnabled(true);
-//            productPrice.setEnabled(true);
-        }else{
-//            deleteBtn.setVisibility(View.GONE);
-//            productName.setEnabled(false);
-//            productPrice.setEnabled(false);
-        }
         setTitle(toolbar, "Ubah Produk");
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                productTable.child(productId).child("isActive").setValue("NONACTIVE");
-                Toast.makeText(ProductDetail.this, "Berhasil menghapus produk", Toast.LENGTH_SHORT).show();
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
+
         plusStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,7 +115,7 @@ public class ProductDetail extends BaseActivity {
                 }
             }
         });
-        if(product.getImage()!=null&&!product.getImage().equals(" ")&&!product.getImage().isEmpty()){
+        if(product.getImage()!=null && !product.getImage().isEmpty()){
             imageCard.setVisibility(View.VISIBLE);
             Picasso.with(getBaseContext()).load(product.getImage()).into(imageProduct);
         }
@@ -142,14 +123,13 @@ public class ProductDetail extends BaseActivity {
         productName.setText(product.getName());
         productPrice.setText(product.getPrice());
 
-        submitBtn.setText("UBAH PRODUK");
+
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgress();
-                productTable.child(productId).child("stock").setValue(stockEdt.getText().toString());
-                productTable.child(productId).child("name").setValue(productName.getText().toString());
-                productTable.child(productId).child("price").setValue(productPrice.getText().toString());
+                productTable.child(productId).child("Stock").setValue(stockEdt.getText().toString());
+                productTable.child(productId).child("Name").setValue(productName.getText().toString());
+                productTable.child(productId).child("Price").setValue(productPrice.getText().toString());
 
                 if (mImageUri != null) {
                     StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
@@ -160,16 +140,13 @@ public class ProductDetail extends BaseActivity {
                                 @Override
                                 public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
 //
-                                    productTable.child(productId).child("image").setValue(taskSnapshot.getDownloadUrl().toString());
-                                    disProgress();
-                                    Toast.makeText(ProductDetail.this, "Berhasil Merubah Produk", Toast.LENGTH_SHORT).show();
-                                    setResult(RESULT_OK);
-                                    finish();
+                                    productTable.child(productId).child("Image").setValue(taskSnapshot.getDownloadUrl().toString());
+
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
-                                public void onFailure( Exception e) {
+                                public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(ProductDetail.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             })
@@ -181,12 +158,10 @@ public class ProductDetail extends BaseActivity {
 
                                 }
                             });
-                }else{
-                    disProgress();
-                    Toast.makeText(ProductDetail.this, "Berhasil Merubah Produk", Toast.LENGTH_SHORT).show();
-                    setResult(RESULT_OK);
-                    finish();
                 }
+                disProgress();
+                Toast.makeText(ProductDetail.this, "Berhasil Merubah Produk", Toast.LENGTH_SHORT).show();
+                finish();
 
             }
         });
@@ -208,7 +183,6 @@ public class ProductDetail extends BaseActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             mImageUri = data.getData();
-            imageCard.setVisibility(View.VISIBLE);
             Picasso.with(this).load(mImageUri).into(imageProduct);
         }
     }

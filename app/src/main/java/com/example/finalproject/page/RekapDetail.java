@@ -5,6 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,21 +21,18 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Interface.ItemClickListener;
 import com.example.finalproject.MainActivity;
+import com.example.finalproject.Model.Invoice;
 import com.example.finalproject.Model.Order;
 import com.example.finalproject.Model.Product;
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.R;
 import com.example.finalproject.adapter.CartAdapter;
 import com.example.finalproject.adapter.OrderAdapter;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.holder.ShoeViewHolder;
-import com.example.finalproject.page.scanner.ScanResultDialog;
+import com.example.finalproject.page.scanner.OrderItem;
 import com.example.finalproject.util.PreferenceUtil;
 import com.example.finalproject.util.StringUtil;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -67,6 +70,8 @@ public class RekapDetail extends BaseActivity {
     LineChart lineChart;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.prev_total_txt)
+    TextView prevTotalTxt;
     @BindView(R.id.total_txt)
     TextView totalTxt;
     RecyclerView.LayoutManager layoutManager;
@@ -75,17 +80,14 @@ public class RekapDetail extends BaseActivity {
 
     FirebaseDatabase database;
     DatabaseReference requests;
-    List<Order> orderList = new ArrayList<>();
-    List<Order> prevOrderList = new ArrayList<>();
+    List<Invoice> orderList = new ArrayList<>();
+    List<Invoice> prevOrderList = new ArrayList<>();
     List<Entry> chartList = new ArrayList<>();
     List<Entry> prevChartList = new ArrayList<>();
-    List<String> daylist = new ArrayList<>();
     Date startDate = new Date();
     Date endDate = new Date();
     SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
     String typeRecap = "Individual";
-    String sellTypeRecap = "Individual";
-
     String productId = "";
     int total = 0;
     int prevTotal = 0;
@@ -135,10 +137,13 @@ public class RekapDetail extends BaseActivity {
     }
 
     private void initEnv(){
-
+        long diffStart = endDate.getTime() - startDate.getTime();
+        long dayStart = TimeUnit.DAYS.convert(diffStart, TimeUnit.MILLISECONDS);
+        calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.DAY_OF_MONTH,-(int) (dayStart+1));
 
         typeRecap = getIntent().getStringExtra("type");
-        sellTypeRecap = getIntent().getStringExtra("sell_type");
         database = FirebaseDatabase.getInstance();
         requests = database.getReference("Order");
         productId = getIntent().getStringExtra("productId");
@@ -148,88 +153,59 @@ public class RekapDetail extends BaseActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        long diffStart = endDate.getTime() - startDate.getTime();
-        long dayStart = TimeUnit.DAYS.convert(diffStart, TimeUnit.MILLISECONDS);
-        calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-        calendar.add(Calendar.DAY_OF_MONTH,-(int) (dayStart+1));
+
         long diff = endDate.getTime() - startDate.getTime();
         long day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
-//        calendar.add(Calendar.DAY_OF_MONTH,-(int) (day+1));
-//        for(int i = 1;i<=(int) (day+1);i++){
-//            chartList.add(new Entry(i, 0));
-//            prevChartList.add(new Entry(i, 0));
-//        }
-        Calendar calendarEnd = Calendar.getInstance();
-        calendarEnd.setTime(endDate);
-        calendarEnd.add(Calendar.MINUTE,59);
-        calendarEnd.add(Calendar.HOUR_OF_DAY, 23);
-        if(day==0){
-            day = day + 1;
-        }
-        for(int i = 0;i<(int) (day+1);i++){
-            Calendar tempCalendar = Calendar.getInstance();
-            tempCalendar.setTime(startDate);
-            if(i>0){
-                tempCalendar.add(Calendar.DAY_OF_MONTH,+i);
-            }
-            daylist.add(String.valueOf(tempCalendar.getTime().getTime()));
+        calendar.add(Calendar.DAY_OF_MONTH,-(int) (day+1));
+        for(int i = 1;i<=(int) (day+1);i++){
             chartList.add(new Entry(i, 0));
-//            prevChartList.add(new Entry(i, 0));
+            prevChartList.add(new Entry(i, 0));
         }
-        loadOrder(requests.orderByChild("date").startAt(calendar.getTime().getTime()).endAt(calendarEnd.getTime().getTime()));
+        loadOrder(requests.orderByChild("date").startAt(calendar.getTime().getTime()).endAt(endDate.getTime()));
     }
 
     private void loadOrder(Query query){
         recyclerView.setAdapter(adapter);
         query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange( DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ssn : dataSnapshot.getChildren()) {
-                    Order sale = ssn.getValue(Order.class);
+                    Invoice sale = ssn.getValue(Invoice.class);
                     if(!productId.isEmpty()){
-                        if(sale.getProductId().equals(productId)){
-                           if(typeRecap.equals("Individual")){
-                               if(sale.getSellerId().equals(PreferenceUtil.getUser().getPhone())){
-                                   addData(sale);
-                               }
-                           }else{
-                               addData(sale);
-                           }
-                        }
-                    }else{
-                        if(typeRecap.equals("Individual")){
-                            if(sale.getSellerId().equals(PreferenceUtil.getUser().getPhone())){
-                                addData(sale);
+                        if(!productId.isEmpty()){
+                            for(Order order : sale.getOrders()){
+                                if(order.getProduct().getProductId().equals(productId)){
+                                    addData(sale);
+                                }
                             }
                         }else{
                             addData(sale);
                         }
+                    }else{
+                        addData(sale);
                     }
+
+
                 }
                 Calendar endPrevDate = Calendar.getInstance();
                 endPrevDate.setTime(startDate);
                 endPrevDate.add(Calendar.DAY_OF_MONTH,-1);
+                prevTotalTxt.setText(dateFormatter.format(calendar.getTime())+" - "+dateFormatter.format(endPrevDate.getTime())+": "+StringUtil.formatToIDR(String.valueOf(prevTotal)));
                 totalTxt.setText(dateFormatter.format(startDate)+" - "+dateFormatter.format(endDate)+": "+StringUtil.formatToIDR(String.valueOf(total)));
 
                 LineDataSet kasusLineDataSet = new LineDataSet(chartList, dateFormatter.format(startDate)+" - "+dateFormatter.format(endDate));
+                kasusLineDataSet.setMode( LineDataSet.Mode.CUBIC_BEZIER);
                 kasusLineDataSet.setColor(Color.BLUE);
                 kasusLineDataSet.setCircleRadius(5f);
-                kasusLineDataSet.setDrawIcons(false);
-                kasusLineDataSet.setDrawCircles(false);
-                kasusLineDataSet.setDrawValues(false);
                 kasusLineDataSet.setCircleColor(Color.BLUE);
 
-//                LineDataSet sembuhLineDataSet = new LineDataSet(prevChartList, dateFormatter.format(calendar.getTime())+" - "+dateFormatter.format(endPrevDate.getTime()));
-//                sembuhLineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-//                sembuhLineDataSet.setColor(Color.GREEN);
-//                sembuhLineDataSet.setCircleRadius(5f);
-//                sembuhLineDataSet.setDrawIcons(false);
-//                sembuhLineDataSet.setDrawCircles(false);
-//                sembuhLineDataSet.setDrawValues(false);
-//                sembuhLineDataSet.setCircleColor(Color.GREEN);
+                LineDataSet sembuhLineDataSet = new LineDataSet(prevChartList, dateFormatter.format(calendar.getTime())+" - "+dateFormatter.format(endPrevDate.getTime()));
+                sembuhLineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                sembuhLineDataSet.setColor(Color.GREEN);
+                sembuhLineDataSet.setCircleRadius(5f);
+                sembuhLineDataSet.setCircleColor(Color.GREEN);
 
 
                 Legend legend = lineChart.getLegend();
@@ -241,7 +217,7 @@ public class RekapDetail extends BaseActivity {
 
                 YAxis leftAxis = lineChart.getAxisLeft();
                 leftAxis.removeAllLimitLines();
-                leftAxis.setAxisMaximum(max+(max/10));
+                leftAxis.setAxisMaximum(max);
                 leftAxis.setAxisMinimum(0f);
                 leftAxis.enableGridDashedLine(10f, 10f, 0f);
                 leftAxis.setDrawZeroLine(false);
@@ -250,17 +226,14 @@ public class RekapDetail extends BaseActivity {
 
                 lineChart.getDescription().setEnabled(false);
                 lineChart.getXAxis().setPosition( XAxis.XAxisPosition.BOTTOM);
-                lineChart.setData(new LineData(kasusLineDataSet));
+                lineChart.setData(new LineData(kasusLineDataSet, sembuhLineDataSet));
                 lineChart.animateXY(100, 500);
                 adapter = new OrderAdapter(orderList, RekapDetail.this);
                 recyclerView.setAdapter(adapter);
-                lineChart.getXAxis().setGranularity(1);
-
-                lineChart.getAxisRight().setEnabled(false);
-//                List<String> date =new  ArrayList<String>();
-//                String[] stockArr = new String[date.size()];
-//                stockArr = date.toArray(stockArr);
-                ValueFormatter tanggal = new AxisDateFormatter(daylist);
+                List<String> date =new  ArrayList<String>();
+                String[] stockArr = new String[date.size()];
+                stockArr = date.toArray(stockArr);
+                ValueFormatter tanggal = new AxisDateFormatter(stockArr);
                 lineChart.getXAxis().setValueFormatter(tanggal);
 
                 adapter = new OrderAdapter(orderList, RekapDetail.this);
@@ -268,7 +241,7 @@ public class RekapDetail extends BaseActivity {
             }
 
             @Override
-            public void onCancelled( DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         }) ;
@@ -276,23 +249,24 @@ public class RekapDetail extends BaseActivity {
     }
 
 
-    private void addData(Order sale){
-        if(sale.getType().equals(sellTypeRecap)){
-            Date date = new Date(sale.getDate());
+    private void addData(Invoice sale){
+        Date date = new Date(sale.getDate());
+        if(max<Integer.parseInt(sale.getPrice())){
+            max = Integer.parseInt(sale.getPrice());
+        }
+        if(date.equals(startDate)||date.after(startDate)){
+            long diff = date.getTime() - startDate.getTime();
+            long day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            chartList.get((int) day).setY((chartList.get((int) day).getY()+Float.parseFloat(sale.getPrice())));
             orderList.add(sale);
-            total += (Integer.parseInt(sale.getPrice())*Integer.parseInt(sale.getQuantity()));
+            total += Integer.parseInt(sale.getPrice());
+        }else{
+            prevOrderList.add(sale);
+            prevTotal += Integer.parseInt(sale.getPrice());
 
-            for(int i=0;i<daylist.size();i++){
-                Date dateListItem = new Date(Long.parseLong(daylist.get(i)));
-                SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yy");
-
-                if(formater.format(dateListItem).equals(formater.format(date))){
-                    chartList.get(i).setY((chartList.get(i).getY()+Float.parseFloat(sale.getPrice())));
-                    if (max<(chartList.get(i).getY()+Integer.parseInt(sale.getPrice()))){
-                        max = (int) (chartList.get(i).getY()+Integer.parseInt(sale.getPrice()));
-                    }
-                }
-            }
+            long diff = date.getTime() - calendar.getTime().getTime();
+            long day = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            prevChartList.get((int) day).setY((prevChartList.get((int) day).getY()+Integer.parseInt(sale.getPrice())));
         }
     }
 

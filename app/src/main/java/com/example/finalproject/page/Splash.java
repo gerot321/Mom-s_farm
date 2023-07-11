@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.example.finalproject.Common.Common;
 import com.example.finalproject.MainActivity;
 import com.momsfarm.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
@@ -30,7 +31,11 @@ public class Splash extends BaseActivity {
             @Override
             public void run() {
                 if(PreferenceUtil.isUserExist()){
-                    startActivity(new Intent(getApplicationContext(), MainMenu.class));
+                    if(PreferenceUtil.getUser().getRole().equals(Common.ROLE_USER)){
+                        startActivity(new Intent(getApplicationContext(), MainMenuUser.class));
+                    }else{
+                        startActivity(new Intent(getApplicationContext(), MainMenu.class));
+                    }
                     finish();
                 }else{
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));

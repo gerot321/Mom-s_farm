@@ -1,6 +1,9 @@
 package com.example.finalproject.Model;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class User implements Parcelable {
     private String name;
     private String password;
     private String phone;
@@ -8,6 +11,7 @@ public class User {
     private String email;
     private String saldo;
     private String address;
+    private String role;
     private String gender;
     private String tanggalLahir;
     private String image;
@@ -26,6 +30,32 @@ public class User {
         this.image=image;
         this.email=email;
     }
+
+    protected User(Parcel in) {
+        name = in.readString();
+        password = in.readString();
+        phone = in.readString();
+        status = in.readString();
+        email = in.readString();
+        saldo = in.readString();
+        address = in.readString();
+        role = in.readString();
+        gender = in.readString();
+        tanggalLahir = in.readString();
+        image = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public String getEmail() {
         return email;
@@ -109,5 +139,31 @@ public class User {
     }
 
 
+    public String getRole() {
+        return role;
+    }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeString(password);
+        parcel.writeString(phone);
+        parcel.writeString(status);
+        parcel.writeString(email);
+        parcel.writeString(saldo);
+        parcel.writeString(address);
+        parcel.writeString(role);
+        parcel.writeString(gender);
+        parcel.writeString(tanggalLahir);
+        parcel.writeString(image);
+    }
 }

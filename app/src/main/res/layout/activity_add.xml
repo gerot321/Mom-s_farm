@@ -7,19 +7,19 @@
     tools:context="com.example.finalproject.page.AddProduct"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
+        <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+    </android.support.design.widget.AppBarLayout>
     <RelativeLayout
         android:id="@+id/button_choose_image"
         android:layout_marginBottom="20dp"
@@ -30,14 +30,15 @@
         android:background="@drawable/border_black"
         android:layout_width="match_parent"
         android:layout_height="165dp">
+
         <TextView
-            android:textColor="@color/colorBlack"
-            android:layout_centerInParent="true"
-            android:textSize="35dp"
-            android:text="Pilih Gambar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <androidx.cardview.widget.CardView
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Pilih Gambar"
+            android:textColor="@color/colorBlack"
+            android:textSize="35dp" />
+        <android.support.v7.widget.CardView
             android:visibility="gone"
             android:id="@+id/image_card"
             android:layout_width="match_parent"
@@ -52,7 +53,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="fitXY" />
 
-        </androidx.cardview.widget.CardView>
+        </android.support.v7.widget.CardView>
 
     </RelativeLayout>
     <LinearLayout
@@ -167,7 +168,7 @@
 
 
 
-    <androidx.cardview.widget.CardView
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="0dp"
@@ -184,7 +185,7 @@
             android:textColor="@android:color/white"
             />
 
-    </androidx.cardview.widget.CardView>
+    </android.support.v7.widget.CardView>
 
 
 <!--    <ProgressBar-->

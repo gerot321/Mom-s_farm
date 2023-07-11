@@ -1,20 +1,26 @@
 package com.example.finalproject.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.example.finalproject.Common.Common;
 import com.example.finalproject.Interface.ItemClickListener;
+import com.example.finalproject.Model.Invoice;
 import com.example.finalproject.Model.Order;
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.R;
+import com.example.finalproject.page.OrderDetail;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,22 +30,24 @@ import java.util.List;
 
 class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public TextView txt_name, txt_price,txt_quantity, txt_product_id, txt_product_price, txt_order_date, txt_type, txt_seller_name;
+    public TextView txt_name, txt_price, other, qty, date, status;
+    public ImageView image;
+    public CardView parent;
 
     private ItemClickListener itemClickListener;
 
 
     public OrderViewHolder(View itemView) {
         super(itemView);
+        txt_name = (TextView)itemView.findViewById(R.id.name);
+        txt_price = (TextView)itemView.findViewById(R.id.price);
+        other = (TextView)itemView.findViewById(R.id.others);
+        qty = (TextView)itemView.findViewById(R.id.qty);
+        date = (TextView)itemView.findViewById(R.id.date);
+        status = (TextView)itemView.findViewById(R.id.status);
+        image = itemView.findViewById(R.id.image);
+        parent = itemView.findViewById(R.id.parent);
 
-        txt_name = (TextView)itemView.findViewById(R.id.product_name);
-        txt_price = (TextView)itemView.findViewById(R.id.order_total);
-        txt_product_id = (TextView)itemView.findViewById(R.id.order_id);
-        txt_quantity = (TextView)itemView.findViewById(R.id.order_quantity);
-        txt_product_price = (TextView)itemView.findViewById(R.id.product_price);
-        txt_order_date = (TextView)itemView.findViewById(R.id.order_date);
-        txt_type = (TextView)itemView.findViewById(R.id.order_type);
-        txt_seller_name = (TextView)itemView.findViewById(R.id.seller_name);
     }
 
     @Override
@@ -50,10 +58,10 @@ class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderViewHolder>{
 
-    private List<Order> listData = new ArrayList<>();
+    private List<Invoice> listData = new ArrayList<>();
     private Context context;
 
-    public OrderAdapter(List<Order> listData, Context context) {
+    public OrderAdapter(List<Invoice> listData, Context context) {
         this.listData = listData;
         this.context = context;
     }
@@ -66,18 +74,33 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(OrderViewHolder holder, int position) {
-        SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yy");
-        Date date = new Date(listData.get(position).getDate());
-        holder.txt_price.setText("Total Harga : "+Integer.parseInt(listData.get(position).getPrice())*Integer.parseInt(listData.get(position).getQuantity()));
-        holder.txt_quantity.setText("Jumlah Produk : "+listData.get(position).getQuantity());
-        holder.txt_product_id.setText("Kode Produk : "+listData.get(position).getProductId());
-        holder.txt_name.setText("Nama Produk : "+listData.get(position).getProductName());
-        holder.txt_product_price.setText("Harga Produk : "+Integer.parseInt(listData.get(position).getPrice()));
-        holder.txt_order_date.setText("Tanggal Order : "+formater.format(date));
-        holder.txt_type.setText("Tipe Order : "+listData.get(position).getType());
-        holder.txt_seller_name.setText("Penjual : "+listData.get(position).getSeller());
+    public void onBindViewHolder(OrderViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+        SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+        holder.txt_price.setText(listData.get(position).getPrice());
+        holder.date.setText(targetDateFormat.format(new Date(listData.get(position).getDate())));
+        holder.qty.setText(listData.get(position).getOrders().get(0).getQuantity() + "Barang");
+        if(listData.get(position).getOrders().size() > 1){
+            holder.other.setText("+"+ (listData.get(position).getOrders().size()-1) +" Barang lainnya.");
+        }else{
+            holder.other.setVisibility(View.GONE);
+        }
+        holder.status.setText(Common.ORDER_TYPE_STRING.get(listData.get(position).getStatus()));
+        holder.txt_name.setText(listData.get(position).getOrders().get(0).getProduct().getName());
+        holder.txt_price.setText(listData.get(position).getPrice());
+        holder.txt_price.setText(listData.get(position).getPrice());
+        holder.txt_price.setText(listData.get(position).getPrice());
+        if(listData.get(position).getOrders().get(0).getProduct().getImage() != null){
+            Picasso.with(context).load(listData.get(position).getOrders().get(0).getProduct().getImage()).into(holder.image);
+        }
+        holder.parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, OrderDetail.class);
+                intent.putExtra("invoice", listData.get(position));
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

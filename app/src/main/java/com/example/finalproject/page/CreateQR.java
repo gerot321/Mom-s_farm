@@ -3,31 +3,46 @@ package com.example.finalproject.page;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import android.os.Parcelable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.Interface.ItemClickListener;
+import com.example.finalproject.Model.Product;
+import com.example.finalproject.R;
+import com.example.finalproject.holder.ShoeViewHolder;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.WriterException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,10 +59,6 @@ public class CreateQR extends AppCompatActivity {
     ImageView qrCodeIV;
     @BindView(R.id.save_qr)
     Button save_qr_code;
-    @BindView(R.id.parent_img)
-    FrameLayout parentImage;
-    @BindView(R.id.prod_name)
-    TextView prodName;
 
     final private int PERMISSION = 1;
 
@@ -56,7 +67,6 @@ public class CreateQR extends AppCompatActivity {
     Bitmap bitmap;
     QRGEncoder qrgEncoder;
     String productId;
-    String productName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,14 +79,10 @@ public class CreateQR extends AppCompatActivity {
 
     private void initData(){
         productId = getIntent().getStringExtra("productId");
-        productName = getIntent().getStringExtra("productName");
     }
 
     private void initView(){
-//        String output = str.substring(0, 1).toUpperCase() + str.substring(1);
-
-        prodName.setText(productName.substring(0, 1).toUpperCase() + productName.substring(1));
-
+        checkPermission();
         if(productId!=null){
             WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
             Display display = manager.getDefaultDisplay();
@@ -97,28 +103,22 @@ public class CreateQR extends AppCompatActivity {
         save_qr_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkPermission();
+                saveImageToGallery(qrCodeIV);
             }
         });
     }
 
 
     private void saveImageToGallery(ImageView iv){
-//        BitmapDrawable draw = (BitmapDrawable) iv.getDrawable();
-//        Bitmap bitmap = draw.getBitmap();
-        parentImage.setDrawingCacheEnabled(true);
+        BitmapDrawable draw = (BitmapDrawable) iv.getDrawable();
+        Bitmap bitmap = draw.getBitmap();
 
-        parentImage.buildDrawingCache();
-
-        Bitmap bitmap = parentImage.getDrawingCache();
         FileOutputStream outStream = null;
         File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File(sdCard.getAbsolutePath() + "/Mom's Farm");
+        File dir = new File(sdCard.getAbsolutePath() + "/save_image");
         dir.mkdirs();
         String fileName = String.format("%d.jpg", System.currentTimeMillis());
         File outFile = new File(dir, fileName);
-
-
         try {
             outStream = new FileOutputStream(outFile);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
@@ -128,9 +128,6 @@ public class CreateQR extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        intent.setData(Uri.fromFile(outFile));
-        sendBroadcast(intent);
     }
 
     private void checkPermission() {
@@ -149,8 +146,6 @@ public class CreateQR extends AppCompatActivity {
         if (!deniedPermissions.isEmpty()) {
             String[] array = new String[deniedPermissions.size()];
             ActivityCompat.requestPermissions(this, deniedPermissions.toArray(array), PERMISSION);
-        }else{
-            saveImageToGallery(qrCodeIV);
         }
     }
     @Override

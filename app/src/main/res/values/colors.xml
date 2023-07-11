@@ -6,4 +6,26 @@
     <color name="colorAccent">#a7a0a2</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#373435</color>
+    <color name="failed">#FC100D</color>
+    <color name="success">#4BB543</color>
+    <color name="colorInactive">#747474</color>
+    <color name="colorActiveSmall">#FFFFFF</color>
+    <color name="colorInactiveSmall">#50FFFFFF</color>
+    <color name="colorInActivePrimary">#ffba84</color>
+    <color name="border_color">#d6d5d5</color>
+    <color name="blueText">#00529c</color>
+    <color name="grayText">#797777</color>
+    <color name="blackText">#383838</color>
+    <color name="lightGreen">#02b16d</color>
+    <color name="positive_green">#4baf84</color>
+    <color name="red">#cf0008</color>
+    <color name="gray_bg">#f4f4f4</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="pending">#fec008</color>
+    <color name="cream">#e5e5e5</color>
+    <color name="lightCream">#fff2e7</color>
+    <color name="defaultColor">#f1f1f1</color>
+    <color name="defaultColorDark">#c6c6c6</color>
+    <color name="pumpkin_orange">#fdcfa6</color>
+    <color name="white_transparent">#B3ffffff</color>
 </resources>

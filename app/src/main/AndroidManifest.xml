@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.momsfarm.finalproject">
+    package="com.example.finalproject">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,7 +12,9 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.finalproject.page.Splash">
+        <activity
+            android:exported="true"
+            android:name="com.example.finalproject.page.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -31,7 +33,10 @@
         <activity android:name="com.example.finalproject.page.RekapDetail"/>
         <activity android:name="com.example.finalproject.page.RekapOption"/>
         <activity android:name="com.example.finalproject.page.EditProfile"/>
-        <activity android:name="com.example.finalproject.page.ChangePassword"/>
+        <activity android:name="com.example.finalproject.page.MainMenuUser"/>
+        <activity android:name="com.example.finalproject.page.TransactionHistory"/>
+        <activity android:name="com.example.finalproject.page.OrderDetail"/>
+        <activity android:name="com.example.finalproject.page.scanner.OrderItem"/>
 
     </application>
 

@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -15,13 +19,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-
 import com.example.finalproject.Model.Product;
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
-import com.example.finalproject.util.PreferenceUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -52,38 +52,28 @@ public class AddProduct extends BaseActivity {
     EditText stockEdt;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.button_choose_image)
-    RelativeLayout mButtonChooseImage;
-    @BindView(R.id.image_view)
-    ImageView mImageView;
-    @BindView(R.id.nameProduct)
-    MaterialEditText  Name;
-    @BindView(R.id.Price)
-    MaterialEditText Price;
-    @BindView(R.id.btnSignUp)
-    Button btnSignUp;
 
     private static final int PICK_IMAGE_REQUEST = 1;
-
+    MaterialEditText  Name, Price;
+    private RelativeLayout mButtonChooseImage;
+    Button btnSignUp;
     private Uri mImageUri;
 
     private StorageTask mUploadTask;
+    private ImageView mImageView;
 
-    DatabaseReference table_product;
     private StorageReference mStorageRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         ButterKnife.bind(this);
-
-        initEnv();
-        initView();
-
-    }
-
-    private void initView(){
         setTitle(toolbar, "Tambah Produk");
+        mButtonChooseImage = findViewById(R.id.button_choose_image);
+        Name = findViewById(R.id.nameProduct);
+        Price =  findViewById(R.id.Price);
+        btnSignUp = findViewById(R.id.btnSignUp);
+        mImageView =  findViewById(R.id.image_view);
 
         plusStock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,46 +93,50 @@ public class AddProduct extends BaseActivity {
             }
         });
 
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference table_user = database.getReference("Product");
+
+
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Name.getText().toString().isEmpty()||Price.getText().toString().isEmpty()||stockEdt.getText().toString().isEmpty()){
-                    Toast.makeText(AddProduct.this, "Mohon isi semua data untuk menambahkan produk", Toast.LENGTH_SHORT).show();
-
-                    return;
-                }
                 showProgress();
+                if (mImageUri != null) {
+                    StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+                            + "." + getFileExtension(mImageUri));
 
-                table_product.orderByChild("name").startAt(Name.getText().toString().toUpperCase()).endAt(Name.getText().toString().toLowerCase()+ "\uf8ff").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    mUploadTask = fileReference.putFile(mImageUri)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+//
+                                    Product products = new Product( "PROD-"+String.valueOf(System.currentTimeMillis()), Name.getText().toString(), taskSnapshot.getDownloadUrl().toString(), Price.getText().toString(), stockEdt.getText().toString());
+                                    table_user.child(products.getProductId()).setValue(products);
+                                    disProgress();
+                                    Toast.makeText(AddProduct.this, "Berhasil Menambahkan Produk", Toast.LENGTH_SHORT).show();
 
-                        if(dataSnapshot.exists()){
-                            boolean isExist = false;
-                            for (DataSnapshot ssn : dataSnapshot.getChildren()) {
-                                Product product = ssn.getValue(Product.class);
-                                if(product.getIsActive().equals("ACTIVE")){
-                                    isExist = true;
+                                    AddProduct.this.finish();
+
                                 }
-                            }
-                            if(isExist){
-                                Toast.makeText(AddProduct.this, "Produk sudah terdaftar", Toast.LENGTH_SHORT).show();
-                                disProgress();
-                            }else{
-                                addProduct();
-                            }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(AddProduct.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+//                                    mProgressBar.setProgress((int) progress);
 
-                        }else{
-                            addProduct();
-                        }
-                        table_product.removeEventListener(this);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                                }
+                            });
+                } else {
+                    Toast.makeText(AddProduct.this, "No file selected", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
@@ -154,58 +148,9 @@ public class AddProduct extends BaseActivity {
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
-    }
-
-
-    private void initEnv(){
-        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        table_product = database.getReference("Product");
 
     }
 
-    private void addProduct(){
-        if (mImageUri != null) {
-            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
-                    + "." + getFileExtension(mImageUri));
-
-            mUploadTask = fileReference.putFile(mImageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-
-                            Product products = new Product( "PROD-"+String.valueOf(System.currentTimeMillis()), Name.getText().toString(), taskSnapshot.getDownloadUrl().toString(), Price.getText().toString(), stockEdt.getText().toString(), "ACTIVE", PreferenceUtil.getUser().getPhone());
-                            table_product.child(products.getProductId()).setValue(products);
-                            disProgress();
-                            Toast.makeText(AddProduct.this, "Berhasil Menambahkan Produk", Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_OK);
-                            AddProduct.this.finish();
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(Exception e) {
-                            Toast.makeText(AddProduct.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-//                                    mProgressBar.setProgress((int) progress);
-
-                        }
-                    });
-        } else {
-            Product products = new Product( "PROD-"+String.valueOf(System.currentTimeMillis()), Name.getText().toString(), " ", Price.getText().toString(), stockEdt.getText().toString(), "ACTIVE", PreferenceUtil.getUser().getPhone());
-            table_product.child(products.getProductId()).setValue(products);
-            disProgress();
-            Toast.makeText(AddProduct.this, "Berhasil Menambahkan Produk", Toast.LENGTH_SHORT).show();
-            setResult(RESULT_OK);
-            AddProduct.this.finish();
-        }
-    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

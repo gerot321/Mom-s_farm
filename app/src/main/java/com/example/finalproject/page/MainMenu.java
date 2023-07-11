@@ -2,15 +2,13 @@ package com.example.finalproject.page;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.view.Menu;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,8 +16,7 @@ import android.widget.TextView;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.MainActivity;
-import com.google.android.material.navigation.NavigationView;
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.R;
 import com.example.finalproject.util.PreferenceUtil;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainMenu extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
     @BindView(R.id.add_product)
     CardView addProduct;
     @BindView(R.id.shop)
@@ -52,20 +49,19 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         ButterKnife.bind(this);
-
-
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-
         table_stock = database.getReference("test");
-
-
         initView();
     }
 
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
 
     private void initView(){
-        toolbar.setTitle("Menu Utama");
+        toolbar.setTitle("Main Menu");
         setSupportActionBar(toolbar);
 
 
@@ -90,17 +86,10 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             }
         });
         myImage = headerView.findViewById(R.id.my_image);
-
-        Menu nav_Menu = navigationView.getMenu();
-        nav_Menu.findItem(R.id.nav_change_password).setVisible(false);
-        addProduct.setVisibility(View.VISIBLE);
-        if(PreferenceUtil.getUser().getStatus().equals("ADMIN")){
-//            addProduct.setVisibility(View.VISIBLE);
-        }else{
-//            addProduct.setVisibility(View.GONE);
-//            Menu nav_Menu = navigationView.getMenu();
-//            nav_Menu.findItem(R.id.nav_change_password).setVisible(false);
+        if(!PreferenceUtil.getUser().getImage().isEmpty() && !PreferenceUtil.getUser().getImage().equals(" ")){
+            Picasso.with(this).load(PreferenceUtil.getUser().getImage()).into(myImage);
         }
+
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,6 +97,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 startActivity(intent);
             }
         });
+
         recap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,14 +152,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 //    }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(!PreferenceUtil.getUser().getImage().equals(" ")&&!PreferenceUtil.getUser().getImage().isEmpty()){
-            Picasso.with(this).load(PreferenceUtil.getUser().getImage()).into(myImage);
-        }
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -185,10 +167,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             PreferenceUtil.clearAll();
             startActivity(intent);
             finish();
-        }
-        if (id == R.id.nav_change_password) {
-            Intent intent = new Intent(this, ChangePassword.class);
-            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

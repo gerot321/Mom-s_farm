@@ -48,25 +48,25 @@ public class Database extends SQLiteAssetHelper {
         return result;
     }
 
-    public void addToCart(Order order){
-        SQLiteDatabase db = getReadableDatabase();
-        String query = "";
-        if(CheckIsDataAlreadyInDBorNot("OrderDetail","ProductId",order.getProductId())){
-////            Order lastOrder = getOrder(order.getProductId());
-//            int totalOrder = Integer.parseInt(order.getQuantity())+Integer.parseInt(lastOrder.getQuantity());
-//            ContentValues cv = new ContentValues();
-//            cv.put("Quantity",String.valueOf(totalOrder));
-//            db.update("OrderDetail", cv, "ProductId = "+order.getProductId(), null);
-        }else{
-            query = String.format("INSERT INTO OrderDetail(ProductId,ProductName,Quantity,Price,Seller) VALUES('%s','%s','%s','%s','%s');",
-                    order.getProductId(),
-                    order.getProductName(),
-                    order.getQuantity(),
-                    order.getPrice(),
-                    order.getSeller());
-            db.execSQL(query);
-        }
-    }
+//    public void addToCart(Order order){
+//        SQLiteDatabase db = getReadableDatabase();
+//        String query = "";
+//        if(CheckIsDataAlreadyInDBorNot("OrderDetail","ProductId",order.getProductId())){
+//////            Order lastOrder = getOrder(order.getProductId());
+////            int totalOrder = Integer.parseInt(order.getQuantity())+Integer.parseInt(lastOrder.getQuantity());
+////            ContentValues cv = new ContentValues();
+////            cv.put("Quantity",String.valueOf(totalOrder));
+////            db.update("OrderDetail", cv, "ProductId = "+order.getProductId(), null);
+//        }else{
+//            query = String.format("INSERT INTO OrderDetail(ProductId,ProductName,Quantity,Price,Seller) VALUES('%s','%s','%s','%s','%s');",
+//                    order.getProductId(),
+//                    order.getProductName(),
+//                    order.getQuantity(),
+//                    order.getPrice(),
+//                    order.getSeller());
+//            db.execSQL(query);
+//        }
+//    }
 
 //    public Order getOrder(String mealid) {
 //        SQLiteDatabase db = getReadableDatabase();

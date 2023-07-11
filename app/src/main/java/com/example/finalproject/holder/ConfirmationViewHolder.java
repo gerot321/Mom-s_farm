@@ -17,7 +17,7 @@ public class ConfirmationViewHolder extends RecyclerView.ViewHolder implements V
     public ConfirmationViewHolder(View itemView) {
         super(itemView);
 
-        txtOrderId = (TextView)itemView.findViewById(R.id.order_id);
+//        txtOrderId = (TextView)itemView.findViewById(R.id.order_id);
 
         itemView.setOnClickListener(this);
 
