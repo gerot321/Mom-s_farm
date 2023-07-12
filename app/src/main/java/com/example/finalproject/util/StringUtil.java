@@ -19,9 +19,9 @@ public class StringUtil {
     public static final String formatToIDR(double number) {
         DecimalFormat formatter = (DecimalFormat) DecimalFormat.getCurrencyInstance();
         DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
-        formatRp.setCurrencySymbol("");
+        formatRp.setCurrencySymbol("Rp ");
         formatRp.setMonetaryDecimalSeparator(',');
-        formatRp.setGroupingSeparator(',');
+        formatRp.setGroupingSeparator('.');
         formatter.setMaximumFractionDigits(0);
         formatter.setDecimalFormatSymbols(formatRp);
 

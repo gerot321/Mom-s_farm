@@ -6,11 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +15,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Interface.ItemClickListener;
@@ -60,19 +59,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.github.mikephil.charting.data.Entry;
 public class RekapDetail extends BaseActivity {
-    @BindView(R.id.recycler_recap)
     RecyclerView recyclerView;
-    @BindView(R.id.lineChart)
     LineChart lineChart;
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.prev_total_txt)
-    TextView prevTotalTxt;
-    @BindView(R.id.total_txt)
     TextView totalTxt;
     RecyclerView.LayoutManager layoutManager;
     OrderAdapter adapter;
@@ -97,12 +88,15 @@ public class RekapDetail extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recap_detail);
-        ButterKnife.bind(this);
         initEnv();
         iniView();
     }
 
     private void iniView(){
+        toolbar =  findViewById(R.id.toolbar);
+        lineChart =  findViewById(R.id.lineChart);
+        recyclerView =  findViewById(R.id.recycler_recap);
+        totalTxt =  findViewById(R.id.total_txt);
 
         toolbar.setTitle("Rekap");
         setSupportActionBar(toolbar);
@@ -170,7 +164,7 @@ public class RekapDetail extends BaseActivity {
         recyclerView.setAdapter(adapter);
         query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ssn : dataSnapshot.getChildren()) {
                     Invoice sale = ssn.getValue(Invoice.class);
                     if(!productId.isEmpty()){
@@ -192,7 +186,7 @@ public class RekapDetail extends BaseActivity {
                 Calendar endPrevDate = Calendar.getInstance();
                 endPrevDate.setTime(startDate);
                 endPrevDate.add(Calendar.DAY_OF_MONTH,-1);
-                prevTotalTxt.setText(dateFormatter.format(calendar.getTime())+" - "+dateFormatter.format(endPrevDate.getTime())+": "+StringUtil.formatToIDR(String.valueOf(prevTotal)));
+//                prevTotalTxt.setText(dateFormatter.format(calendar.getTime())+" - "+dateFormatter.format(endPrevDate.getTime())+": "+StringUtil.formatToIDR(String.valueOf(prevTotal)));
                 totalTxt.setText(dateFormatter.format(startDate)+" - "+dateFormatter.format(endDate)+": "+StringUtil.formatToIDR(String.valueOf(total)));
 
                 LineDataSet kasusLineDataSet = new LineDataSet(chartList, dateFormatter.format(startDate)+" - "+dateFormatter.format(endDate));
@@ -233,7 +227,7 @@ public class RekapDetail extends BaseActivity {
                 List<String> date =new  ArrayList<String>();
                 String[] stockArr = new String[date.size()];
                 stockArr = date.toArray(stockArr);
-                ValueFormatter tanggal = new AxisDateFormatter(stockArr);
+                ValueFormatter tanggal = new AxisDateFormatter(date);
                 lineChart.getXAxis().setValueFormatter(tanggal);
 
                 adapter = new OrderAdapter(orderList, RekapDetail.this);
@@ -241,7 +235,7 @@ public class RekapDetail extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         }) ;

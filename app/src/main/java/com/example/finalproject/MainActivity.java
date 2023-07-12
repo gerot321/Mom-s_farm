@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.finalproject.page.SignIn;
 import com.example.finalproject.page.SignUp;
-import com.momsfarm.finalproject.R;
 
 public class MainActivity extends AppCompatActivity {
 

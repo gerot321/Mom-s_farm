@@ -1,48 +1,30 @@
 package com.example.finalproject.page;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Environment;
-import android.os.Parcelable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 
-import com.example.finalproject.Interface.ItemClickListener;
-import com.example.finalproject.Model.Product;
 import com.example.finalproject.R;
-import com.example.finalproject.holder.ShoeViewHolder;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.zxing.WriterException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,14 +32,10 @@ import java.util.List;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class CreateQR extends AppCompatActivity {
 
-    @BindView(R.id.idIVQrcode)
     ImageView qrCodeIV;
-    @BindView(R.id.save_qr)
     Button save_qr_code;
 
     final private int PERMISSION = 1;
@@ -71,7 +49,6 @@ public class CreateQR extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_qr);
-        ButterKnife.bind(this);
         initData();
         initView();
 
@@ -82,6 +59,9 @@ public class CreateQR extends AppCompatActivity {
     }
 
     private void initView(){
+        qrCodeIV =  findViewById(R.id.idIVQrcode);
+        save_qr_code =  findViewById(R.id.save_qr);
+
         checkPermission();
         if(productId!=null){
             WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);

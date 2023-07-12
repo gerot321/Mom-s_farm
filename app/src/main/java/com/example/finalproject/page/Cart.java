@@ -2,15 +2,16 @@ package com.example.finalproject.page;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Database.Database;
@@ -37,20 +38,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 
 public class Cart extends BaseActivity {
-    @BindView(R.id.listCart)
     RecyclerView recyclerView;
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.total)
     TextView txtTotalPrice;
-    @BindView(R.id.btnPlaceOrder)
     Button btnPlace;
-    @BindView(R.id.btnClearCart)
     Button btnClear;
     RecyclerView.LayoutManager layoutManager;
 
@@ -68,7 +61,6 @@ public class Cart extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
-        ButterKnife.bind(this);
         new Database(getBaseContext()).clearCart();
         initEnv();
         initView();
@@ -86,11 +78,17 @@ public class Cart extends BaseActivity {
 
 
     private void initView(){
+        recyclerView =  findViewById(R.id.listCart);
+        toolbar =  findViewById(R.id.toolbar);
+        txtTotalPrice =  findViewById(R.id.total);
+        btnPlace =  findViewById(R.id.btnPlaceOrder);
+        btnClear =  findViewById(R.id.btnClearCart);
         toolbar.setTitle("Keranjang");
         setSupportActionBar(toolbar);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         btnPlace.setOnClickListener(new View.OnClickListener() {
             @Override

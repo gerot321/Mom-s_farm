@@ -19,8 +19,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
 import com.example.finalproject.Model.User;
+import com.example.finalproject.R;
 import com.google.android.material.textfield.TextInputLayout;
-import com.momsfarm.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.util.PreferenceUtil;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,38 +42,22 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class EditProfile extends BaseActivity {
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.image_card)
     CardView imageHolder;
-    @BindView(R.id.button_choose_image)
     RelativeLayout mButtonChooseImage;
-    @BindView(R.id.image_view)
     ImageView mImageView;
-    @BindView(R.id.radioButton)
     RadioButton male;
-    @BindView(R.id.radioButton2)
     RadioButton female;
-    @BindView(R.id.etPhone)
     MaterialEditText etPhone;
-    @BindView(R.id.etName)
     MaterialEditText etName;
-    @BindView(R.id.etPassword)
     MaterialEditText etPassword;
-    @BindView(R.id.etTanngal)
     MaterialEditText etDate;
-    @BindView(R.id.etAddress)
     MaterialEditText etAddress;
     RadioButton radio;
-    @BindView(R.id.radioGroup)
     RadioGroup groups;
-    @BindView(R.id.btnSignUp)
     Button btnSignUp;
-    @BindView(R.id.inputLayout)
     TextInputLayout textInputLayout;
 
     private static final String TAG = "PhoneAuth";
@@ -91,7 +75,6 @@ public class EditProfile extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        ButterKnife.bind(this);
         initEnv();
         initView();
 
@@ -99,6 +82,21 @@ public class EditProfile extends BaseActivity {
     }
 
     private void initView(){
+        imageHolder =  findViewById(R.id.image_card);
+        mButtonChooseImage =  findViewById(R.id.button_choose_image);
+        male =  findViewById(R.id.radioButton);
+        mImageView =  findViewById(R.id.image_view);
+        female =  findViewById(R.id.radioButton2);
+        etPhone =  findViewById(R.id.etPhone);
+        etName =  findViewById(R.id.etName);
+        etPassword =  findViewById(R.id.etPassword);
+        etDate =  findViewById(R.id.etTanngal);
+        etAddress =  findViewById(R.id.etAddress);
+        groups =  findViewById(R.id.radioGroup);
+        btnSignUp =  findViewById(R.id.btnSignUp);
+        textInputLayout =  findViewById(R.id.inputLayout);
+        toolbar =  findViewById(R.id.toolbar);
+
         mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,7 +160,7 @@ public class EditProfile extends BaseActivity {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             disProgress();
-                                            createUser(taskSnapshot.getDownloadUrl().toString());
+                                            createUser(taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
                                             table_user.removeEventListener(this);
 
                                         }

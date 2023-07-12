@@ -7,12 +7,6 @@ import android.graphics.Color;
 import android.graphics.Insets;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +22,10 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Model.Invoice;
@@ -46,6 +44,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,15 +62,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class TransactionHistory extends BaseActivity {
-    @BindView(R.id.recycler_recap)
     RecyclerView recyclerView;
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.filterBtn)
     LinearLayout filterBtn;
     RecyclerView.LayoutManager layoutManager;
     OrderAdapter adapter;
@@ -89,7 +84,6 @@ public class TransactionHistory extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_history);
-        ButterKnife.bind(this);
         initEnv();
         iniView();
     }
@@ -97,6 +91,10 @@ public class TransactionHistory extends BaseActivity {
 
 
     private void iniView(){
+        recyclerView = findViewById(R.id.recycler_recap);
+        toolbar = findViewById(R.id.toolbar);
+        filterBtn = findViewById(R.id.filterBtn);
+
         bottom_sheet = findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet);
         toolbar.setTitle("History Transaksi");
@@ -113,6 +111,7 @@ public class TransactionHistory extends BaseActivity {
                 showBottomSheetDialog();
             }
         });
+        loadOrder(requests.orderByChild("date").startAt(startDate.getTime()).endAt(endDate.getTime()));
     }
     String status = "ALL";
     public void showBottomSheetDialog() {
@@ -277,7 +276,6 @@ public class TransactionHistory extends BaseActivity {
         requests = database.getReference("Invoice");
         startDate = cal.getTime();
         endDate = new Date();
-        loadOrder(requests.orderByChild("date").startAt(startDate.getTime()).endAt(endDate.getTime()));
     }
 
     private void loadOrder(Query query){
@@ -285,7 +283,7 @@ public class TransactionHistory extends BaseActivity {
         recyclerView.setAdapter(adapter);
         query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange( DataSnapshot dataSnapshot) {
                 for (DataSnapshot ssn : dataSnapshot.getChildren()) {
                     Invoice sale = ssn.getValue(Invoice.class);
                     if(status.equals(Common.ORDER_ALL)){
@@ -299,7 +297,7 @@ public class TransactionHistory extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled( DatabaseError databaseError) {
 
             }
         }) ;

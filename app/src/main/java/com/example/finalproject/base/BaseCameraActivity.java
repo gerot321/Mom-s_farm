@@ -32,7 +32,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.R;
 
 public abstract class BaseCameraActivity extends AppCompatActivity {
     private AlertDialog mDialog;

@@ -20,10 +20,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.R;
 import com.example.finalproject.util.PreferenceUtil;
 
-import butterknife.ButterKnife;
 
 public class BaseActivity extends AppCompatActivity {
     private ProgressDialog dialog;

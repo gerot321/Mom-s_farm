@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Model.User;
+import com.example.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.util.PreferenceUtil;
 import com.google.firebase.database.DataSnapshot;
@@ -19,19 +20,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.momsfarm.finalproject.R;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class ChangePassword extends BaseActivity {
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.etPhone)
     EditText etPhone;
-    @BindView(R.id.etPassword)
     EditText etPassword;
-    @BindView(R.id.btnSignIn)
     Button btnSignIn;
 
     DatabaseReference table_user;
@@ -40,7 +34,6 @@ public class ChangePassword extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
-        ButterKnife.bind(this);
         PreferenceUtil.setContext(this);
 
         initEnv();
@@ -50,6 +43,11 @@ public class ChangePassword extends BaseActivity {
     }
 
     private void initView(){
+        toolbar =  findViewById(R.id.toolbar);
+        etPhone =  findViewById(R.id.etPhone);
+        etPassword =  findViewById(R.id.etPassword);
+        btnSignIn =  findViewById(R.id.btnSignIn);
+
         setTitle(toolbar, "Masuk");
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override

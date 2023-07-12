@@ -22,7 +22,7 @@ import java.util.Calendar;
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Model.Order;
 import com.example.finalproject.Model.Product;
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,29 +37,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 public class RekapOption extends BaseActivity {
-    @BindView(R.id.pick_start_date)
     TextView pickStartDate;
-    @BindView(R.id.choose_product)
     TextView chooseProduct;
-    @BindView(R.id.product_name)
     TextView productName;
-    @BindView(R.id.pick_end_date)
     TextView pickEndDate;
-    @BindView(R.id.view_recap)
     Button viewRecap;
-    @BindView(R.id.recap_option)
     Spinner recapOption;
-    @BindView(R.id.date_end)
     TextView dateEndText;
-    @BindView(R.id.date_start)
     TextView dateStartText;
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.sell_type_option)
     Spinner sellTypeOption;
     public static final int REQUEST_CODE = 1;
 
@@ -76,12 +64,23 @@ public class RekapOption extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recap_option);
-        ButterKnife.bind(this);
         initEnv();
         iniView();
     }
 
     private void iniView(){
+        toolbar = findViewById(R.id.toolbar);
+        pickStartDate = findViewById(R.id.pick_start_date);
+        chooseProduct = findViewById(R.id.choose_product);
+        productName = findViewById(R.id.product_name);
+        pickEndDate = findViewById(R.id.pick_end_date);
+        viewRecap = findViewById(R.id.view_recap);
+        recapOption = findViewById(R.id.recap_option);
+        dateEndText = findViewById(R.id.date_end);
+        dateStartText = findViewById(R.id.date_start);
+        sellTypeOption = findViewById(R.id.sell_type_option);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         chooseProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

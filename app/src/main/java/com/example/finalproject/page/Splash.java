@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.MainActivity;
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.util.PreferenceUtil;
 

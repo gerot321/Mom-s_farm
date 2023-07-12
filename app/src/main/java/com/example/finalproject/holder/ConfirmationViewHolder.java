@@ -6,7 +6,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.Interface.ItemClickListener;
-import com.momsfarm.finalproject.R;
 
 
 public class ConfirmationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

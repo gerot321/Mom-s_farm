@@ -6,20 +6,18 @@ import android.os.Parcelable;
 import com.google.firebase.database.PropertyName;
 
 public class Product implements Parcelable {
-    private String name, image, price, stock,productId,isActive, seller;
+    private String name, image, price, stock,productId;
 
     public Product(){
 
     }
 
-    public Product(String id,String name, String image, String price, String stock, String isActive,String seller) {
+    public Product(String id,String name, String image, String price, String stock) {
         productId=id;
         this.name = name;
         this.image = image;
         this.price = price;
         this.stock = stock;
-        this.seller = seller;
-        this.isActive = isActive;
     }
 
 
@@ -29,8 +27,6 @@ public class Product implements Parcelable {
         price = in.readString();
         stock = in.readString();
         productId = in.readString();
-        isActive = in.readString();
-        seller = in.readString();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -57,17 +53,12 @@ public class Product implements Parcelable {
         parcel.writeString(price);
         parcel.writeString(stock);
         parcel.writeString(productId);
-        parcel.writeString(isActive);
-        parcel.writeString(seller);
     }
 
     public String getProductId() {
         return productId;
     }
 
-    public String getSeller() {
-        return seller;
-    }
 
     public String getPrice() {
         return price;
@@ -77,9 +68,6 @@ public class Product implements Parcelable {
         return image;
     }
 
-    public String getIsActive() {
-        return isActive;
-    }
 
     public String getName() {
         return name;

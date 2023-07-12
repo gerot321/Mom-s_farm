@@ -5,10 +5,6 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -16,6 +12,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.example.finalproject.Model.Product;
 import com.example.finalproject.R;
@@ -35,29 +34,17 @@ import com.google.firebase.storage.UploadTask;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class ProductDetail extends BaseActivity {
-    @BindView(R.id.image_card)
     CardView imageCard;
-    @BindView(R.id.image_product)
     ImageView imageProduct;
-    @BindView(R.id.productPrice)
     MaterialEditText productPrice;
-    @BindView(R.id.productName)
     MaterialEditText productName;
-    @BindView(R.id.submit_btn)
     Button submitBtn;
-    @BindView(R.id.button_choose_image)
     RelativeLayout mButtonChooseImage;
-    @BindView(R.id.minus_stock)
     RelativeLayout minusStock;
-    @BindView(R.id.plus_stock)
     RelativeLayout plusStock;
-    @BindView(R.id.product_stock_edt)
     EditText stockEdt;
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     FirebaseDatabase database;
@@ -75,7 +62,6 @@ public class ProductDetail extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_product);
-        ButterKnife.bind(this);
 
 
         initData();
@@ -96,6 +82,17 @@ public class ProductDetail extends BaseActivity {
     }
 
     public void initView(){
+        toolbar =  findViewById(R.id.toolbar);
+        stockEdt =  findViewById(R.id.product_stock_edt);
+        plusStock =  findViewById(R.id.plus_stock);
+        minusStock =  findViewById(R.id.minus_stock);
+        mButtonChooseImage =  findViewById(R.id.button_choose_image);
+        submitBtn =  findViewById(R.id.submit_btn);
+        productName =  findViewById(R.id.productName);
+        productPrice =  findViewById(R.id.productPrice);
+        imageProduct =  findViewById(R.id.image_product);
+        imageCard =  findViewById(R.id.image_card);
+
         setTitle(toolbar, "Ubah Produk");
 
         plusStock.setOnClickListener(new View.OnClickListener() {
@@ -140,13 +137,13 @@ public class ProductDetail extends BaseActivity {
                                 @Override
                                 public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
 //
-                                    productTable.child(productId).child("Image").setValue(taskSnapshot.getDownloadUrl().toString());
+                                    productTable.child(productId).child("Image").setValue(taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
 
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
-                                public void onFailure(@NonNull Exception e) {
+                                public void onFailure( Exception e) {
                                     Toast.makeText(ProductDetail.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             })

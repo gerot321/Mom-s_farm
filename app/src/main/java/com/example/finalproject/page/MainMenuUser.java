@@ -3,44 +3,38 @@ package com.example.finalproject.page;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.finalproject.Common.Common;
 import com.example.finalproject.Interface.ItemClickListener;
 import com.example.finalproject.MainActivity;
 import com.example.finalproject.Model.Product;
 import com.example.finalproject.R;
 import com.example.finalproject.holder.ShoeViewHolder;
-import com.example.finalproject.page.scanner.CodeScannerActivity;
 import com.example.finalproject.page.scanner.OrderItem;
 import com.example.finalproject.util.PreferenceUtil;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
-public class MainMenuUser extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
-    @BindView(R.id.toolbar)
+public class MainMenuUser extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     Toolbar toolbar;
     ImageView myImage;
     FirebaseRecyclerAdapter<Product, ShoeViewHolder> adapter;
@@ -57,7 +51,6 @@ public class MainMenuUser extends AppCompatActivity  implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_user);
-        ButterKnife.bind(this);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         table_stock = database.getReference("test");
         iniEnv();
@@ -79,6 +72,8 @@ public class MainMenuUser extends AppCompatActivity  implements NavigationView.O
 
 
     private void initView(){
+        toolbar = findViewById(R.id.toolbar);
+
         toolbar.setTitle("Daftar Produk");
         setSupportActionBar(toolbar);
 

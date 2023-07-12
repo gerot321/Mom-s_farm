@@ -3,8 +3,8 @@ package com.example.finalproject.page.scanner;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Model.Invoice;
@@ -27,6 +30,7 @@ import com.example.finalproject.page.OrderDetail;
 import com.example.finalproject.page.ProductDetail;
 import com.example.finalproject.page.ProductList;
 import com.example.finalproject.util.PreferenceUtil;
+import com.example.finalproject.util.StringUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,41 +43,81 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class OrderItem extends BaseActivity {
-    @BindView(R.id.linen_option)
     Spinner linenOption;
-    @BindView(R.id.glass_option)
     Spinner glassOption;
-    @BindView(R.id.mattboard_option)
     Spinner mattboardOption;
 
-    @BindView(R.id.height)
     EditText height;
-    @BindView(R.id.image_card)
     CardView placeHolder;
-    @BindView(R.id.image)
     ImageView image;
-    @BindView(R.id.width)
     EditText width;
     Product result;
     Varian size;
     Varian mattboard;
     Varian linen;
     Varian glass;
+    Toolbar toolbar;
+    TextView totalPrice;
+    TextView weightTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_add_to_cart);
-        ButterKnife.bind(this);
         PreferenceUtil.setContext(this);
         setTitle("Tambah Produk");
         result = getIntent().getParcelableExtra("product");
-
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Beli Produk");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         List<Order> orders = PreferenceUtil.getOrders();
+        width = findViewById(R.id.width);
+        image = findViewById(R.id.image);
+        placeHolder = findViewById(R.id.image_card);
+        height = findViewById(R.id.height);
+        mattboardOption = findViewById(R.id.mattboard_option);
+        glassOption = findViewById(R.id.glass_option);
+        linenOption = findViewById(R.id.linen_option);
+        glassOption = findViewById(R.id.glass_option);
+        totalPrice = findViewById(R.id.totalPrice);
+        weightTxt = findViewById(R.id.weight);
+
+        height.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                calculateTotalPrice();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        width.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                calculateTotalPrice();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         for(Order order : orders){
             if(order.getProduct().getProductId().equals(result.getProductId())){
@@ -138,13 +182,7 @@ public class OrderItem extends BaseActivity {
                 if(size == null && linen == null && mattboard == null && glass == null){
                     return;
                 }
-                int unitSize = Integer.parseInt(height.getText().toString()) * Integer.parseInt(height.getText().toString()) * 2;
-                int glassPrice = (unitSize * glass.getBasePrice());
-                int basePrice = (unitSize * Integer.parseInt(result.getPrice()));
-                int linenPrice = (unitSize * glass.getBasePrice());
-                int mattboardPrice = (unitSize * mattboard.getBasePrice());
 
-                total = glassPrice + basePrice + linenPrice + mattboardPrice;
                 if(!found){
                     orders.add(new Order(
                             "ORD-"+System.currentTimeMillis(),
@@ -155,7 +193,7 @@ public class OrderItem extends BaseActivity {
                             size,
                             mattboard,
                             linen,glass,
-                            Common.ORDER_WAITING_PAYMENT
+                            weight
                     ));
                 }
                 PreferenceUtil.setOrders(orders);
@@ -176,7 +214,7 @@ public class OrderItem extends BaseActivity {
                         size,
                         mattboard,
                         linen,glass,
-                        Common.ORDER_WAITING_PAYMENT
+                        weight
                 );
                 List<Order> orders = new ArrayList<>();
                 orders.add(order);
@@ -209,6 +247,8 @@ public class OrderItem extends BaseActivity {
 
     }
     int total = 0;
+    double weight = 0;
+
     private void initOption(List<Varian> list, Spinner spinner, final String type){
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -222,6 +262,7 @@ public class OrderItem extends BaseActivity {
                 }else if(type.equals(Common.VARIAN_MATBOARD)){
                     mattboard = mattboardList.get(position);
                 }
+                calculateTotalPrice();
             }
 
             @Override
@@ -247,7 +288,7 @@ public class OrderItem extends BaseActivity {
     private void loadVarian(final Query query){
         query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ssn : dataSnapshot.getChildren()) {
                     Varian varian = ssn.getValue(Varian.class);
                     if(varian.getType().equals(Common.VARIAN_GLASS)){
@@ -273,14 +314,28 @@ public class OrderItem extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         }) ;
 
     }
 
+    private void calculateTotalPrice(){
+        if(width.getText().toString().isEmpty() || height.getText().toString().isEmpty()){
+            return;
+        }
+        weight = (Double.parseDouble(height.getText().toString()) * Double.parseDouble(height.getText().toString()) * 5) / 6000;
+        int unitSize = Integer.parseInt(height.getText().toString()) * Integer.parseInt(height.getText().toString()) * 2;
+        int glassPrice = (unitSize * glass.getBasePrice());
+        int basePrice = (unitSize * Integer.parseInt(result.getPrice()));
+        int linenPrice = (unitSize * linen.getBasePrice());
+        int mattboardPrice = (unitSize * mattboard.getBasePrice());
 
+        total = glassPrice + basePrice + linenPrice + mattboardPrice;
+        totalPrice.setText(StringUtil.formatToIDR(String.valueOf(total)));
+        weightTxt.setText(String.valueOf(weight));
+    }
     private static int resolveDialogTheme(Context context) {
         TypedValue outValue = new TypedValue();
         return outValue.resourceId;

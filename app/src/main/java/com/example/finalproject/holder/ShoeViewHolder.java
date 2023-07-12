@@ -8,7 +8,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.Interface.ItemClickListener;
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.R;
 
 
 public class ShoeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -3,11 +3,12 @@ package com.example.finalproject.page;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Model.User;
@@ -21,11 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class SignIn extends BaseActivity {
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
     EditText etPhone, etPassword;
 
@@ -36,13 +34,15 @@ public class SignIn extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        ButterKnife.bind(this);
-        setTitle(toolbar, "Masuk");
+        toolbar = findViewById(R.id.toolbar);
+
         etPhone = (MaterialEditText)findViewById(R.id.etPhone);
         etPassword = (MaterialEditText)findViewById(R.id.etPassword);
         btnSignIn = (Button)findViewById(R.id.btnSignIn);
         PreferenceUtil.setContext(this);
         // Initialize firebase
+        setTitle(toolbar, "Masuk");
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference table_user = database.getReference("User");
 

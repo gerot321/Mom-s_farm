@@ -18,11 +18,11 @@ import com.example.finalproject.Common.Common;
 import com.example.finalproject.Interface.ItemClickListener;
 import com.example.finalproject.Model.Order;
 import com.example.finalproject.Model.Product;
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.R;
 import com.example.finalproject.page.CreateQR;
 import com.example.finalproject.page.ProductDetail;
 import com.example.finalproject.page.ProductList;
-import com.example.finalproject.page.scanner.ScanResultDialog;
+import com.example.finalproject.page.scanner.OrderItem;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -117,16 +117,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder>{
                     context.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ScanResultDialog dialog = new ScanResultDialog(context, model);
-                            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialogInterface) {
-                                    Intent intent = context.getIntent();
-                                    context.setResult(context.RESULT_OK, intent);
-                                    context.finish();
-                                }
-                            });
-                            dialog.show();
+                            Intent intent = new Intent(context, OrderItem.class);
+                            intent.putExtra("product", (Parcelable) model);
+                            context.startActivity(intent);
                         }
                     });
 

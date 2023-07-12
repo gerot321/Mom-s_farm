@@ -3,14 +3,15 @@ package com.example.finalproject.page;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Interface.ItemClickListener;
@@ -26,8 +27,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class ProductList extends BaseActivity {
 
@@ -41,13 +40,11 @@ public class ProductList extends BaseActivity {
 
     int page = 0;
     FirebaseRecyclerAdapter<Product, ShoeViewHolder> adapter;
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
-        ButterKnife.bind(this);
         initData();
         iniEnv();
         initView();
@@ -60,6 +57,8 @@ public class ProductList extends BaseActivity {
     }
 
     private void initView(){
+        toolbar =  findViewById(R.id.toolbar);
+
         setTitle(toolbar, "Daftar Produk");
 
         recyclerView = (RecyclerView)findViewById(R.id.recycler_shoe);

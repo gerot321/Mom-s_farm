@@ -2,13 +2,14 @@ package com.example.finalproject.page;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,26 +19,19 @@ import com.example.finalproject.Common.Common;
 import com.example.finalproject.MainActivity;
 import com.example.finalproject.R;
 import com.example.finalproject.util.PreferenceUtil;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
-public class MainMenu extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
-    @BindView(R.id.add_product)
+public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     CardView addProduct;
-    @BindView(R.id.shop)
     CardView shop;
-    @BindView(R.id.update_product)
     CardView updateProduct;
-    @BindView(R.id.create_qr)
     CardView createQR;
-    @BindView(R.id.recap)
     CardView recap;
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
     TextView txtFullName, editProfile;
     ImageView myImage;
@@ -48,7 +42,6 @@ public class MainMenu extends AppCompatActivity  implements NavigationView.OnNav
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        ButterKnife.bind(this);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         table_stock = database.getReference("test");
         initView();
@@ -61,6 +54,13 @@ public class MainMenu extends AppCompatActivity  implements NavigationView.OnNav
 //    }
 
     private void initView(){
+        toolbar = findViewById(R.id.toolbar);
+        addProduct = findViewById(R.id.add_product);
+        createQR = findViewById(R.id.create_qr);
+        shop = findViewById(R.id.shop);
+        updateProduct = findViewById(R.id.update_product);
+        recap = findViewById(R.id.recap);
+
         toolbar.setTitle("Main Menu");
         setSupportActionBar(toolbar);
 

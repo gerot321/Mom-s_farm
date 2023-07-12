@@ -5,10 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -18,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.example.finalproject.Model.Product;
 import com.example.finalproject.R;
@@ -38,19 +37,12 @@ import com.google.firebase.storage.UploadTask;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class AddProduct extends BaseActivity {
-    @BindView(R.id.image_card)
     CardView imageHolder;
-    @BindView(R.id.minus_stock)
     RelativeLayout minusStock;
-    @BindView(R.id.plus_stock)
     RelativeLayout plusStock;
-    @BindView(R.id.product_stock_edt)
     EditText stockEdt;
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -67,13 +59,17 @@ public class AddProduct extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-        ButterKnife.bind(this);
-        setTitle(toolbar, "Tambah Produk");
         mButtonChooseImage = findViewById(R.id.button_choose_image);
         Name = findViewById(R.id.nameProduct);
         Price =  findViewById(R.id.Price);
         btnSignUp = findViewById(R.id.btnSignUp);
         mImageView =  findViewById(R.id.image_view);
+        stockEdt =  findViewById(R.id.product_stock_edt);
+        plusStock =  findViewById(R.id.plus_stock);
+        minusStock =  findViewById(R.id.minus_stock);
+        imageHolder =  findViewById(R.id.image_card);
+        toolbar =  findViewById(R.id.toolbar);
+        setTitle(toolbar, "Tambah Produk");
 
         plusStock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +107,7 @@ public class AddProduct extends BaseActivity {
                                 @Override
                                 public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
 //
-                                    Product products = new Product( "PROD-"+String.valueOf(System.currentTimeMillis()), Name.getText().toString(), taskSnapshot.getDownloadUrl().toString(), Price.getText().toString(), stockEdt.getText().toString());
+                                    Product products = new Product( "PROD-"+String.valueOf(System.currentTimeMillis()), Name.getText().toString(), taskSnapshot.getMetadata().getReference().getDownloadUrl().toString(), Price.getText().toString(), stockEdt.getText().toString());
                                     table_user.child(products.getProductId()).setValue(products);
                                     disProgress();
                                     Toast.makeText(AddProduct.this, "Berhasil Menambahkan Produk", Toast.LENGTH_SHORT).show();
@@ -122,7 +118,7 @@ public class AddProduct extends BaseActivity {
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
-                                public void onFailure(@NonNull Exception e) {
+                                public void onFailure( Exception e) {
                                     Toast.makeText(AddProduct.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             })

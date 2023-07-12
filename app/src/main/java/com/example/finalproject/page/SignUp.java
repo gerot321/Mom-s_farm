@@ -21,7 +21,7 @@ import androidx.cardview.widget.CardView;
 
 import com.example.finalproject.Model.Product;
 import com.example.finalproject.Model.User;
-import com.momsfarm.finalproject.R;
+import com.example.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.util.PreferenceUtil;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,33 +43,19 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class SignUp extends BaseActivity {
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.image_card)
     CardView imageHolder;
-    @BindView(R.id.button_choose_image)
     RelativeLayout mButtonChooseImage;
-    @BindView(R.id.image_view)
     ImageView mImageView;
-    @BindView(R.id.etPhone)
     MaterialEditText etPhone;
-    @BindView(R.id.etName)
     MaterialEditText etName;
-    @BindView(R.id.etPassword)
     MaterialEditText etPassword;
-    @BindView(R.id.etTanngal)
     MaterialEditText etDate;
-    @BindView(R.id.etAddress)
     MaterialEditText etAddress;
-    @BindView(R.id.radioButton)
     RadioButton radio;
-    @BindView(R.id.radioGroup)
     RadioGroup groups;
-    @BindView(R.id.btnSignUp)
     Button btnSignUp;
     private Uri mImageUri;
 
@@ -84,7 +70,6 @@ public class SignUp extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        ButterKnife.bind(this);
         initEnv();
         initView();
     }
@@ -97,6 +82,19 @@ public class SignUp extends BaseActivity {
     }
 
     private void initView(){
+        etPhone = findViewById(R.id.etPhone);
+        toolbar = findViewById(R.id.toolbar);
+        imageHolder = findViewById(R.id.image_card);
+        mButtonChooseImage = findViewById(R.id.button_choose_image);
+        mImageView = findViewById(R.id.image_view);
+        etName = findViewById(R.id.etName);
+        etPassword = findViewById(R.id.etPassword);
+        etDate = findViewById(R.id.etTanngal);
+        etAddress = findViewById(R.id.etAddress);
+        radio = findViewById(R.id.radioButton);
+        groups = findViewById(R.id.radioGroup);
+        btnSignUp = findViewById(R.id.btnSignUp);
+
         setTitle(toolbar, "Buat Akun");
         mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +145,7 @@ public class SignUp extends BaseActivity {
                                                 Toast.makeText(SignUp.this, "Nomor telepon sudah terdaftar", Toast.LENGTH_SHORT).show();
                                             }else {
                                                 disProgress();
-                                                createUser(taskSnapshot.getDownloadUrl().toString());
+                                                createUser(taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
                                             }
                                             table_user.removeEventListener(this);
                                         }

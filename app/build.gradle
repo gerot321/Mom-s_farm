@@ -9,13 +9,17 @@ android {
         versionCode 1
         multiDexEnabled true
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -26,43 +30,33 @@ repositories {
 }
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestCompile('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     // Add libraries
-    implementation 'com.android.support:design:28.+'
+    implementation 'com.google.android.material:material:1.5.0'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    implementation 'com.google.android.gms:play-services:11.0.2'
+    implementation 'com.firebaseui:firebase-ui-database:1.2.0'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
-    implementation 'com.android.support:appcompat-v7:28.+'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.google.firebase:firebase-core:11.0.2'
-    implementation 'com.google.firebase:firebase-database:11.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.firebase:firebase-database:20.2.2'
     implementation 'info.hoang8f:fbutton:1.0.5'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
-    implementation 'com.android.support:cardview-v7:28.+'
-    implementation 'com.android.support:recyclerview-v7:28.+'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'com.firebaseui:firebase-ui-database:1.2.0'
-    implementation 'com.google.firebase:firebase-storage:11.0.2'
+    implementation 'com.google.firebase:firebase-storage:20.2.1'
     testImplementation 'junit:junit:4.12'
     implementation 'de.hdodenhof:circleimageview:1.3.0'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
     implementation 'com.pixplicity.letterpress:library:1.0'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
-    implementation 'com.google.firebase:firebase-auth:11.0.2'
-    implementation 'com.firebaseui:firebase-ui:2.0.1'
-    implementation 'com.firebaseui:firebase-ui-auth:2.0.1'
-    implementation 'info.androidhive:barcode-reader:1.1.5'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
-    implementation 'com.jakewharton:butterknife:8.8.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.0'
 
 
-    implementation 'com.budiyev.android:code-scanner:2.1.0'
     implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 

@@ -7,19 +7,19 @@
     tools:context="com.example.finalproject.page.AddProduct"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
     <RelativeLayout
         android:id="@+id/button_choose_image"
         android:layout_marginBottom="20dp"
@@ -38,7 +38,7 @@
             android:text="Pilih Gambar"
             android:textColor="@color/colorBlack"
             android:textSize="35dp" />
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:visibility="gone"
             android:id="@+id/image_card"
             android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="fitXY" />
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
     <LinearLayout
@@ -168,7 +168,7 @@
 
 
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="0dp"
@@ -185,7 +185,7 @@
             android:textColor="@android:color/white"
             />
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
 <!--    <ProgressBar-->

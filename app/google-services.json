@@ -292,6 +292,42 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:389252841267:android:3695c716784ef366ee8846",
+        "android_client_info": {
+          "package_name": "com.framly.id"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "389252841267-8hvphakjpisjkrnuu9qan6povn87oa84.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdt6Oe5A_5nq1Md_hpGyTdSs91ldPeT_s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "389252841267-5mgnbuti7jlirubibfl7s8lk8crkvkqh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "389252841267-8o8ro0lhppm46iq2uup7on5nikvm74iu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mlukasik.youtube"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:389252841267:android:ced3a7c9705f9d56ee8846",
         "android_client_info": {
           "package_name": "com.zerobaseindexing.flutter_text_recognition"

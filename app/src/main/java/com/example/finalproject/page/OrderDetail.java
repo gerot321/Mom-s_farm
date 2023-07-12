@@ -4,9 +4,6 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -20,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Model.Invoice;
@@ -47,46 +46,29 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class OrderDetail extends BaseActivity {
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.invoice_no)
     TextView orderId;
-    @BindView(R.id.goods_price_text)
     TextView price;
-    @BindView(R.id.transaction_proof)
     TextView filename;
-    @BindView(R.id.status_text)
     TextView status;
-    @BindView(R.id.date)
     TextView date;
-    @BindView(R.id.price_text)
     TextView totalPrice;
-    @BindView(R.id.noResi)
     TextView noResi;
-    @BindView(R.id.address)
     TextView address;
 
     private static final int PICK_IMAGE_REQUEST = 1;
-    @BindView(R.id.submit_btn)
     Button submitBtn;
-    @BindView(R.id.cancelBtn)
     Button cancelBtn;
 
     private Uri mImageUri;
-    @BindView(R.id.btnUpload)
     TextView btnUpload;
 
     private StorageTask mUploadTask;
     private Invoice invoice;
-    @BindView(R.id.fieldLayout)
     LinearLayout fieldLayout;
-    @BindView(R.id.orderList)
     LinearLayout orderList;
-    @BindView(R.id.shippingInput)
     EditText shippingField;
 
     private StorageReference mStorageRef;
@@ -94,7 +76,21 @@ public class OrderDetail extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
-        ButterKnife.bind(this);
+        toolbar =  findViewById(R.id.toolbar);
+        orderId =  findViewById(R.id.invoice_no);
+        price =  findViewById(R.id.goods_price_text);
+        filename =  findViewById(R.id.transaction_proof);
+        status =  findViewById(R.id.status_text);
+        date =  findViewById(R.id.date);
+        totalPrice =  findViewById(R.id.price_text);
+        noResi =  findViewById(R.id.noResi);
+        submitBtn =  findViewById(R.id.submit_btn);
+        cancelBtn =  findViewById(R.id.cancelBtn);
+        btnUpload =  findViewById(R.id.btnUpload);
+        fieldLayout =  findViewById(R.id.fieldLayout);
+        orderList =  findViewById(R.id.orderList);
+        shippingField =  findViewById(R.id.shippingInput);
+
         setTitle(toolbar, "Order Detail");
 
 
@@ -273,7 +269,7 @@ public class OrderDetail extends BaseActivity {
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-                                url = taskSnapshot.getDownloadUrl().toString();
+                                url = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
                                 filename.setText(url);
                                 invoice.setImageTransaction(url);
                                 Toast.makeText(OrderDetail.this, "Berhasil Mengupload Bukti Pembayaran", Toast.LENGTH_SHORT).show();
@@ -281,7 +277,7 @@ public class OrderDetail extends BaseActivity {
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
-                            public void onFailure(@NonNull Exception e) {
+                            public void onFailure( Exception e) {
                                 Toast.makeText(OrderDetail.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         })

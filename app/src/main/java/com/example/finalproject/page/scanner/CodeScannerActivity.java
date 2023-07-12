@@ -33,14 +33,10 @@ import android.os.Parcelable;
 import android.widget.Toast;
 
 
-import com.budiyev.android.codescanner.CodeScannerView;
-import com.budiyev.android.codescanner.DecodeCallback;
-import com.budiyev.android.codescanner.ErrorCallback;
 import com.example.finalproject.Common.Common;
 import com.example.finalproject.Model.Product;
 import com.example.finalproject.R;
 
-import com.budiyev.android.codescanner.CodeScanner;
 import com.example.finalproject.base.BaseCameraActivity;
 import com.example.finalproject.page.ProductDetail;
 import com.google.firebase.database.DataSnapshot;
@@ -50,146 +46,143 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.Result;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class CodeScannerActivity extends BaseCameraActivity {
-    private static final int RC_PERMISSION = 10;
-    private CodeScanner mCodeScanner;
-    private boolean mPermissionGranted;
-    @BindView(R.id.scanner)
-    CodeScannerView codeScannerView;
-
-    int sourcePage = 0;
-    FirebaseDatabase database;
-    DatabaseReference productReference;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_code_scanner);
-        ButterKnife.bind(this);
-        sourcePage = getIntent().getIntExtra("page",0);
-        iniEnv();
-        initView();
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = getIntent();
-        setResult(RESULT_OK, intent);
-        finish();
-    }
-
-    private void initView(){
-        mCodeScanner = new CodeScanner(this, codeScannerView);
-
-        mCodeScanner.setDecodeCallback(new DecodeCallback() {
-            @Override
-            public void onDecoded(final Result result) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showProgress();
-                    }
-                });
-                productReference.child(result.getText()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(final DataSnapshot dataSnapshot) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                disProgress();
-                            }
-                        });
-                        final Product product =dataSnapshot.getValue(Product.class);
-                        if(sourcePage == Common.PAGE_SHOP){
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-//                                    OrderItem dialog = new OrderItem(CodeScannerActivity.this, product);
-//                                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                                        @Override
-//                                        public void onDismiss(DialogInterface dialogInterface) {
-//                                            mCodeScanner.startPreview();
-//                                        }
-//                                    });
-//                                    dialog.show();
-                                }
-                            });
-                        }else if(sourcePage == Common.PAGE_UPDATE_PRODUCT){
-                            Intent intent = new Intent(CodeScannerActivity.this, ProductDetail.class);
-                            intent.putExtra("productId", product.getProductId());
-                            intent.putExtra("product", (Parcelable) product);
-                            startActivity(intent);
-                            finish();
-                        }else if(sourcePage == Common.PAGE_RECAP){
-                            Intent intent = getIntent();
-                            intent.putExtra("product", (Parcelable) product);
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        }
-                        productReference.removeEventListener(this);
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-            }
-        });
-        mCodeScanner.setErrorCallback(new ErrorCallback() {
-            @Override
-            public void onError(Exception error) {
-                Toast.makeText(CodeScannerActivity.this, getString(R.string.scanner_error, error), Toast.LENGTH_LONG).show();
-            }
-        });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                mPermissionGranted = false;
-                requestPermissions(new String[] {Manifest.permission.CAMERA}, RC_PERMISSION);
-            } else {
-                mPermissionGranted = true;
-            }
-        } else {
-            mPermissionGranted = true;
-        }
-    }
-
-    private void iniEnv(){
-        database = FirebaseDatabase.getInstance();
-
-        productReference = database.getReference("Product");
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,String[] permissions,
-            int[] grantResults) {
-        if (requestCode == RC_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mPermissionGranted = true;
-                mCodeScanner.startPreview();
-            } else {
-                mPermissionGranted = false;
-            }
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mPermissionGranted) {
-            mCodeScanner.startPreview();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        mCodeScanner.releaseResources();
-        super.onPause();
-    }
+//    private static final int RC_PERMISSION = 10;
+//    private CodeScanner mCodeScanner;
+//    private boolean mPermissionGranted;
+//    CodeScannerView codeScannerView;
+//
+//    int sourcePage = 0;
+//    FirebaseDatabase database;
+//    DatabaseReference productReference;
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_code_scanner);
+//        sourcePage = getIntent().getIntExtra("page",0);
+//        iniEnv();
+//        initView();
+//    }
+//
+//    @Override
+//    public void onBackPressed() {
+//        Intent intent = getIntent();
+//        setResult(RESULT_OK, intent);
+//        finish();
+//    }
+//
+//    private void initView(){
+//        codeScannerView = findViewById(R.id.scanner);
+//        mCodeScanner = new CodeScanner(this, codeScannerView);
+//
+//        mCodeScanner.setDecodeCallback(new DecodeCallback() {
+//            @Override
+//            public void onDecoded(final Result result) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        showProgress();
+//                    }
+//                });
+//                productReference.child(result.getText()).addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(final DataSnapshot dataSnapshot) {
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                disProgress();
+//                            }
+//                        });
+//                        final Product product =dataSnapshot.getValue(Product.class);
+//                        if(sourcePage == Common.PAGE_SHOP){
+//                            runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+////                                    OrderItem dialog = new OrderItem(CodeScannerActivity.this, product);
+////                                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+////                                        @Override
+////                                        public void onDismiss(DialogInterface dialogInterface) {
+////                                            mCodeScanner.startPreview();
+////                                        }
+////                                    });
+////                                    dialog.show();
+//                                }
+//                            });
+//                        }else if(sourcePage == Common.PAGE_UPDATE_PRODUCT){
+//                            Intent intent = new Intent(CodeScannerActivity.this, ProductDetail.class);
+//                            intent.putExtra("productId", product.getProductId());
+//                            intent.putExtra("product", (Parcelable) product);
+//                            startActivity(intent);
+//                            finish();
+//                        }else if(sourcePage == Common.PAGE_RECAP){
+//                            Intent intent = getIntent();
+//                            intent.putExtra("product", (Parcelable) product);
+//                            setResult(RESULT_OK, intent);
+//                            finish();
+//                        }
+//                        productReference.removeEventListener(this);
+//
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
+//
+//            }
+//        });
+//        mCodeScanner.setErrorCallback(new ErrorCallback() {
+//            @Override
+//            public void onError(Exception error) {
+//                Toast.makeText(CodeScannerActivity.this, getString(R.string.scanner_error, error), Toast.LENGTH_LONG).show();
+//            }
+//        });
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//                mPermissionGranted = false;
+//                requestPermissions(new String[] {Manifest.permission.CAMERA}, RC_PERMISSION);
+//            } else {
+//                mPermissionGranted = true;
+//            }
+//        } else {
+//            mPermissionGranted = true;
+//        }
+//    }
+//
+//    private void iniEnv(){
+//        database = FirebaseDatabase.getInstance();
+//
+//        productReference = database.getReference("Product");
+//
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode,String[] permissions,
+//            int[] grantResults) {
+//        if (requestCode == RC_PERMISSION) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                mPermissionGranted = true;
+//                mCodeScanner.startPreview();
+//            } else {
+//                mPermissionGranted = false;
+//            }
+//        }
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        if (mPermissionGranted) {
+//            mCodeScanner.startPreview();
+//        }
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        mCodeScanner.releaseResources();
+//        super.onPause();
+//    }
 }
