@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -29,8 +30,10 @@ import com.example.finalproject.Model.Varian;
 import com.example.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.util.PreferenceUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -45,6 +48,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 public class OrderDetail extends BaseActivity {
@@ -90,7 +94,7 @@ public class OrderDetail extends BaseActivity {
         fieldLayout =  findViewById(R.id.fieldLayout);
         orderList =  findViewById(R.id.orderList);
         shippingField =  findViewById(R.id.shippingInput);
-
+        address = findViewById(R.id.address);
         setTitle(toolbar, "Order Detail");
 
 
@@ -99,7 +103,7 @@ public class OrderDetail extends BaseActivity {
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference table = database.getReference("Order");
+        final DatabaseReference table = database.getReference("Invoice");
         SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         price.setText(invoice.getPrice());
@@ -107,7 +111,7 @@ public class OrderDetail extends BaseActivity {
         orderId.setText(invoice.getId());
         status.setText(Common.ORDER_TYPE_STRING.get(invoice.getStatus()));
         noResi.setText(invoice.getShippingReceipt());
-        address.setText(PreferenceUtil.getUser().getAddress());
+        address.setText(PreferenceUtil.getUser().getAddress()==null?"-":PreferenceUtil.getUser().getAddress());
 
         date.setText(targetDateFormat.format(new Date(invoice.getDate())));
         totalPrice.setText(String.valueOf(Integer.parseInt(invoice.getPrice())+Integer.parseInt(invoice.getShippingPrive())));
@@ -115,20 +119,19 @@ public class OrderDetail extends BaseActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                table.child(invoice.getId()).setValue(invoice);
 
-                if(PreferenceUtil.getUser().getRole() == Common.ROLE_USER){
-                    if(invoice.getStatus() == Common.ORDER_WAITING_PAYMENT || invoice.getStatus() != Common.ORDER_PAYMENT_FAILED){
+                if(PreferenceUtil.getUser().getRole().equals(Common.ROLE_USER)){
+                    if(invoice.getStatus().equals(Common.ORDER_WAITING_PAYMENT) || invoice.getStatus().equals(Common.ORDER_PAYMENT_FAILED)){
                         invoice.setStatus(Common.ORDER_IN_REVIEW);
                     }
-                    if(invoice.getStatus() == Common.ORDER_SHIPPING){
+                    if(invoice.getStatus().equals( Common.ORDER_SHIPPING)){
                         invoice.setStatus(Common.ORDER_SUCCESS);
                     }
                 }else{
-                    if(invoice.getStatus() == Common.ORDER_PAYMENT_APPROVED){
+                    if(invoice.getStatus().equals(Common.ORDER_PAYMENT_APPROVED)){
                         invoice.setShippingReceipt(shippingField.getText().toString());
                         invoice.setStatus(Common.ORDER_SHIPPING);
-                    }else if(invoice.getStatus() == Common.ORDER_IN_REVIEW){
+                    }else if(invoice.getStatus().equals(Common.ORDER_IN_REVIEW)){
                         invoice.setStatus(Common.ORDER_PAYMENT_APPROVED);
                     }
                 }
@@ -140,14 +143,14 @@ public class OrderDetail extends BaseActivity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(PreferenceUtil.getUser().getRole() == Common.ROLE_USER){
-                    if(invoice.getStatus() == Common.ORDER_WAITING_PAYMENT || invoice.getStatus() != Common.ORDER_PAYMENT_FAILED){
+                if(PreferenceUtil.getUser().getRole().equals(Common.ROLE_USER)){
+                    if(invoice.getStatus().equals(Common.ORDER_WAITING_PAYMENT) || invoice.getStatus().equals(Common.ORDER_PAYMENT_FAILED)){
                         invoice.setStatus(Common.ORDER_FAILED);
                     }
                 }else{
-                    if(invoice.getStatus() == Common.ORDER_PAYMENT_APPROVED){
+                    if(invoice.getStatus().equals(Common.ORDER_PAYMENT_APPROVED)){
                         invoice.setStatus(Common.ORDER_PAYMENT_FAILED);
-                    }else if(invoice.getStatus() == Common.ORDER_WAITING_PAYMENT){
+                    }else if(invoice.getStatus().equals(Common.ORDER_WAITING_PAYMENT)){
                         invoice.setStatus(Common.ORDER_FAILED);
                     }
                 }
@@ -157,7 +160,7 @@ public class OrderDetail extends BaseActivity {
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(PreferenceUtil.getUser().getRole() == Common.ROLE_USER){
+                if(PreferenceUtil.getUser().getRole().equals(Common.ROLE_USER)){
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -169,36 +172,36 @@ public class OrderDetail extends BaseActivity {
             }
         });
 
-        if(PreferenceUtil.getUser().getRole() == Common.ROLE_USER){
+        if(PreferenceUtil.getUser().getRole().equals(Common.ROLE_USER)){
             btnUpload.setText("Upload");
-            if(invoice.getStatus() != Common.ORDER_WAITING_PAYMENT){
+            if(!invoice.getStatus().equals(Common.ORDER_WAITING_PAYMENT)){
                 cancelBtn.setVisibility(View.GONE);
                 submitBtn.setVisibility(View.GONE);
             }
-            if(invoice.getStatus() != Common.ORDER_PAYMENT_FAILED){
+            if(!invoice.getStatus().equals(Common.ORDER_PAYMENT_FAILED)){
                 cancelBtn.setVisibility(View.GONE);
             }
-            if(invoice.getStatus() == Common.ORDER_SHIPPING){
+            if(invoice.getStatus().equals(Common.ORDER_SHIPPING)){
                 cancelBtn.setVisibility(View.GONE);
             }
         }else{
             btnUpload.setText("Lihat");
-            if(invoice.getStatus() == Common.ORDER_PAYMENT_APPROVED){
+            if(Objects.equals(invoice.getStatus(), Common.ORDER_PAYMENT_APPROVED)){
                 fieldLayout.setVisibility(View.VISIBLE);
                 cancelBtn.setVisibility(View.GONE);
-            }else if(invoice.getStatus() == Common.ORDER_FAILED){
+            }else if(invoice.getStatus().equals(Common.ORDER_FAILED)){
                 cancelBtn.setVisibility(View.GONE);
                 submitBtn.setVisibility(View.GONE);
-            }else if(invoice.getStatus() == Common.ORDER_SHIPPING){
+            }else if(invoice.getStatus().equals(Common.ORDER_SHIPPING)){
                 submitBtn.setVisibility(View.GONE);
                 cancelBtn.setVisibility(View.GONE);
-            }else if(invoice.getStatus() == Common.ORDER_SUCCESS){
+            }else if(invoice.getStatus().equals(Common.ORDER_SUCCESS)){
                 cancelBtn.setVisibility(View.GONE);
                 submitBtn.setVisibility(View.GONE);
-            }else if(invoice.getStatus() == Common.ORDER_PAYMENT_FAILED){
+            }else if(invoice.getStatus().equals(Common.ORDER_PAYMENT_FAILED)){
                 cancelBtn.setVisibility(View.GONE);
                 submitBtn.setVisibility(View.GONE);
-            }else if(invoice.getStatus() == Common.ORDER_WAITING_PAYMENT){
+            }else if(invoice.getStatus().equals(Common.ORDER_WAITING_PAYMENT)){
                 submitBtn.setVisibility(View.GONE);
             }
         }
@@ -269,10 +272,17 @@ public class OrderDetail extends BaseActivity {
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-                                url = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
-                                filename.setText(url);
-                                invoice.setImageTransaction(url);
-                                Toast.makeText(OrderDetail.this, "Berhasil Mengupload Bukti Pembayaran", Toast.LENGTH_SHORT).show();
+                                taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete( Task<Uri> task) {
+                                        url = task.getResult().toString();
+                                        filename.setText(url);
+                                        invoice.setImageTransaction(url);
+                                        Toast.makeText(OrderDetail.this, "Berhasil Mengupload Bukti Pembayaran", Toast.LENGTH_SHORT).show();
+                                        disProgress();
+                                    }
+                                });
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -285,6 +295,10 @@ public class OrderDetail extends BaseActivity {
                             @Override
                             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                                 double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                                if(progress == 100.0){
+                                    Log.d("finishhhh", String.valueOf(progress));
+                                }
+                                Log.d("progress", String.valueOf(progress));
 //                                    mProgressBar.setProgress((int) progress);
 
                             }

@@ -255,8 +255,7 @@ public class TransactionHistory extends BaseActivity {
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
-
-    public static int getWindowHeight( Activity activity) {
+    public static int getWindowHeight(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             WindowMetrics windowMetrics = activity.getWindowManager().getCurrentWindowMetrics();
             Insets insets = windowMetrics.getWindowInsets()
@@ -294,6 +293,7 @@ public class TransactionHistory extends BaseActivity {
                 }
                 adapter = new OrderAdapter(orderList, TransactionHistory.this);
                 recyclerView.setAdapter(adapter);
+                query.removeEventListener(this);
             }
 
             @Override
@@ -320,5 +320,4 @@ public class TransactionHistory extends BaseActivity {
         logout.setVisible(false);
         return true;
     }
-
 }

@@ -20,6 +20,7 @@ import com.example.finalproject.Model.Invoice;
 import com.example.finalproject.Model.Order;
 import com.example.finalproject.R;
 import com.example.finalproject.page.OrderDetail;
+import com.example.finalproject.util.StringUtil;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -88,9 +89,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderViewHolder>{
         }
         holder.status.setText(Common.ORDER_TYPE_STRING.get(listData.get(position).getStatus()));
         holder.txt_name.setText(listData.get(position).getOrders().get(0).getProduct().getName());
-        holder.txt_price.setText(listData.get(position).getPrice());
-        holder.txt_price.setText(listData.get(position).getPrice());
-        holder.txt_price.setText(listData.get(position).getPrice());
+        holder.txt_price.setText(StringUtil.formatToIDR(listData.get(position).getPrice()));
         if(listData.get(position).getOrders().get(0).getProduct().getImage() != null){
             Picasso.with(context).load(listData.get(position).getOrders().get(0).getProduct().getImage()).into(holder.image);
         }

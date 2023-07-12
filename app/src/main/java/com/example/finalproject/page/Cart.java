@@ -103,7 +103,8 @@ public class Cart extends BaseActivity {
                         "",
                         String.valueOf(total),
                         date.getTime(),
-                        Common.ORDER_WAITING_PAYMENT
+                        Common.ORDER_WAITING_PAYMENT,
+                        PreferenceUtil.getUser().getAddress()
                         );
                 invoiceRef.child(invoice.getId()).setValue(invoice);
 

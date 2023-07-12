@@ -10,6 +10,7 @@ public class Invoice implements Parcelable {
     private String price;
     private String shippingPrive;
     private String shippingReceipt;
+    private String address;
 
     private Long date;
     private String imageTransaction;
@@ -22,7 +23,7 @@ public class Invoice implements Parcelable {
     public Invoice() {
     }
 
-    public Invoice(String id, User buyer, List<Order> orders, String imageTransaction, String price, Long date, String status) {
+    public Invoice(String id, User buyer, List<Order> orders, String imageTransaction, String price, Long date, String status, String address) {
         this.buyer = buyer;
         this.orders = orders;
         this.price = price;
@@ -31,6 +32,7 @@ public class Invoice implements Parcelable {
         this.status = status;
         this.imageTransaction = imageTransaction;
         this.id = id;
+        this.address = address;
     }
 
 

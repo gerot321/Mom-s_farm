@@ -66,7 +66,7 @@ public class User implements Parcelable {
     }
 
     public String getAddress() {
-        return address;
+        return address == null?"-":address;
     }
 
     public String getGender() {

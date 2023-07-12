@@ -225,7 +225,8 @@ public class OrderItem extends BaseActivity {
                         "",
                         String.valueOf(total),
                         date.getTime(),
-                        Common.ORDER_WAITING_PAYMENT
+                        Common.ORDER_WAITING_PAYMENT,
+                        PreferenceUtil.getUser().getAddress()
                 );
 
                 DatabaseReference invoiceRef = database.getReference("Invoice");
