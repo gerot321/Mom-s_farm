@@ -169,7 +169,12 @@ public class OrderItem extends BaseActivity {
                 List<Order> orders = PreferenceUtil.getOrders();
                 boolean found = false;
                 for(int i=0;i<orders.size();i++){
-                    if(orders.get(i).getProduct().getProductId().equals(result.getProductId())){
+                    if(orders.get(i).getProduct().getProductId().equals(result.getProductId()) &&
+                            orders.get(i).getHeight() == Integer.parseInt(height.getText().toString())&&
+                            orders.get(i).getHeight() == Integer.parseInt(width.getText().toString())&&
+                            orders.get(i).getLinen().getId() == linen.getId()&&
+                            orders.get(i).getMattboard().getId() == mattboard.getId()&&
+                            orders.get(i).getGlass().getId() == glass.getId()){
                         found = true;
 
                         orders.get(i).setQuantity(String.valueOf(
@@ -193,7 +198,9 @@ public class OrderItem extends BaseActivity {
                             size,
                             mattboard,
                             linen,glass,
-                            weight
+                            weight,
+                            Integer.parseInt(width.getText().toString()),
+                            Integer.parseInt(height.getText().toString())
                     ));
                 }
                 PreferenceUtil.setOrders(orders);
@@ -214,7 +221,9 @@ public class OrderItem extends BaseActivity {
                         size,
                         mattboard,
                         linen,glass,
-                        weight
+                        weight,
+                        Integer.parseInt(width.getText().toString()),
+                        Integer.parseInt(height.getText().toString())
                 );
                 List<Order> orders = new ArrayList<>();
                 orders.add(order);

@@ -15,13 +15,15 @@ public class Order implements Parcelable {
     private Varian glass;
     private String id;
     private double weight;
+    private int width;
+    private int height;
 
     private Product product;
 
     public Order() {
     }
 
-    public Order(String id,Product product, String quantity, String price, Long date, Varian size, Varian mattboard, Varian linen, Varian glass, double weight) {
+    public Order(String id,Product product, String quantity, String price, Long date, Varian size, Varian mattboard, Varian linen, Varian glass, double weight, int width, int height) {
         this.product = product;
         this.quantity = quantity;
         this.price = price;
@@ -32,9 +34,10 @@ public class Order implements Parcelable {
         this.date = date;
         this.id = id;
         this.weight = weight;
+        this.height = height;
+        this.width = width;
 
     }
-
 
     protected Order(Parcel in) {
         quantity = in.readString();
@@ -50,6 +53,8 @@ public class Order implements Parcelable {
         glass = in.readParcelable(Varian.class.getClassLoader());
         id = in.readString();
         weight = in.readDouble();
+        width = in.readInt();
+        height = in.readInt();
         product = in.readParcelable(Product.class.getClassLoader());
     }
 
@@ -69,6 +74,8 @@ public class Order implements Parcelable {
         dest.writeParcelable(glass, flags);
         dest.writeString(id);
         dest.writeDouble(weight);
+        dest.writeInt(width);
+        dest.writeInt(height);
         dest.writeParcelable(product, flags);
     }
 
@@ -163,5 +170,25 @@ public class Order implements Parcelable {
         this.product = product;
     }
 
+    public int getHeight() {
+        return height;
+    }
 
+    public void setHeight(int height) {
+        this.height = height;
+    }
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
 }

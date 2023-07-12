@@ -305,10 +305,7 @@ public class TransactionHistory extends BaseActivity {
     }
 
     private void addData(Invoice sale){
-        Date date = new Date(sale.getDate());
-        if(startDate !=null &&(date.equals(startDate)||date.after(startDate))){
-            orderList.add(sale);
-        }else{
+        if(sale.getBuyer().getPhone().equals(PreferenceUtil.getUser().getPhone())){
             orderList.add(sale);
         }
     }

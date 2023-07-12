@@ -13,6 +13,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.finalproject.Interface.ItemClickListener;
 import com.example.finalproject.Model.Order;
 import com.example.finalproject.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +21,9 @@ import java.util.List;
 
 class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public TextView txt_cart_name, txt_price,txt_shipping_price;
-    public ImageView img_cart_count;
+    public TextView txt_cart_name, txt_price, varianDetail;
+    public ImageView removeItem;
+    public ImageView imageView;
 
     private ItemClickListener itemClickListener;
 
@@ -32,8 +34,12 @@ class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
     public CartViewHolder(View itemView) {
         super(itemView);
 
-        txt_cart_name = (TextView)itemView.findViewById(R.id.cart_item_name);
-        txt_price = (TextView)itemView.findViewById(R.id.cart_item_price);
+        txt_cart_name = (TextView)itemView.findViewById(R.id.name);
+        txt_price = (TextView)itemView.findViewById(R.id.price);
+        removeItem = itemView.findViewById(R.id.removeItem);
+        varianDetail = itemView.findViewById(R.id.varianDetail);
+        imageView = itemView.findViewById(R.id.image);
+
 //        txt_shipping_price = (TextView)itemView.findViewById(R.id.cart_shipping_price);
 
     }
@@ -63,19 +69,24 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
 
     @Override
     public void onBindViewHolder(CartViewHolder holder, int position) {
-//        TextDrawable drawable = TextDrawable.builder()
-//                .buildRound(""+listData.get(position).getQuantity(), Color.RED);
-
-//        holder.img_cart_count.setImageDrawable(drawable);
-
-
-
-//        int shippingPrice = (Integer.parseInt(listData.get(position).getShippingPrice()));
         holder.txt_price.setText("Total Price : "+listData.get(position).getPrice());
+        holder.removeItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-//        holder.txt_shipping_price.setText("Stock : "+listData.get(position).getQuantity());
-
+            }
+        });
         holder.txt_cart_name.setText(listData.get(position).getProduct().getName());
+        holder.varianDetail.setText(new StringBuilder().append("Linen ").
+                append(listData.get(position).getLinen().getName()).
+                append(", Mattboard ").
+                append(listData.get(position).getMattboard().getName()).
+                append(", Kaca ").
+                append(listData.get(position).getGlass().getName()).toString());
+        holder.varianDetail.setText(listData.get(position).getProduct().getName());
+        if(listData.get(position).getProduct().getImage() != null && !listData.get(position).getProduct().getImage().isEmpty()){
+            Picasso.with(context).load(listData.get(position).getProduct().getImage()).into(holder.imageView);
+        }
     }
 
     @Override
