@@ -99,12 +99,12 @@ public class OrderDetail extends BaseActivity {
         address = findViewById(R.id.address);
         shippingPrice = findViewById(R.id.shipping_price_text);
 
-        setTitle(toolbar, "Order Detail");
+        setTitle(toolbar, "Detail Pembelian");
 
 
         submitBtn = findViewById(R.id.submit_btn);
         invoice = getIntent().getParcelableExtra("invoice");
-
+        url = invoice.getImageTransaction();
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference table = database.getReference("Invoice");
@@ -170,23 +170,20 @@ public class OrderDetail extends BaseActivity {
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     startActivityForResult(intent, PICK_IMAGE_REQUEST);
                 }else{
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(intent);
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
                 }
             }
         });
 
         if(PreferenceUtil.getUser().getRole().equals(Common.ROLE_USER)){
             btnUpload.setText("Upload");
-            if(!invoice.getStatus().equals(Common.ORDER_WAITING_PAYMENT)){
+            if(!invoice.getStatus().equals(Common.ORDER_PAYMENT_FAILED) || invoice.getStatus().equals(Common.ORDER_SHIPPING)){
+                cancelBtn.setVisibility(View.GONE);
+            }else if(!invoice.getStatus().equals(Common.ORDER_WAITING_PAYMENT)){
                 cancelBtn.setVisibility(View.GONE);
                 submitBtn.setVisibility(View.GONE);
-            }
-            if(!invoice.getStatus().equals(Common.ORDER_PAYMENT_FAILED)){
-                cancelBtn.setVisibility(View.GONE);
-            }
-            if(invoice.getStatus().equals(Common.ORDER_SHIPPING)){
-                cancelBtn.setVisibility(View.GONE);
             }
         }else{
             btnUpload.setText("Lihat");
@@ -210,30 +207,34 @@ public class OrderDetail extends BaseActivity {
             }
         }
 
-        if(invoice.getStatus() == Common.ORDER_PAYMENT_APPROVED){
+        if(invoice.getStatus().equals(Common.ORDER_PAYMENT_APPROVED) ){
+            submitBtn.setText("Update Nomor Resi");
             status.setText("Pembayaran Disetujui");
-        }else if(invoice.getStatus() == Common.ORDER_FAILED){
+        }else if(invoice.getStatus().equals(Common.ORDER_FAILED)){
             status.setText("Pembelian Gagal");
             cancelBtn.setVisibility(View.GONE);
             submitBtn.setVisibility(View.GONE);
-        }else if(invoice.getStatus() == Common.ORDER_SHIPPING){
+        }else if(invoice.getStatus().equals(Common.ORDER_SHIPPING)){
+            submitBtn.setText("Selesaikan Pembelian");
+
             status.setText("Dalam Pengiriman");
-            submitBtn.setVisibility(View.GONE);
-            cancelBtn.setVisibility(View.GONE);
-        }else if(invoice.getStatus() == Common.ORDER_SUCCESS){
+        }else if(invoice.getStatus().equals(Common.ORDER_SUCCESS)){
             status.setText("Pembelian Sukses");
             cancelBtn.setVisibility(View.GONE);
             submitBtn.setVisibility(View.GONE);
-        }else if(invoice.getStatus() == Common.ORDER_PAYMENT_FAILED){
+        }else if(invoice.getStatus().equals(Common.ORDER_PAYMENT_FAILED)){
+            submitBtn.setText("Update Pembelian");
             status.setText("Pembayaran Tidak Sesuai");
             cancelBtn.setVisibility(View.GONE);
             submitBtn.setVisibility(View.GONE);
-        }else if(invoice.getStatus() == Common.ORDER_WAITING_PAYMENT){
+        }else if(invoice.getStatus().equals(Common.ORDER_WAITING_PAYMENT)){
+            submitBtn.setText("Update Pembelian");
             status.setText("Menunggu Pembayaran");
             submitBtn.setVisibility(View.GONE);
-        }else if(invoice.getStatus() == Common.ORDER_IN_REVIEW){
+        }else if(invoice.getStatus().equals(Common.ORDER_IN_REVIEW)){
+            submitBtn.setText("Terima Pembayaran");
             status.setText("Menunggu Review Penjual");
-            submitBtn.setVisibility(View.GONE);
+            cancelBtn.setVisibility(View.GONE);
         }
 
         optionList.add(new Option(Common.ORDER_WAITING_PAYMENT, "Menunggu Pembayaran"));

@@ -184,8 +184,8 @@ public class MainMenuUser extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.scan, menu);
         MenuItem item = menu.findItem(R.id.menuSearch);
-        MenuItem scan = menu.findItem(R.id.scanBtn);
-        scan.setVisible(false);
+//        MenuItem scan = menu.findItem(R.id.scanBtn);
+//        scan.setVisible(false);
 
         SearchView searchView = (SearchView)item.getActionView();
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {

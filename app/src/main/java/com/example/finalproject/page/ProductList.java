@@ -83,7 +83,7 @@ public class ProductList extends BaseActivity {
             @Override
             protected void populateViewHolder(ShoeViewHolder viewHolder, final Product model, int position) {
                 viewHolder.shoe_name.setText(model.getName());
-                if(!model.getImage().equals("") && !model.getImage().equals(" ")){
+                if(model.getImage()!=null&&!model.getImage().equals("") && !model.getImage().equals(" ")){
                     Picasso.with(getBaseContext()).load(model.getImage()).into(viewHolder.shoe_image);
                 }
 
