@@ -87,6 +87,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderViewHolder>{
         }else{
             holder.other.setVisibility(View.GONE);
         }
+        if(listData.get(position).getStatus().equals(Common.ORDER_SUCCESS)){
+            holder.status.setTextColor(context.getColor(R.color.success));
+        }else if(listData.get(position).getStatus().equals(Common.ORDER_FAILED) && listData.get(position).getStatus().equals(Common.ORDER_PAYMENT_FAILED)){
+            holder.status.setTextColor(context.getColor(R.color.failed));
+        }else{
+            holder.status.setTextColor(context.getColor(R.color.pending));
+        }
+
         holder.status.setText(Common.ORDER_TYPE_STRING.get(listData.get(position).getStatus()));
         holder.txt_name.setText(listData.get(position).getOrders().get(0).getProduct().getName());
         holder.txt_price.setText(StringUtil.formatToIDR(listData.get(position).getPrice()));

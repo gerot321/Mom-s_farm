@@ -139,80 +139,47 @@ public class OrderItem extends BaseActivity {
 
 
 
-        plusStock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if((Integer.parseInt(stockEdt.getText().toString())+ orderQuantityCart)<Integer.parseInt(result.getStock())){
-                    int stockValue = Integer.parseInt(stockEdt.getText().toString())+1;
-                    stockEdt.setText(String.valueOf(stockValue));
-                }
-            }
+        plusStock.setOnClickListener(view -> {
+            int stockValue = Integer.parseInt(stockEdt.getText().toString())+1;
+            stockEdt.setText(String.valueOf(stockValue));
         });
 
-        minusStock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(Integer.parseInt(stockEdt.getText().toString())>0){
-                    int stockValue = Integer.parseInt(stockEdt.getText().toString())-1;
-                    stockEdt.setText(String.valueOf(stockValue));
-                }
+        minusStock.setOnClickListener(view -> {
+            if(Integer.parseInt(stockEdt.getText().toString())>0){
+                int stockValue = Integer.parseInt(stockEdt.getText().toString())-1;
+                stockEdt.setText(String.valueOf(stockValue));
             }
         });
 
 
         name.setText(result.getName());
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        addBtn.setOnClickListener(view -> {
 
-                List<Order> orders = PreferenceUtil.getOrders();
-                boolean found = false;
-                for(int i=0;i<orders.size();i++){
-                    if(orders.get(i).getProduct().getProductId().equals(result.getProductId()) &&
-                            orders.get(i).getHeight() == Integer.parseInt(height.getText().toString())&&
-                            orders.get(i).getHeight() == Integer.parseInt(width.getText().toString())&&
-                            orders.get(i).getLinen().getId() == linen.getId()&&
-                            orders.get(i).getMattboard().getId() == mattboard.getId()&&
-                            orders.get(i).getGlass().getId() == glass.getId()){
-                        found = true;
+            List<Order> orders1 = PreferenceUtil.getOrders();
+            boolean found = false;
+            for(int i = 0; i< orders1.size(); i++){
+                if(orders1.get(i).getProduct().getProductId().equals(result.getProductId()) &&
+                        orders1.get(i).getHeight() == Integer.parseInt(height.getText().toString())&&
+                        orders1.get(i).getHeight() == Integer.parseInt(width.getText().toString())&&
+                        orders1.get(i).getLinen().getId() == linen.getId()&&
+                        orders1.get(i).getMattboard().getId() == mattboard.getId()&&
+                        orders1.get(i).getGlass().getId() == glass.getId()){
+                    found = true;
 
-                        orders.get(i).setQuantity(String.valueOf(
-                                Integer.parseInt(orders.get(i).getQuantity())
-                                        + Integer.parseInt(stockEdt.getText().toString())
-                        ));
-                    }
-                }
-                Date date = new Date();
-                if(size == null && linen == null && mattboard == null && glass == null){
-                    return;
-                }
-
-                if(!found){
-                    orders.add(new Order(
-                            "ORD-"+System.currentTimeMillis(),
-                            result,
-                            stockEdt.getText().toString(),
-                            String.valueOf(total),
-                            date.getTime(),
-                            size,
-                            mattboard,
-                            linen,glass,
-                            weight,
-                            Integer.parseInt(width.getText().toString()),
-                            Integer.parseInt(height.getText().toString())
+                    orders1.get(i).setQuantity(String.valueOf(
+                            Integer.parseInt(orders1.get(i).getQuantity())
+                                    + Integer.parseInt(stockEdt.getText().toString())
                     ));
                 }
-                PreferenceUtil.setOrders(orders);
-                finish();
             }
-        });
+            Date date = new Date();
+            if(size == null && linen == null && mattboard == null && glass == null){
+                return;
+            }
 
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Date date = new Date();
-                Order order = new Order(
+            if(!found){
+                orders1.add(new Order(
                         "ORD-"+System.currentTimeMillis(),
                         result,
                         stockEdt.getText().toString(),
@@ -224,30 +191,49 @@ public class OrderItem extends BaseActivity {
                         weight,
                         Integer.parseInt(width.getText().toString()),
                         Integer.parseInt(height.getText().toString())
-                );
-                List<Order> orders = new ArrayList<>();
-                orders.add(order);
-                Invoice invoice = new Invoice(
-                        "INV-"+System.currentTimeMillis(),
-                        PreferenceUtil.getUser(),
-                        orders,
-                        "",
-                        String.valueOf(total),
-                        date.getTime(),
-                        Common.ORDER_WAITING_PAYMENT,
-                        PreferenceUtil.getUser().getAddress()
-                );
-
-                DatabaseReference invoiceRef = database.getReference("Invoice");
-                DatabaseReference orderRef = database.getReference("Order");
-
-                invoiceRef.child(invoice.getId()).setValue(invoice);
-                orderRef.child(order.getId()).setValue(order);
-
-                Intent intent = new Intent(OrderItem.this, OrderDetail.class);
-                intent.putExtra("invoice", invoice);
-                startActivity(intent);
+                ));
             }
+            PreferenceUtil.setOrders(orders1);
+            finish();
+        });
+
+        cancelBtn.setOnClickListener(view -> {
+            Date date = new Date();
+            Order order = new Order(
+                    "ORD-"+System.currentTimeMillis(),
+                    result,
+                    stockEdt.getText().toString(),
+                    String.valueOf(total),
+                    date.getTime(),
+                    size,
+                    mattboard,
+                    linen,glass,
+                    weight,
+                    Integer.parseInt(width.getText().toString()),
+                    Integer.parseInt(height.getText().toString())
+            );
+            List<Order> orders12 = new ArrayList<>();
+            orders12.add(order);
+            Invoice invoice = new Invoice(
+                    "INV-"+System.currentTimeMillis(),
+                    PreferenceUtil.getUser(),
+                    orders12,
+                    "",
+                    String.valueOf(total),
+                    date.getTime(),
+                    Common.ORDER_WAITING_PAYMENT,
+                    PreferenceUtil.getUser().getAddress()
+            );
+
+            DatabaseReference invoiceRef = database.getReference("Invoice");
+            DatabaseReference orderRef = database.getReference("Order");
+
+            invoiceRef.child(invoice.getId()).setValue(invoice);
+            orderRef.child(order.getId()).setValue(order);
+
+            Intent intent = new Intent(OrderItem.this, OrderDetail.class);
+            intent.putExtra("invoice", invoice);
+            startActivity(intent);
         });
         database = FirebaseDatabase.getInstance();
 

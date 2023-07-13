@@ -84,6 +84,18 @@ public class PreferenceUtil {
         return order;
     }
 
+    public static ArrayList<Order> removeOrder(int position) {
+        Gson gson = new Gson();
+        String json = sharedPreferencesToken.getString("Orders", "");
+        if(json.isEmpty()){
+            return new ArrayList<>();
+        }
+        Type type = new TypeToken<ArrayList<Order>>() {}.getType();
+        ArrayList<Order> order = gson.fromJson(json, type);
+        order.remove(position);
+        return order;
+    }
+
     public static void clearOrder() {
 
         Gson gson = new Gson();

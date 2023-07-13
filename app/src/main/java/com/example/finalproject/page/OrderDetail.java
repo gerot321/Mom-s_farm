@@ -30,6 +30,7 @@ import com.example.finalproject.Model.Varian;
 import com.example.finalproject.R;
 import com.example.finalproject.base.BaseActivity;
 import com.example.finalproject.util.PreferenceUtil;
+import com.example.finalproject.util.StringUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -61,6 +62,7 @@ public class OrderDetail extends BaseActivity {
     TextView totalPrice;
     TextView noResi;
     TextView address;
+    TextView shippingPrice;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     Button submitBtn;
@@ -95,6 +97,8 @@ public class OrderDetail extends BaseActivity {
         orderList =  findViewById(R.id.orderList);
         shippingField =  findViewById(R.id.shippingInput);
         address = findViewById(R.id.address);
+        shippingPrice = findViewById(R.id.shipping_price_text);
+
         setTitle(toolbar, "Order Detail");
 
 
@@ -106,7 +110,7 @@ public class OrderDetail extends BaseActivity {
         final DatabaseReference table = database.getReference("Invoice");
         SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        price.setText(invoice.getPrice());
+        price.setText(StringUtil.formatToIDR(invoice.getPrice()));
         filename.setText(invoice.getImageTransaction());
         orderId.setText(invoice.getId());
         status.setText(Common.ORDER_TYPE_STRING.get(invoice.getStatus()));
@@ -114,8 +118,8 @@ public class OrderDetail extends BaseActivity {
         address.setText(PreferenceUtil.getUser().getAddress()==null?"-":PreferenceUtil.getUser().getAddress());
 
         date.setText(targetDateFormat.format(new Date(invoice.getDate())));
-        totalPrice.setText(String.valueOf(Integer.parseInt(invoice.getPrice())+Integer.parseInt(invoice.getShippingPrive())));
-
+        totalPrice.setText(StringUtil.formatToIDR(String.valueOf(Integer.parseInt(invoice.getPrice())+Integer.parseInt(invoice.getShippingPrive()))));
+        shippingPrice.setText(StringUtil.formatToIDR(invoice.getShippingPrive()));
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

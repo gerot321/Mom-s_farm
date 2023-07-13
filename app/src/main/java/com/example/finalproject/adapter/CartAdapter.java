@@ -13,6 +13,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.finalproject.Interface.ItemClickListener;
 import com.example.finalproject.Model.Order;
 import com.example.finalproject.R;
+import com.example.finalproject.util.PreferenceUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.List;
 
 class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public TextView txt_cart_name, txt_price, varianDetail;
+    public TextView txt_cart_name, txt_price, varianDetail, quantity;
     public ImageView removeItem;
     public ImageView imageView;
 
@@ -39,7 +40,7 @@ class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
         removeItem = itemView.findViewById(R.id.removeItem);
         varianDetail = itemView.findViewById(R.id.varianDetail);
         imageView = itemView.findViewById(R.id.image);
-
+        quantity = itemView.findViewById(R.id.qty);
 //        txt_shipping_price = (TextView)itemView.findViewById(R.id.cart_shipping_price);
 
     }
@@ -69,12 +70,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
 
     @Override
     public void onBindViewHolder(CartViewHolder holder, int position) {
-        holder.txt_price.setText("Total Price : "+listData.get(position).getPrice());
-        holder.removeItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
+        holder.txt_price.setText("Total Price : " + listData.get(position).getPrice());
+        holder.removeItem.setOnClickListener(view -> {
+            listData.remove(position);
+            notifyItemRemoved(position);
+            PreferenceUtil.removeOrder(position);
         });
         holder.txt_cart_name.setText(listData.get(position).getProduct().getName());
         holder.varianDetail.setText(new StringBuilder().append("Linen ").
@@ -83,10 +83,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
                 append(listData.get(position).getMattboard().getName()).
                 append(", Kaca ").
                 append(listData.get(position).getGlass().getName()).toString());
-        holder.varianDetail.setText(listData.get(position).getProduct().getName());
         if(listData.get(position).getProduct().getImage() != null && !listData.get(position).getProduct().getImage().isEmpty()){
             Picasso.with(context).load(listData.get(position).getProduct().getImage()).into(holder.imageView);
         }
+        holder.quantity.setText("Jumlah: " + listData.get(position).getQuantity());
     }
 
     @Override

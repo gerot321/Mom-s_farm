@@ -174,14 +174,12 @@ public class Cart extends BaseActivity {
         adapter = new CartAdapter(cart, this);
         recyclerView.setAdapter(adapter);
 
-        //Calculate total price
-
         for (Order order:cart)
             total+=(Integer.parseInt(order.getPrice())*Integer.parseInt(order.getQuantity()));
         Locale locale = new Locale("en", "US");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
 
-        txtTotalPrice.setText("Rp "+ StringUtil.formatToIDR(String.valueOf(total)));
+        txtTotalPrice.setText(StringUtil.formatToIDR(String.valueOf(total)));
 
     }
     @Override
