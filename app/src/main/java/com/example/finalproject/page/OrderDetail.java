@@ -124,7 +124,7 @@ public class OrderDetail extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                if(PreferenceUtil.getUser().getRole().equals(Common.ROLE_USER)){
+                if(PreferenceUtil.getUser().getRole().equalsIgnoreCase(Common.ROLE_USER)){
                     if(invoice.getStatus().equals(Common.ORDER_WAITING_PAYMENT) || invoice.getStatus().equals(Common.ORDER_PAYMENT_FAILED)){
                         invoice.setStatus(Common.ORDER_IN_REVIEW);
                     }
@@ -147,7 +147,7 @@ public class OrderDetail extends BaseActivity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(PreferenceUtil.getUser().getRole().equals(Common.ROLE_USER)){
+                if(PreferenceUtil.getUser().getRole().equalsIgnoreCase(Common.ROLE_USER)){
                     if(invoice.getStatus().equals(Common.ORDER_WAITING_PAYMENT) || invoice.getStatus().equals(Common.ORDER_PAYMENT_FAILED)){
                         invoice.setStatus(Common.ORDER_FAILED);
                     }
@@ -164,7 +164,7 @@ public class OrderDetail extends BaseActivity {
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(PreferenceUtil.getUser().getRole().equals(Common.ROLE_USER)){
+                if(PreferenceUtil.getUser().getRole().equalsIgnoreCase(Common.ROLE_USER)){
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -177,7 +177,7 @@ public class OrderDetail extends BaseActivity {
             }
         });
 
-        if(PreferenceUtil.getUser().getRole().equals(Common.ROLE_USER)){
+        if(PreferenceUtil.getUser().getRole().equalsIgnoreCase(Common.ROLE_USER)){
             btnUpload.setText("Upload");
             if(!invoice.getStatus().equals(Common.ORDER_PAYMENT_FAILED) || invoice.getStatus().equals(Common.ORDER_SHIPPING)){
                 cancelBtn.setVisibility(View.GONE);
@@ -254,7 +254,11 @@ public class OrderDetail extends BaseActivity {
             Picasso.with(this).load(order.getProduct().getImage()).into(image);
 
             price.setText(order.getPrice());
-            name.setText(order.getProduct().getName());
+            String poText = "";
+            if(order.getProduct().getPoTime()>0){
+                poText = " PO - " + order.getProduct().getPoTime() + "Hari";
+            }
+            name.setText(order.getProduct().getName()+poText);
             qty.setText(order.getQuantity() + " x " + (Integer.parseInt(order.getPrice())/Integer.parseInt(order.getQuantity())));
 
             orderList.addView(layout);

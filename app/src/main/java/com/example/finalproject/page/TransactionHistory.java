@@ -305,7 +305,7 @@ public class TransactionHistory extends BaseActivity {
     }
 
     private void addData(Invoice sale){
-        if(PreferenceUtil.getUser().getRole().equals(Common.ROLE_ADMIN)){
+        if(PreferenceUtil.getUser().getRole().equalsIgnoreCase(Common.ROLE_ADMIN)){
             orderList.add(sale);
         }else{
             if(sale.getBuyer().getPhone().equals(PreferenceUtil.getUser().getPhone())){

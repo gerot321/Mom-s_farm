@@ -138,6 +138,8 @@ public class OrderItem extends BaseActivity {
         Button addBtn = findViewById(R.id.add_btn);
 
         TextView name = findViewById(R.id.product_name);
+        TextView desc = findViewById(R.id.desc);
+
         final EditText stockEdt = findViewById(R.id.product_stock_edt);
         RelativeLayout minusStock = findViewById(R.id.minus_stock);
         RelativeLayout plusStock = findViewById(R.id.plus_stock);
@@ -158,6 +160,7 @@ public class OrderItem extends BaseActivity {
 
 
         name.setText(result.getName());
+        desc.setText(result.getDesc());
 
         addBtn.setOnClickListener(view -> {
             if(width.getText().toString().isEmpty() || height.getText().toString().isEmpty() && stockEdt.getText().toString().isEmpty()){
@@ -198,7 +201,8 @@ public class OrderItem extends BaseActivity {
                         linen,glass,
                         weight,
                         Integer.parseInt(width.getText().toString()),
-                        Integer.parseInt(height.getText().toString())
+                        Integer.parseInt(height.getText().toString()),
+                        result.getPoTime()
                 ));
             }
             PreferenceUtil.setOrders(orders1);
@@ -229,7 +233,8 @@ public class OrderItem extends BaseActivity {
                                     linen,glass,
                                     weight,
                                     Integer.parseInt(width.getText().toString()),
-                                    Integer.parseInt(height.getText().toString())
+                                    Integer.parseInt(height.getText().toString()),
+                                    result.getPoTime()
                             );
                             List<Order> orders12 = new ArrayList<>();
                             orders12.add(order);
